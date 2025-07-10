@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>模型文件列表</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: "Microsoft YaHei", Arial, sans-serif;
+            background: linear-gradient(120deg, #e0e7ff 0%, #f0fdfa 100%);
+            margin: 0;
+            min-height: 100vh;
+        }
+        .navbar {
+            width: 100%;
+            height: 56px;
+            background: linear-gradient(90deg, #6366f1 0%, #38bdf8 100%);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 32px;
+            box-sizing: border-box;
+            color: #fff;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 100;
+        }
+        .navbar-logo {
+            font-size: 1.3rem;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+        .navbar-menu {
+            list-style: none;
+            display: flex;
+            gap: 32px;
+            margin: 0;
+            padding: 0;
+        }
+        .navbar-menu li a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1.08rem;
+            transition: color 0.2s;
+        }
+        .navbar-menu li a:hover {
+            color: #e0e7ff;
+        }
+        .sidebar {
+            position: fixed;
+            top: 56px;
+            left: 0;
+            width: 200px;
+            height: calc(100vh - 56px);
+            background: #f8fafc;
+            border-right: 1.5px solid #e0e7ef;
+            padding-top: 36px;
+            box-sizing: border-box;
+            box-shadow: 2px 0 12px #e0e7ef1a;
+            transition: box-shadow 0.2s;
+            z-index: 10;
+        }
+        .sidebar ul {
+            list-style: none;
+            padding: 0 0 0 24px;
+            margin: 0;
+        }
+        .sidebar ul li {
+            margin-bottom: 22px;
+        }
+        .sidebar ul li a {
+            display: block;
+            color: #2563eb;
+            text-decoration: none;
+            font-size: 1.12rem;
+            font-weight: 500;
+            border-radius: 8px 0 0 8px;
+            padding: 8px 0 8px 16px;
+            transition: background 0.18s, color 0.18s, font-weight 0.18s;
+        }
+        .sidebar ul li a:hover,
+        .sidebar ul li a.active {
+            background: linear-gradient(90deg, #e0e7ff 0%, #f0fdfa 100%);
+            color: #1d4ed8;
+            font-weight: 700;
+        }
+        .main-content {
+            margin-left: 200px;
+            margin-top: 72px;
+            padding: 32px 24px;
+        }
+        @media (max-width: 900px) {
+            .sidebar { display: none; }
+            .main-content { margin-left: 0; }
+            .navbar { padding: 0 12px; }
+        }
+        .container { max-width: 950px; margin: 0 auto; background: #fff; border-radius: 18px; box-shadow: 0 4px 24px #dbeafe; padding: 40px 24px; }
+        h1 { color: #2563eb; font-size: 2.2rem; letter-spacing: 1px; margin-bottom: 24px; text-align: center; }
+        table { width: 100%; border-collapse: collapse; margin-top: 24px; background: #f8fafc; border-radius: 10px; overflow: hidden; }
+        th, td { padding: 16px 10px; border-bottom: 1px solid #e5e7eb; text-align: left; font-size: 1.08rem; }
+        th { background: linear-gradient(90deg, #6366f1 0%, #38bdf8 100%); color: #fff; }
+        tr:last-child td { border-bottom: none; }
+        a { color: #2563eb; text-decoration: none; font-weight: 600; }
+        a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <!-- 顶部导航栏和侧边栏同上 -->
+    <!-- 可放在 <body> 内最前面 -->
+    <nav class="navbar">
+        <div class="navbar-logo">数智员工管理平台</div>
+        <ul class="navbar-menu">
+            <li><a href="model_demo.html">首页</a></li>
+            <!-- <li><a href="model_files.html">模型文件</a></li> -->
+            <li><a href="#">关于</a></li>
+        </ul>
+    </nav>
+    <aside class="sidebar">
+        <ul>
+            <li><a href="model_demo.html">模型总览</a></li>
+            <!-- <li><a href="model_files.html">文件列表</a></li> -->
+            <li><a href="model_data_dashboard.html">数据看板</a></li>
+        </ul>
+    </aside>
+    <div class="main-content">
+        <div class="container">
+            <h1 id="model-title"></h1>
+            <table>
+                <thead>
+                    <tr>
+                        <th>文件名</th>
+                        <th>类型</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>config.json</td>
+                        <td class="file-type">配置文件</td>
+                        <td><a href="file_detail.html?file=config.json">查看详情</a></td>
+                    </tr>
+                    <tr>
+                        <td>model-00001-of-00118.safetensors</td>
+                        <td class="file-type">权重分片</td>
+                        <td><a href="safetensors_weights.html">查看详情</a></td>
+                    </tr>
+                    <tr>
+                        <td>model.safetensors.index.json</td>
+                        <td class="file-type">权重索引</td>
+                        <td><a href="file_detail.html?file=model.safetensors.index.json">查看详情</a></td>
+                    </tr>
+                    <!-- 继续添加更多文件 -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script>
+        // 获取URL参数
+        function getQueryParam(name) {
+            const url = window.location.search;
+            const params = new URLSearchParams(url);
+            return params.get(name) || '';
+        }
+        // 设置标题
+        document.addEventListener('DOMContentLoaded', function() {
+            const modelName = getQueryParam('model');
+            document.getElementById('model-title').textContent = modelName + ' 模型文件列表';
+        });
+    </script>
+</body>
+</html>

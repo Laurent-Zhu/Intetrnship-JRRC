@@ -1,0 +1,106 @@
+# - code: declared.operations
+#   function_desc: 定义大语言模型
+#   props:
+#     design: 2b352afb089049bca92180956279efaf
+#   args:
+#     payload:
+#       llm:
+#         name: gpt-4o
+#         temperature: 0.5
+#         slaves:
+#           - name: qwen2-72b-instruct-gptq-int8
+#   sinks:
+#     logging: true
+
+# - code: llmx.predict.chat
+#   function_desc: 根据项目名称和描述生成总结
+#   props:
+#     design: 7c7c990a58e5466ea9f268d1d8e04e87
+#   args:
+#     messages:
+#       - type: system
+#         template: |-
+#           你是一个专业的总结生成助手。根据用户提供的项目名称和描述，生成一份简洁、结构化的项目总结报告，格式为Markdown。报告应包含：
+#           - 标题：以项目名称为中心（使用 <center> 标签）
+#           - 项目概述：简要概述项目描述
+#           - 关键信息：提取描述中的核心内容，列出2-3个要点
+#           - 总结：简短总结项目的价值或进展
+#       - type: human
+#         template: |-
+#           项目名称：{context#project_name}
+#           项目描述：{context#project_desc}
+#   sinks:
+#     context:
+#       - name: summary_result
+#     logging: true
+
+# - code: reply.operations
+#   function_desc: 输出总结到前端
+#   props:
+#     design: f944185977e74063af349eef36a50f70
+#   args:
+#     pending: "{context#summary_result}"
+#   reply: pending
+- code: declared.operations
+  name: 定义大语言模型
+  function_desc: 设置使用gpt-4o模型生成短文
+  props:
+    design: 2b352afb089049bca92180956279efaf
+  args:
+    payload:
+      llm:
+        name: gpt-4o
+        temperature: 0.7
+        slaves:
+          - name: qwen2-72b-instruct-gptq-int8
+  sinks:
+    logging: true
+
+- code: llmx.predict.chat
+  name: 根据关键词生成短文
+  function_desc: 使用关键词生成200-300字的短文
+  props:
+    design: 7c7c990a58e5466ea9f268d1d8e04e87
+  args:
+    messages:
+      - type: system
+        template: |-
+          你是一个专业的短文生成助手。根据用户提供的关键词，生成一篇200-300字的短文，内容连贯、逻辑清晰，格式为Markdown。短文应包含：
+          - 标题：以关键词为核心（使用 <center> 标签）
+          - 正文：围绕关键词展开，结构为引言、主体和结尾
+          - 语言：简洁生动，适合通用读者
+      - type: human
+        template: 关键词：{context#content}
+  sinks:
+    # format:
+    #   - type: load-json-array
+    context: answer
+    logging: true
+
+# - code: memories.storage#put
+#   name: 持久化保存对话内容
+#   function_desc: 保存用户输入的关键词和生成的短文
+#   props:
+#     design: 8a1b2c3d-45e6-7890-abcd-ef1234567890
+#   args:
+#     messages:
+#       - role: user
+#         content: 关键词：{context#keywords}
+#       - role: assistant
+#         content: "{context#article_result}"
+#   sinks:
+#     logging: true
+
+- code: reply.operations
+  name: 输出短文到前端
+  function_desc: 将生成的短文以Markdown格式显示
+  props:
+    design: f944185977e74063af349eef36a50f70
+  args:
+    pending: "{context#answer}"
+  reply: pending
+
+- code: refs.operations
+  name: 保存历史记录
+  args:
+    flows: chat-memories-flush.yml

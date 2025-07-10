@@ -1,0 +1,1832 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>权重信息展示</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #e0e7ff 0%, #f0fdfa 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            background: transparent;
+            padding: 40px 0 32px 0;
+            max-width: 1200px;
+            width: 98vw;
+            margin: 40px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        h1 {
+            color: #1e293b;
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+            text-align: center;
+        }
+        .subtitle {
+            color: #64748b;
+            font-size: 1.1rem;
+            margin-bottom: 24px;
+            text-align: center;
+        }
+        .card-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 24px;
+            justify-content: center;
+            width: 100%;
+        }
+        .card {
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 4px 16px 0 rgba(31, 38, 135, 0.10);
+            padding: 24px 22px 18px 22px;
+            min-width: 260px;
+            max-width: 340px;
+            flex: 1 1 300px;
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 0;
+            transition: box-shadow 0.2s, transform 0.2s;
+        }
+        .card:hover {
+            box-shadow: 0 8px 32px #bae6fd;
+            transform: translateY(-4px) scale(1.03);
+        }
+        .card-title {
+            font-weight: 700;
+            font-size: 1.08rem;
+            color: #2563eb;
+            margin-bottom: 8px;
+            word-break: break-all;
+        }
+        .card-meta {
+            color: #64748b;
+            font-size: 0.98rem;
+            margin-bottom: 8px;
+        }
+        .card-label {
+            color: #334155;
+            font-weight: 600;
+            margin-right: 4px;
+        }
+        .weight-values {
+            background: #f1f5f9;
+            border-radius: 6px;
+            padding: 8px 10px;
+            margin-top: 6px;
+            font-family: 'JetBrains Mono', 'Consolas', 'Menlo', monospace;
+            font-size: 0.98rem;
+            color: #0f172a;
+            overflow-x: auto;
+            word-break: break-all;
+        }
+        @media (max-width: 900px) {
+            .card-list { gap: 12px; }
+            .card { min-width: 180px; max-width: 98vw; padding: 16px 8px 12px 8px; }
+        }
+        @media (max-width: 700px) {
+            .container { padding: 12px 2vw; }
+            h1 { font-size: 1.3rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Safetensors 权重信息展示</h1>
+        <div class="subtitle">每个权重以卡片形式展示，含前10项权重值</div>
+        <div class="card-list">
+
+            <div class="card">
+                <div class="card-title">model.embed_tokens.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([151936, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[-0.0013885498046875, -0.008056640625, 0.0113525390625, -0.00689697265625, -0.0010223388671875, 0.0009307861328125, 0.003814697265625, 0.003204345703125, 0.0111083984375, -0.0048828125]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.0.down_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([4096, 1536])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[5.173683166503906e-05, -7.963180541992188e-05, 6.151199340820312e-05, 7.677078247070312e-05, 4.38690185546875e-05, -6.914138793945312e-05, 9.870529174804688e-05, 9.202957153320312e-05, -7.963180541992188e-05, 0.013916015625]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.0.gate_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[-0.00010442733764648438, 0.00011396408081054688, -0.00016117095947265625, 4.6253204345703125e-05, -0.00012302398681640625, -8.440017700195312e-05, -4.738569259643555e-06, -5.555152893066406e-05, 0.00014495849609375, -0.0001354217529296875]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.0.up_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[-5.078315734863281e-05, 8.702278137207031e-06, -3.039836883544922e-05, 3.7670135498046875e-05, -1.0788440704345703e-05, 8.285045623779297e-06, 2.115964889526367e-06, -3.886222839355469e-05, 2.8848648071289062e-05, -4.744529724121094e-05]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.1.down_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([4096, 1536])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[7.581710815429688e-05, -5.155801773071289e-06, 0.00011682510375976562, 4.1484832763671875e-05, -8.7738037109375e-05, 0.004486083984375, -2.0623207092285156e-05, 9.72747802734375e-05, 0.0118408203125, -7.295608520507812e-05]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.1.gate_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[-5.3942203521728516e-06, -8.046627044677734e-07, -1.3932585716247559e-06, 7.539987564086914e-06, -1.5795230865478516e-06, 6.854534149169922e-06, 6.631016731262207e-07, 2.0265579223632812e-06, -1.341104507446289e-06, 3.874301910400391e-06]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.1.up_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[2.5779008865356445e-06, 2.6226043701171875e-06, 4.231929779052734e-06, 4.678964614868164e-06, -1.4975666999816895e-06, 1.895427703857422e-05, 6.07222318649292e-07, -1.691281795501709e-06, 2.16066837310791e-06, -7.599592208862305e-07]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.10.down_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([4096, 1536])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[-1.3887882232666016e-05, 0.0013885498046875, -8.7738037109375e-05, 0.00689697265625, 0.00909423828125, 6.8247318267822266e-06, 4.863739013671875e-05, -9.584426879882812e-05, -4.076957702636719e-05, -1.0967254638671875e-05]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.10.gate_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[1.2398231774568558e-08, 2.663000486791134e-09, 4.838511813431978e-10, -1.949956640601158e-09, -3.623426891863346e-09, -9.778887033462524e-09, 6.330083124339581e-10, 1.0695657692849636e-09, 5.0640664994716644e-09, -4.685716703534126e-09]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.10.up_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[-1.234002411365509e-08, -2.5902409106492996e-09, -5.020410753786564e-10, 1.9354047253727913e-09, 3.623426891863346e-09, 9.778887033462524e-09, -6.330083124339581e-10, -1.0477378964424133e-09, -5.0640664994716644e-09, 4.598405212163925e-09]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.11.down_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([4096, 1536])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[4.6333298087120056e-08, 0.0002689361572265625, -0.041259765625, -7.43865966796875e-05, 0.0001125335693359375, 0.000270843505859375, -3.039836883544922e-05, -0.0005340576171875, -0.0008087158203125, -0.000598907470703125]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.11.gate_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[-1.1449174941446927e-15, -5.93275428784068e-16, 6.331740687315346e-17, -9.280770596475918e-17, 2.7647155398380363e-17, -2.858824288409778e-15, 1.0570971181733668e-17, -1.0200174038743626e-15, 6.002143226879753e-16, 2.636779683484747e-16]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.11.up_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[-1.1379786002407855e-15, -5.793976409762536e-16, 6.765421556309548e-17, -1.0148132334464322e-16, 3.0574501264091225e-17, -2.9559688030644793e-15, 1.0299920638612292e-17, -1.0408340855860843e-15, 6.210310043996969e-16, 2.636779683484747e-16]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.12.down_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([4096, 1536])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[0.0123291015625, -0.00738525390625, 1.9610979506978765e-12, 0.0107421875, 4.638422979041934e-11, -0.000225067138671875, 0.00146484375, 8.296966552734375e-05, 0.01422119140625, 0.00140380859375]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.12.gate_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[-0.010009765625, 0.0033111572265625, -0.00135040283203125, -0.0003681182861328125, -0.00140380859375, 0.004119873046875, 0.00194549560546875, -0.0021209716796875, -0.009521484375, -0.00153350830078125]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.12.up_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[-0.010009765625, -0.003631591796875, 0.00836181640625, 0.001068115234375, 0.005523681640625, -0.01336669921875, 0.00028228759765625, 0.004608154296875, -0.0059814453125, -0.004608154296875]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.13.down_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([4096, 1536])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[9.489059448242188e-05, -4.7497451305389404e-08, 1.919269561767578e-05, -3.189779818058014e-08, -0.023193359375, -6.657501216977835e-10, 2.837623469531536e-10, -4.100799560546875e-05, -0.00061798095703125, -1.633167266845703e-05]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.13.gate_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[-1.3358203432289883e-12, 9.450218385609332e-13, 4.654054919228656e-13, 1.1155520951433573e-12, -4.2099657093785936e-13, -1.092459456231154e-13, 8.393286066166183e-14, -1.936228954946273e-13, -1.1013412404281553e-12, 4.760636329592671e-13]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.13.up_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[2.7284841053187847e-12, -7.709388682997087e-13, -4.902744876744691e-13, -1.2292389328649733e-12, 2.877698079828406e-13, -2.7569058147491887e-12, -4.246603069191224e-15, 4.689582056016661e-13, 7.247535904753022e-13, -7.389644451905042e-13]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.14.down_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([4096, 1536])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[-2.2631138563156128e-07, 2.3096799850463867e-07, 6.532669067382812e-05, -0.017578125, -2.956390380859375e-05, -9.679794311523438e-05, 7.772445678710938e-05, 0.0390625, 0.000743865966796875, 0.017822265625]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.14.gate_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[4.39648317751562e-14, -7.66053886991358e-15, 1.3711254354120683e-14, -1.341149413747189e-13, -1.4210854715202004e-14, 2.5579538487363607e-13, 1.8735013540549517e-15, 6.616929226765933e-14, 5.262457136723242e-14, -1.1457501614131615e-13]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.14.up_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[-4.463096558993129e-14, 6.855627177060342e-15, -1.2878587085651816e-14, 1.3589129821411916e-13, 1.4099832412739488e-14, -2.5579538487363607e-13, -1.8596235662471372e-15, -6.705747068735946e-14, -5.1736392947532295e-14, 1.1457501614131615e-13]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.15.down_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([4096, 1536])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[-0.0118408203125, 0.00946044921875, -0.000827789306640625, 3.073364496231079e-08, 0.01300048828125, -7.295608520507812e-05, -0.000118255615234375, 1.919269561767578e-05, 3.365363543395006e-16, -0.00048828125]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.15.gate_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[0.006591796875, -3.6716461181640625e-05, 0.000881195068359375, -0.0040283203125, -0.001953125, -0.01043701171875, 8.726119995117188e-05, -0.0026092529296875, 0.000522613525390625, 0.00040435791015625]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.15.up_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[-0.0023193359375, 0.00125885009765625, 0.0014495849609375, -0.004669189453125, -0.001556396484375, 0.0101318359375, 0.0004215240478515625, 0.003021240234375, -0.005706787109375, -0.0032958984375]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.16.down_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([4096, 1536])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[-0.0029144287109375, 0.021484375, -0.0031890869140625, 0.00311279296875, -0.0164794921875, -0.009521484375, -0.0032501220703125, -2.09808349609375e-05, 0.0034637451171875, 0.002899169921875]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.16.gate_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[0.00080108642578125, -0.001007080078125, -0.004730224609375, 0.001739501953125, 0.0009765625, -0.007110595703125, -0.000579833984375, -0.0018310546875, 0.0047607421875, -0.00128936767578125]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.16.up_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[0.002227783203125, 0.00049591064453125, -0.0005950927734375, 0.00518798828125, -0.001922607421875, 0.00787353515625, 0.00016880035400390625, -0.004974365234375, 0.01007080078125, 0.0038299560546875]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.17.down_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([4096, 1536])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[-0.02099609375, -8.487701416015625e-05, -0.0001583099365234375, -6.29425048828125e-05, 4.1961669921875e-05, -7.867813110351562e-05, -8.940696716308594e-06, 2.6106834411621094e-05, -8.821487426757812e-05, -0.00064849853515625]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.17.gate_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[0.01312255859375, 0.014404296875, 0.00439453125, -0.010498046875, 0.0137939453125, 0.004791259765625, -0.003814697265625, 0.00872802734375, -0.01611328125, 0.017333984375]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.17.up_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[0.0233154296875, 0.004180908203125, 0.016845703125, -0.004638671875, 0.00836181640625, -0.01416015625, -0.00055694580078125, 0.005157470703125, 0.0057373046875, 0.017578125]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.18.down_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([4096, 1536])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[-3.790855407714844e-05, 7.295608520507812e-05, -8.678436279296875e-05, -2.8371810913085938e-05, 6.389617919921875e-05, -0.0001163482666015625, -8.153915405273438e-05, 3.9577484130859375e-05, -1.5139579772949219e-05, -0.00010824203491210938]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.18.gate_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[0.0001373291015625, 0.000118255615234375, 8.249282836914062e-05, -0.00011396408081054688, 0.00011873245239257812, -0.00011110305786132812, -7.420778274536133e-06, 7.772445678710938e-05, -9.918212890625e-05, -3.695487976074219e-05]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.18.up_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[7.534027099609375e-05, -4.470348358154297e-06, 0.00011157989501953125, -4.0531158447265625e-06, 9.250640869140625e-05, -3.504753112792969e-05, 6.29425048828125e-05, 4.839897155761719e-05, -0.00010538101196289062, 7.104873657226562e-05]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.19.down_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([4096, 1536])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[5.507469177246094e-05, 6.532669067382812e-05, -0.000812530517578125, -0.00019168853759765625, 0.0016021728515625, 8.0108642578125e-05, -4.482269287109375e-05, -7.963180541992188e-05, -8.96453857421875e-05, -4.482269287109375e-05]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.19.gate_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[0.000446319580078125, -0.000568389892578125, -0.000469207763671875, 0.00012683868408203125, -0.000118255615234375, -0.00113677978515625, -2.2530555725097656e-05, -0.000335693359375, 0.00104522705078125, -0.00021076202392578125]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.19.up_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[-0.00043487548828125, 0.00051116943359375, 0.000499725341796875, -0.00011587142944335938, 0.00011539459228515625, 0.000858306884765625, 9.5367431640625e-06, 0.00048828125, -0.0007781982421875, 0.0004482269287109375]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.2.down_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([4096, 1536])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[3.1948089599609375e-05, 9.012222290039062e-05, 2.6226043701171875e-05, -6.866455078125e-05, -9.202957153320312e-05, 1.4662742614746094e-05, -4.482269287109375e-05, 3.886222839355469e-05, -0.0130615234375, 0.00341796875]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.2.gate_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[1.0073184967041016e-05, -1.2695789337158203e-05, -5.900859832763672e-06, 9.462237358093262e-07, -7.361173629760742e-06, 4.839897155761719e-05, 5.21540641784668e-07, -1.1026859283447266e-05, 1.609325408935547e-05, 3.844499588012695e-06]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.2.up_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[3.314018249511719e-05, 8.535385131835938e-05, 0.00011873245239257812, -9.250640869140625e-05, -0.00011157989501953125, 0.0001392364501953125, 1.8358230590820312e-05, -0.00012302398681640625, 0.00011014938354492188, -6.29425048828125e-05]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.20.down_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([4096, 1536])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[-4.863739013671875e-05, 7.677078247070312e-05, 3.9637088775634766e-06, 0.00074005126953125, 1.1742115020751953e-05, -7.963180541992188e-05, 1.5616416931152344e-05, -1.4185905456542969e-05, 1.2695789337158203e-05, -0.000118255615234375]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.20.gate_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[1.2732925824820995e-09, -1.1714291758835316e-09, 2.1391315385699272e-09, 5.420588422566652e-10, -3.4378899727016687e-10, -5.704350769519806e-09, 4.501998773775995e-11, -2.35741026699543e-09, -2.4920154828578234e-10, 9.185896487906575e-11]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.20.up_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[-2.255546860396862e-09, 9.531504474580288e-10, -2.255546860396862e-09, -9.458744898438454e-10, 2.9467628337442875e-10, 5.9371814131736755e-09, -3.6834535421803594e-11, 2.35741026699543e-09, 2.874003257602453e-10, 4.843059286940843e-11]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.21.down_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([4096, 1536])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[0.0018768310546875, 0.004150390625, -0.00010442733764648438, 7.200241088867188e-05, 0.00012874603271484375, -0.00152587890625, 0.01007080078125, -0.00011110305786132812, -7.092952728271484e-06, -0.00011396408081054688]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.21.gate_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[0.000698089599609375, -6.723403930664062e-05, -0.00018787384033203125, 0.000324249267578125, 0.00010633468627929688, -0.0003299713134765625, -2.6702880859375e-05, 0.0002765655517578125, -0.000392913818359375, -0.000446319580078125]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.21.up_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[0.00066375732421875, -6.079673767089844e-05, -0.000179290771484375, 0.0003185272216796875, 0.00011110305786132812, -0.0003185272216796875, -2.6226043701171875e-05, 0.0002727508544921875, -0.0003910064697265625, -0.000446319580078125]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.22.down_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([4096, 1536])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[0.00086212158203125, -0.0030059814453125, -0.00262451171875, -0.000667572021484375, 3.719329833984375e-05, 0.01300048828125, -0.000946044921875, -0.001861572265625, -0.00011301040649414062, 0.0011444091796875]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.22.gate_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[-0.00127410888671875, -2.7298927307128906e-05, -7.62939453125e-05, -0.000331878662109375, -5.21540641784668e-06, 0.0020904541015625, 5.030632019042969e-05, -0.000308990478515625, 0.00026702880859375, 0.00016021728515625]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.22.up_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[-0.00138092041015625, -0.00022792816162109375, -3.680586814880371e-06, -0.00060272216796875, 3.3855438232421875e-05, 0.0024261474609375, 2.5272369384765625e-05, -0.00028228759765625, -4.315376281738281e-05, 1.3634562492370605e-06]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.23.down_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([4096, 1536])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[2.4318695068359375e-05, 0.00011873245239257812, -3.4332275390625e-05, -8.64267349243164e-06, 1.811981201171875e-05, 8.296966552734375e-05, -0.0201416015625, -2.4884939193725586e-06, 0.00010919570922851562, -5.555152893066406e-05]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.23.gate_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[1.8975697457790375e-08, -2.86672729998827e-09, 2.3137545213103294e-09, -2.5174813345074654e-09, -4.0745362639427185e-09, 3.748573362827301e-08, -3.1104718800634146e-10, 1.5934347175061703e-09, 2.8958311304450035e-09, -1.1186784831807017e-10]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.23.up_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[-2.2351741790771484e-08, 2.240994945168495e-09, -7.916241884231567e-09, 2.5756889954209328e-09, 5.1513779908418655e-09, -3.888271749019623e-08, 1.382431946694851e-10, 2.1100277081131935e-09, -1.0360963642597198e-08, 1.7971615307033062e-09]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.24.down_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([4096, 1536])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[5.7697296142578125e-05, 9.250640869140625e-05, 8.702278137207031e-06, -0.00011205673217773438, -2.5331974029541016e-06, 0.000118255615234375, -0.00128173828125, -8.106231689453125e-06, 0.00121307373046875, 0.0029296875]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.24.gate_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[0.0001239776611328125, -0.000110626220703125, 1.633167266845703e-05, -4.470348358154297e-06, 2.8014183044433594e-05, 5.364418029785156e-05, 8.106231689453125e-06, 1.3828277587890625e-05, -3.838539123535156e-05, -4.291534423828125e-06]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.24.up_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[-0.0001678466796875, -3.790855407714844e-05, -3.743171691894531e-05, 3.075599670410156e-05, -2.7179718017578125e-05, -0.0001125335693359375, 5.930662155151367e-06, -0.00010347366333007812, 2.2411346435546875e-05, -3.695487976074219e-05]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.25.down_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([4096, 1536])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[0.0081787109375, 0.004669189453125, -0.01531982421875, -5.245208740234375e-05, 0.02099609375, -8.296966552734375e-05, 3.170967102050781e-05, 2.7298927307128906e-05, 4.696846008300781e-05, 4.9591064453125e-05]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.25.gate_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[0.00518798828125, -0.0003948211669921875, 0.01043701171875, 0.0078125, -0.00011587142944335938, 0.01153564453125, 0.00142669677734375, 0.0024871826171875, 0.00543212890625, -0.0159912109375]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.25.up_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[0.0257568359375, -0.0025177001953125, -0.00274658203125, 0.0145263671875, -0.0130615234375, -0.010986328125, -0.002471923828125, -0.003814697265625, -0.0045166015625, -0.0167236328125]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.26.down_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([4096, 1536])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[-0.0024566650390625, 0.00177001953125, 0.000720977783203125, 0.0019989013671875, 0.00921630859375, -1.633167266845703e-05, 0.00156402587890625, 0.001312255859375, -0.01385498046875, -0.0054931640625]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.26.gate_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[0.002960205078125, -0.00138092041015625, -0.0021209716796875, 0.0025787353515625, 0.002166748046875, 0.007568359375, 0.00061798095703125, -0.00067901611328125, -0.0087890625, 0.0009307861328125]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.26.up_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[0.0033721923828125, -0.002655029296875, -8.20159912109375e-05, -0.00186920166015625, -0.0032501220703125, -0.000820159912109375, 2.5272369384765625e-05, -0.00238037109375, -0.00946044921875, 0.0002994537353515625]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.27.down_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([4096, 1536])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[-5.698204040527344e-05, -0.0128173828125, 8.7738037109375e-05, 7.009506225585938e-05, 0.006072998046875, -2.6106834411621094e-05, 9.584426879882812e-05, -0.000499725341796875, -4.744529724121094e-05, -0.0057373046875]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.27.gate_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[3.0357660829594124e-17, 1.1362438767648086e-16, -2.7929047963226594e-16, 4.579669976578771e-16, -7.19910242530375e-17, 2.5673907444456745e-15, 1.3660947373317356e-17, -2.706168622523819e-16, -6.522560269672795e-16, 4.0766001685454967e-16]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.27.up_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[7.389922007661198e-16, -2.0556473190325164e-16, 1.5352302762394743e-16, -5.828670879282072e-16, 6.852157730108388e-17, -1.0685896612017132e-15, -8.890457814381136e-18, 2.2724877535296173e-16, 6.036837696399289e-16, -8.569533971325427e-16]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.28.down_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([4096, 1536])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[0.004486083984375, 9.686118573881686e-11, 0.00046539306640625, -0.01507568359375, -0.00013446807861328125, 6.771087646484375e-05, -0.0004482269287109375, -0.0029296875, 0.0015869140625, -8.296966552734375e-05]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.28.gate_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[7.867813110351562e-05, 0.00537109375, 0.004119873046875, -0.007080078125, -0.00150299072265625, 0.00836181640625, 5.435943603515625e-05, -0.0028228759765625, 0.001373291015625, 0.00162506103515625]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.28.up_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[0.00616455078125, -0.00125885009765625, -0.000446319580078125, -0.006072998046875, 0.0030364990234375, 0.0010528564453125, -0.000232696533203125, -0.0019378662109375, 0.00177764892578125, -0.0098876953125]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.29.down_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([4096, 1536])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[0.007476806640625, -1.3244516594568267e-11, 0.024169921875, -0.0079345703125, 8.158385753631592e-07, 7.963180541992188e-05, 1.1205673217773438e-05, -0.00439453125, -4.2382453102618456e-10, 0.00933837890625]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.29.gate_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[0.00152587890625, -0.0072021484375, 0.0068359375, 0.0023956298828125, 0.00799560546875, 0.0159912109375, 0.0020904541015625, 0.0042724609375, 0.0036773681640625, -0.01409912109375]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.29.up_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[0.01611328125, -0.01068115234375, 0.013427734375, -0.000637054443359375, 0.0126953125, -0.00921630859375, 0.000507354736328125, 0.0133056640625, 0.0084228515625, -0.01275634765625]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.3.down_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([4096, 1536])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[-6.961822509765625e-05, 1.7434358596801758e-06, -5.078315734863281e-05, -0.000118255615234375, -7.295608520507812e-05, 9.679794311523438e-05, -0.00011396408081054688, 0.00010633468627929688, 5.459785461425781e-05, -9.441375732421875e-05]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.3.gate_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[7.009506225585938e-05, 4.839897155761719e-05, -0.00011396408081054688, -0.00010156631469726562, 5.21540641784668e-07, 8.726119995117188e-05, -1.296401023864746e-06, -1.0073184967041016e-05, 5.650520324707031e-05, -7.581710815429688e-05]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.3.up_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[-1.9073486328125e-06, -1.9669532775878906e-06, 1.7285346984863281e-06, 5.62518835067749e-07, 1.555308699607849e-07, -4.100799560546875e-05, -6.07222318649292e-07, 1.1995434761047363e-06, -1.125037670135498e-06, 8.52346420288086e-06]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.30.down_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([4096, 1536])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[-0.00021648406982421875, 3.409385681152344e-05, -0.000518798828125, 0.007080078125, 0.00970458984375, -6.151199340820312e-05, -0.000118255615234375, -2.041459083557129e-06, -0.0224609375, 0.000949859619140625]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.30.gate_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[0.000621795654296875, -0.00031280517578125, -0.000141143798828125, -7.486343383789062e-05, -0.00040435791015625, -0.00119781494140625, 3.6507844924926758e-06, -9.655952453613281e-06, -0.000186920166015625, 0.0002727508544921875]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.30.up_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[-0.00030517578125, -2.8967857360839844e-05, 0.0002918243408203125, 0.00011539459228515625, 0.0002384185791015625, 0.000713348388671875, -9.894371032714844e-06, -9.870529174804688e-05, -0.000240325927734375, 0.00011730194091796875]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.31.down_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([4096, 1536])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[-0.00323486328125, -0.000263214111328125, 0.00020122528076171875, -2.5391578674316406e-05, 6.845220923423767e-08, -5.476176738739014e-07, -3.546476364135742e-06, -0.027099609375, -8.916854858398438e-05, 4.5262277126312256e-07]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.31.gate_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[-0.0059814453125, -0.004302978515625, -0.005706787109375, -0.00128173828125, 0.00250244140625, -0.0272216796875, 0.00506591796875, -0.00057220458984375, 0.0194091796875, 0.01495361328125]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.31.up_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[-0.007720947265625, 0.003265380859375, 0.00994873046875, 0.0089111328125, -0.005035400390625, -0.013671875, -0.0012664794921875, -0.007537841796875, 0.0010528564453125, -0.0027008056640625]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.32.down_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([4096, 1536])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[5.125999450683594e-05, 8.440017700195312e-05, 7.390975952148438e-05, -0.002899169921875, 0.0206298828125, 0.00113677978515625, 7.963180541992188e-05, 0.005157470703125, -9.250640869140625e-05, -1.3649463653564453e-05]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.32.gate_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[4.76837158203125e-05, 3.600120544433594e-05, 0.00011682510375976562, 9.775161743164062e-05, 5.459785461425781e-05, -0.00012969970703125, 6.246566772460938e-05, -0.00010347366333007812, -1.3232231140136719e-05, -1.3887882232666016e-05]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.32.up_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[8.96453857421875e-05, -8.153915405273438e-05, -8.440017700195312e-05, -1.3172626495361328e-05, -7.581710815429688e-05, 3.7670135498046875e-05, 1.9431114196777344e-05, -3.147125244140625e-05, 4.673004150390625e-05, 3.62396240234375e-05]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.33.down_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([4096, 1536])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[0.000675201416015625, -0.0019378662109375, -0.01434326171875, 0.00102996826171875, -0.001220703125, -1.9431114196777344e-05, 7.539987564086914e-06, -0.00010061264038085938, -0.001007080078125, 0.0036773681640625]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.33.gate_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[-0.0006561279296875, -9.250640869140625e-05, -0.000476837158203125, -0.00041961669921875, 0.0004024505615234375, -0.002471923828125, -0.00013256072998046875, -0.000217437744140625, 0.00060272216796875, -0.00035858154296875]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.33.up_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[0.000720977783203125, 0.000415802001953125, -5.173683166503906e-05, 0.00086212158203125, -0.0001316070556640625, 0.001434326171875, 0.00010204315185546875, 0.0003204345703125, -0.00017452239990234375, 0.00010728836059570312]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.34.down_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([4096, 1536])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[2.8848648071289062e-05, -7.724761962890625e-05, 7.82012939453125e-05, 5.6743621826171875e-05, 0.01556396484375, 5.435943603515625e-05, -0.00555419921875, -8.20159912109375e-05, 0.0093994140625, -6.031990051269531e-05]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.34.gate_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[-3.457069396972656e-05, 5.555152893066406e-05, 0.0001277923583984375, 1.633167266845703e-05, 1.0669231414794922e-05, 0.0001850128173828125, -6.723403930664062e-05, -5.5789947509765625e-05, -8.535385131835938e-05, -3.0994415283203125e-05]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.34.up_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[4.4345855712890625e-05, -6.29425048828125e-05, -6.943941116333008e-06, -5.555152893066406e-05, -1.125037670135498e-06, -9.417533874511719e-06, 3.594905138015747e-07, -5.459785461425781e-05, -9.441375732421875e-05, 4.9591064453125e-05]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.35.down_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([4096, 1536])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[0.0015869140625, -0.002471923828125, 0.004302978515625, 0.002960205078125, -0.0087890625, 0.00091552734375, -0.000629425048828125, 0.002227783203125, 0.000873565673828125, 0.004119873046875]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.35.gate_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[0.00051116943359375, 1.043081283569336e-06, 0.00023174285888671875, -0.000759124755859375, -8.344650268554688e-06, 0.0012359619140625, -0.0001239776611328125, 0.000461578369140625, -0.000457763671875, 0.0002994537353515625]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.35.up_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[-0.00167083740234375, 0.000782012939453125, -0.000751495361328125, 0.0006561279296875, -0.0001506805419921875, -0.000774383544921875, 9.894371032714844e-06, -1.704692840576172e-05, -0.00018596649169921875, -0.0004558563232421875]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.36.down_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([4096, 1536])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[9.489059448242188e-05, -9.393692016601562e-05, 0.000972747802734375, 0.0001068115234375, -0.00012063980102539062, -4.267692565917969e-05, 0.00010919570922851562, -1.2755393981933594e-05, -0.00127410888671875, -5.173683166503906e-05]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.36.gate_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[-2.1420419216156006e-08, -5.617039278149605e-09, -2.8958311304450035e-09, -9.080395102500916e-09, 4.94765117764473e-10, -1.4370016288012266e-10, 6.293703336268663e-10, -3.041350282728672e-09, -4.918547347187996e-09, -7.974449545145035e-09]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.36.up_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[-2.537854015827179e-08, -6.373738870024681e-09, -3.5070115700364113e-09, -6.28642737865448e-09, -2.2964741219766438e-11, 5.238689482212067e-09, 6.439222488552332e-10, -1.4842953532934189e-09, -7.62520357966423e-09, -5.1513779908418655e-09]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.37.down_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([4096, 1536])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[-0.00011396408081054688, 0.005340576171875, -0.00011157989501953125, 0.000579833984375, -0.007568359375, 0.00421142578125, 4.1484832763671875e-05, 0.00011873245239257812, 3.382563591003418e-06, 0.00012302398681640625]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.37.gate_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[-1.6257217794191092e-11, -1.3855583347321954e-12, -3.780087354243733e-12, 1.0118128557223827e-11, 7.844391802791506e-12, 3.296918293926865e-11, 1.1866063687193673e-12, -6.87805368215777e-12, -4.575895218295045e-12, 1.5234036254696548e-11]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.37.up_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[1.602984411874786e-11, 2.0321522242738865e-12, 4.291678123991005e-12, -9.606537787476555e-12, -7.673861546209082e-12, -2.8762769943568856e-11, -1.3002932064409833e-12, 6.59383658785373e-12, 3.0411229090532288e-12, -1.3983481039758772e-11]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.38.down_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([4096, 1536])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[6.818771362304688e-05, -2.5153160095214844e-05, 0.00015163421630859375, 7.599592208862305e-07, 6.771087646484375e-05, 6.771087646484375e-05, -6.103515625e-05, 6.29425048828125e-05, 7.43865966796875e-05, -0.0011749267578125]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.38.gate_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[-1.1563301086425781e-05, -1.3113021850585938e-06, -4.202127456665039e-06, 8.52346420288086e-06, 1.1026859283447266e-06, 2.849102020263672e-05, 4.2654573917388916e-07, -2.9355287551879883e-06, -9.201467037200928e-07, -7.033348083496094e-06]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.38.up_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[-1.0251998901367188e-05, -1.55717134475708e-06, -4.708766937255859e-06, 8.702278137207031e-06, 1.1622905731201172e-06, 2.7894973754882812e-05, 4.4517219066619873e-07, -2.6971101760864258e-06, -1.214444637298584e-06, -7.033348083496094e-06]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.39.down_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([4096, 1536])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[-2.3126602172851562e-05, -2.115964889526367e-06, 3.7997961044311523e-06, 7.677078247070312e-05, 0.010498046875, 2.0563602447509766e-06, 3.838539123535156e-05, 3.266334533691406e-05, 9.298324584960938e-06, 3.1888484954833984e-06]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.39.gate_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[2.286988957586611e-19, -2.0244087439377778e-19, 1.6432439176733427e-19, -4.468098796766434e-20, -1.2027867851011065e-19, -4.174178364069192e-18, 1.5670109524204556e-20, -7.072725109573408e-20, -4.1165801236558996e-19, 2.456395547037471e-19]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.39.up_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[3.7947076036992655e-19, -1.1096131609031334e-19, 1.6771252355635147e-19, -9.147955830346444e-20, -6.691560283308973e-20, -3.1035287187397564e-18, 1.079967007749233e-20, -9.275010772434589e-20, -4.37069000783219e-19, 1.8041801776516597e-19]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.4.down_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([4096, 1536])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[-1.0788440704345703e-05, 5.0067901611328125e-06, -0.00011301040649414062, -9.000301361083984e-06, -1.1563301086425781e-05, 3.361701965332031e-05, 9.489059448242188e-05, 0.00010919570922851562, -7.987022399902344e-06, 0.00029754638671875]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.4.gate_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[1.3278622645884752e-10, 3.219611244276166e-10, 2.546585164964199e-10, -3.54702933691442e-11, -1.5370460459962487e-10, 2.2846506908535957e-09, -5.95719029661268e-11, 5.784386303275824e-10, 9.968061931431293e-10, 8.86757334228605e-11]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.4.up_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[-1.7189449863508344e-10, -3.019522409886122e-10, -2.346496330574155e-10, 1.1050360626541078e-10, 1.6189005691558123e-10, -2.6047928258776665e-09, 6.684786058031023e-11, -5.456968210637569e-10, -9.531504474580288e-10, -5.184119800105691e-11]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.40.down_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([4096, 1536])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[0.000782012939453125, 3.039836883544922e-05, -1.7523765563964844e-05, 0.0034027099609375, 0.0004177093505859375, -5.453824996948242e-06, 0.00164794921875, 0.00396728515625, -0.037841796875, 0.00024127960205078125]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.40.gate_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[0.000293731689453125, -0.00023174285888671875, 0.00023651123046875, -0.00012302398681640625, -0.000278472900390625, 0.000946044921875, 3.1441450119018555e-06, 0.00017642974853515625, 0.000110626220703125, 0.000396728515625]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.40.up_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[0.000850677490234375, -0.000125885009765625, 0.00016117095947265625, -0.0003223419189453125, -0.000244140625, 0.0004749298095703125, 2.777576446533203e-05, 0.0003795623779296875, -0.0002689361572265625, 0.0002918243408203125]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.41.down_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([4096, 1536])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[-0.01458740234375, -2.2411346435546875e-05, -0.00012159347534179688, 3.4123659133911133e-06, -4.7206878662109375e-05, 0.0038604736328125, 0.01263427734375, -3.0159950256347656e-05, 0.003082275390625, -1.990795135498047e-05]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.41.gate_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[-0.0245361328125, -0.00112152099609375, -0.00830078125, 0.019287109375, 0.01434326171875, 0.0086669921875, -0.0012664794921875, 0.00041961669921875, 0.000888824462890625, 0.00689697265625]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.41.up_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[0.0038909912109375, 0.01007080078125, 0.0013580322265625, -0.00750732421875, -0.00933837890625, -0.044189453125, 0.00135040283203125, -0.01025390625, -0.00159454345703125, -0.0096435546875]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.42.down_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([4096, 1536])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[0.0135498046875, -0.004791259765625, -0.00714111328125, -7.677078247070312e-05, 0.0123291015625, 0.0035400390625, 0.0054931640625, -0.000118255615234375, 0.01385498046875, -0.00010633468627929688]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.42.gate_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[0.005523681640625, -0.01007080078125, 0.00054168701171875, 0.00098419189453125, -0.006744384765625, 0.004302978515625, 0.00020694732666015625, -0.005889892578125, -0.005218505859375, 0.0218505859375]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.42.up_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[-0.01251220703125, 0.01220703125, -0.01324462890625, -0.0059814453125, -0.007568359375, 0.0029449462890625, -0.000949859619140625, 0.004791259765625, -0.01251220703125, -0.0233154296875]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.43.down_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([4096, 1536])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[0.0213623046875, -1.919269561767578e-05, 0.006683349609375, 4.220008850097656e-05, -6.771087646484375e-05, 4.982948303222656e-05, 0.008056640625, 0.01251220703125, -0.029541015625, -0.031982421875]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.43.gate_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[-0.005279541015625, -0.02392578125, -0.0030517578125, -0.031982421875, 0.0028533935546875, 0.029052734375, 0.004364013671875, 0.00665283203125, -0.01171875, -0.0380859375]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.43.up_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[-0.01153564453125, -0.0281982421875, 0.0002593994140625, -0.042724609375, 0.00518798828125, 0.031982421875, 0.00396728515625, 0.0177001953125, -0.000804901123046875, -0.034912109375]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.44.down_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([4096, 1536])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[-0.00168609619140625, -0.000957489013671875, -0.005584716796875, -0.00064849853515625, 0.00653076171875, 0.0004558563232421875, 7.031485438346863e-08, 1.8104910850524902e-06, -0.0003795623779296875, -2.294778823852539e-06]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.44.gate_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[-0.000545501708984375, -0.000881195068359375, 0.0001888275146484375, -0.00013637542724609375, -0.000553131103515625, -0.0020904541015625, 0.0001316070556640625, -0.00028228759765625, -0.0009613037109375, 0.00010061264038085938]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.44.up_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[0.000759124755859375, 0.000797271728515625, -8.7738037109375e-05, -4.506111145019531e-05, 0.000606536865234375, 0.00193023681640625, -0.00012302398681640625, 0.00024127960205078125, 0.00095367431640625, 8.153915405273438e-05]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.45.down_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([4096, 1536])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[0.006866455078125, -0.006378173828125, 0.01287841796875, 4.5297099404706387e-13, -7.200241088867188e-05, 0.001220703125, 6.246566772460938e-05, -0.00011873245239257812, 2.002716064453125e-05, -3.266334533691406e-05]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.45.gate_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[0.0135498046875, -0.0057373046875, 0.00091552734375, -0.00946044921875, -0.00323486328125, -0.011962890625, -0.00139617919921875, 0.00732421875, -0.006866455078125, -0.00433349609375]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.45.up_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[-0.009521484375, 0.003570556640625, 0.00750732421875, 0.00506591796875, 0.0019683837890625, 0.007354736328125, 0.00122833251953125, -0.0115966796875, 0.00193023681640625, -0.0002803802490234375]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.46.down_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([4096, 1536])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[-5.185604095458984e-06, -3.62396240234375e-05, -4.637986421585083e-07, -1.0281801223754883e-06, -7.972121238708496e-07, 0.0135498046875, 0.0012359619140625, 2.644956111907959e-07, 0.007354736328125, -1.3562384992837906e-08]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.46.gate_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[1.547373340571312e-15, 3.5778671692021646e-17, 2.480654570646834e-16, -6.852157730108388e-17, -3.165870343657673e-17, -1.1379786002407855e-15, -1.5382118322138094e-18, 1.5352302762394743e-16, -3.2439329000766293e-16, 4.718447854656915e-16]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.46.up_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[1.5543122344752192e-15, 3.382710778154774e-17, 2.42861286636753e-16, -8.196568423990414e-17, -3.7730235602495554e-17, -1.1310397063368782e-15, -2.2768245622195593e-18, 1.448494102440634e-16, -3.174543961037557e-16, 4.614364446098307e-16]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.47.down_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([4096, 1536])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[2.7929047963226594e-16, 0.0196533203125, -8.296966552734375e-05, 7.104873657226562e-05, -6.818771362304688e-05, -5.657784640789032e-08, 3.7997961044311523e-06, 0.000499725341796875, -0.00909423828125, 3.019806626980426e-14]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.47.gate_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[-1.8561541192951836e-16, 2.688821387764051e-17, 1.1882855810441129e-16, -4.83554168928535e-17, -1.485356976305141e-17, 2.723515857283587e-16, 2.3093506273941244e-17, -6.591949208711867e-17, 8.413408858487514e-17, -1.2902005852577503e-17]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.47.up_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[-3.625572064791527e-16, 2.5804011705155006e-17, -4.96564594998361e-17, 2.1575623232461538e-17, 5.4860629927766524e-17, 4.753142324176451e-16, 5.502326025363935e-18, -1.1622647289044608e-16, -1.0191500421363742e-17, 6.765421556309548e-17]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.48.down_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([4096, 1536])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[5.030632019042969e-05, -0.0213623046875, 0.02685546875, -0.007781982421875, -0.005859375, -4.1484832763671875e-05, -7.82012939453125e-05, 2.2292137145996094e-05, -0.00116729736328125, 4.029273986816406e-05]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.48.gate_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[-0.00012683868408203125, 0.000133514404296875, -0.00012969970703125, 0.00010061264038085938, 8.7738037109375e-05, -6.67572021484375e-05, -0.00010824203491210938, 0.00010442733764648438, -0.00012874603271484375, 0.00012493133544921875]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.48.up_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[7.867813110351562e-06, -5.9604644775390625e-06, -5.923211574554443e-07, -1.4126300811767578e-05, 3.9637088775634766e-06, 1.537799835205078e-05, 6.966292858123779e-07, -2.0712614059448242e-06, -1.043081283569336e-07, 6.109476089477539e-07]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.49.down_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([4096, 1536])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[-0.00014019012451171875, 4.029273986816406e-05, 1.71661376953125e-05, -8.344650268554688e-06, 7.534027099609375e-05, -7.677078247070312e-05, 2.765655517578125e-05, -0.00024127960205078125, -5.984306335449219e-05, -1.2218952178955078e-05]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.49.gate_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[0.00018215179443359375, 0.0001125335693359375, 0.0001392364501953125, 0.0001163482666015625, -0.00010061264038085938, -0.00037384033203125, 8.726119995117188e-05, -8.440017700195312e-05, -0.00010061264038085938, 6.437301635742188e-05]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.49.up_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[-1.4781951904296875e-05, 7.4803829193115234e-06, -1.0803341865539551e-07, -1.2099742889404297e-05, -4.8160552978515625e-05, -0.00025177001953125, -1.0132789611816406e-06, 3.170967102050781e-05, -9.250640869140625e-05, 2.9802322387695312e-05]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.5.down_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([4096, 1536])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[-0.0108642578125, 0.0191650390625, -0.00011396408081054688, 0.01104736328125, 0.00372314453125, 1.4975666999816895e-06, -8.96453857421875e-05, -6.031990051269531e-05, -0.00055694580078125, 7.677078247070312e-05]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.5.gate_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[0.00080108642578125, 0.0012359619140625, 0.00113677978515625, 0.00927734375, -0.0008697509765625, 0.00933837890625, -0.00023365020751953125, 0.0030364990234375, 0.000335693359375, 0.00567626953125]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.5.up_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[0.003082275390625, 0.00689697265625, -0.002166748046875, 0.005950927734375, 0.004180908203125, 0.01031494140625, -0.0004215240478515625, 0.00921630859375, -0.00836181640625, 0.0038909912109375]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.50.down_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([4096, 1536])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[0.000553131103515625, -5.543231964111328e-06, -4.4345855712890625e-05, 5.6743621826171875e-05, 7.343292236328125e-05, 8.440017700195312e-05, 9.012222290039062e-05, 0.0002613067626953125, 4.506111145019531e-05, -0.00010204315185546875]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.50.gate_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[-1.3887882232666016e-05, 0.0002536773681640625, -0.000415802001953125, -0.000522613525390625, -0.00054168701171875, 0.000659942626953125, -0.00012063980102539062, 0.00016880035400390625, 0.0005645751953125, -0.0004558563232421875]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.50.up_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[-0.00173187255859375, -0.00020313262939453125, 0.00052642822265625, 0.00052642822265625, 0.00075531005859375, 0.00146484375, 0.00010204315185546875, -0.0001468658447265625, -0.00084686279296875, 0.000347137451171875]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.51.down_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([4096, 1536])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[2.115964889526367e-06, 0.00017833709716796875, 9.441375732421875e-05, 8.20159912109375e-05, 8.630752563476562e-05, 1.9788742065429688e-05, 3.4332275390625e-05, 8.106231689453125e-05, 3.24249267578125e-05, -6.961822509765625e-05]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.51.gate_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[-2.0116567611694336e-06, -3.241002559661865e-07, -1.990795135498047e-05, 1.1742115020751953e-05, -1.3634562492370605e-06, 6.4373016357421875e-06, 1.3485550880432129e-06, -3.2782554626464844e-06, 1.728534698486328e-05, -1.233816146850586e-05]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.51.up_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[2.8461217880249023e-06, -4.32133674621582e-06, 1.4960765838623047e-05, -1.5854835510253906e-05, -3.5315752029418945e-06, -1.2218952178955078e-05, -7.003545761108398e-07, -3.591179847717285e-06, -1.9431114196777344e-05, 1.6808509826660156e-05]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.52.down_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([4096, 1536])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[3.039836883544922e-06, -8.96453857421875e-05, -1.424551010131836e-05, 2.110004425048828e-05, 0.00010204315185546875, 0.00011301040649414062, 9.679794311523438e-05, -6.389617919921875e-05, -0.00012063980102539062, -6.943941116333008e-06]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.52.gate_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[1.5560885913146194e-12, -1.4210854715202004e-13, -2.433608869978343e-13, -3.1796787425264483e-13, 2.6201263381153694e-14, -5.258016244624741e-13, -2.2537527399890678e-14, -5.129230373768223e-14, -1.2292389328649733e-12, -3.4638958368304884e-13]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.52.up_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[8.846257060213247e-13, -2.4202861936828413e-14, -1.1723955140041653e-13, -4.618527782440651e-13, 3.2862601528904634e-14, -1.2931877790833823e-12, -2.4313884239290928e-14, -1.9628743075372768e-13, -5.826450433232822e-13, 3.885780586188048e-14]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.53.down_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([4096, 1536])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[-0.0157470703125, 0.01263427734375, -3.0159950256347656e-05, -1.2695789337158203e-05, -1.8596649169921875e-05, -0.0013580322265625, -0.004241943359375, -0.001190185546875, -2.5153160095214844e-05, -1.9669532775878906e-06]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.53.gate_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[-0.002044677734375, -0.00836181640625, 0.00164794921875, -0.006500244140625, 0.00634765625, -0.0203857421875, 0.001739501953125, -0.006317138671875, -0.00579833984375, 0.00025177001953125]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.53.up_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[-0.009033203125, -0.01513671875, -0.005523681640625, 0.0031280517578125, 0.01190185546875, 0.0169677734375, 0.00054168701171875, -0.0062255859375, -0.0120849609375, -0.022216796875]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.54.down_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([4096, 1536])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[-5.857145879417658e-10, 0.00021839141845703125, 0.000316619873046875, -0.00011920928955078125, -8.987262845039368e-08, -1.4528632164001465e-07, -0.000335693359375, 0.00024127960205078125, 0.0002651214599609375, -0.003631591796875]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.54.gate_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[1.1032841307212493e-15, -6.38378239159465e-16, -1.97758476261356e-16, 1.096345236817342e-15, -3.3480163086352377e-16, 1.6792123247455493e-15, -4.7488055154865094e-17, -1.4085954624931674e-15, -1.7694179454963432e-15, -2.2724877535296173e-16]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.54.up_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[1.1171619185290638e-15, -6.38378239159465e-16, -1.97758476261356e-16, 1.1032841307212493e-15, -3.41740524767431e-16, 1.6653345369377348e-15, -4.7488055154865094e-17, -1.4085954624931674e-15, -1.7694179454963432e-15, -2.237793284010081e-16]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.55.down_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([4096, 1536])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[-0.004425048828125, -0.000453948974609375, 0.006072998046875, -1.71661376953125e-05, 0.0091552734375, 9.393692016601562e-05, 0.00127410888671875, -0.000492095947265625, 0.01507568359375, -0.00010347366333007812]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.55.gate_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[0.00139617919921875, -0.007659912109375, 0.009521484375, -0.0191650390625, 0.00457763671875, 0.024169921875, 0.0003147125244140625, -0.0157470703125, 0.015869140625, 0.00469970703125]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.55.up_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[-9.965896606445312e-05, -0.004241943359375, -0.00179290771484375, 0.0031890869140625, 0.0003490447998046875, -0.00653076171875, 0.00119781494140625, -0.004150390625, -0.0028839111328125, -0.00341796875]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.56.down_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([4096, 1536])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[2.0384788513183594e-05, 0.0028228759765625, 8.96453857421875e-05, -7.343292236328125e-05, 0.0003910064697265625, 7.963180541992188e-05, 0.007080078125, -0.004974365234375, 0.00225830078125, -0.0032501220703125]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.56.gate_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[-3.91155481338501e-08, 3.1104718800634146e-10, 8.549250196665525e-10, 3.6816345527768135e-09, -1.618172973394394e-08, -2.0675361156463623e-07, -2.5174813345074654e-09, -1.0710209608078003e-08, 1.8510036170482635e-08, 1.6530975699424744e-08]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.56.up_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[3.4458935260772705e-08, -5.2386894822120667e-08, 9.96515154838562e-08, 1.3969838619232178e-07, -1.6065314412117004e-08, -1.8905848264694214e-07, -5.209585651755333e-09, -9.033828973770142e-08, 5.21540641784668e-08, -2.9103830456733704e-08]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.57.down_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([4096, 1536])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[-0.01123046875, 9.489059448242188e-05, -0.0238037109375, -3.2335519790649414e-06, -1.5735626220703125e-05, -8.463859558105469e-06, -6.341934204101562e-05, -0.0098876953125, 9.584426879882812e-05, -1.4483928680419922e-05]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.57.gate_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[0.017333984375, -0.0014801025390625, -0.0098876953125, 0.006988525390625, 0.005401611328125, 0.0038909912109375, -0.00159454345703125, -0.00118255615234375, 0.0019989013671875, -0.00250244140625]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.57.up_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[-0.006988525390625, 0.0016632080078125, -0.01416015625, -0.03955078125, 0.013427734375, 0.02880859375, 0.000705718994140625, -0.00933837890625, 0.0036163330078125, -0.0135498046875]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.58.down_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([4096, 1536])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[2.5272369384765625e-05, 0.0113525390625, -0.0003910064697265625, -1.169741153717041e-06, -0.00830078125, -0.0036163330078125, -1.1861324310302734e-05, 7.963180541992188e-05, -0.0003108978271484375, 5.781650543212891e-06]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.58.gate_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[-2.2530555725097656e-05, 5.900859832763672e-06, -5.632638931274414e-06, 1.239776611328125e-05, 6.0498714447021484e-06, 2.1219253540039062e-05, -2.8312206268310547e-07, 5.923211574554443e-07, -5.513429641723633e-07, 1.1920928955078125e-06]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.58.up_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[-2.276897430419922e-05, 5.8710575103759766e-06, -5.632638931274414e-06, 1.2218952178955078e-05, 5.990266799926758e-06, 2.110004425048828e-05, -2.849847078323364e-07, 5.476176738739014e-07, -6.146728992462158e-07, 1.169741153717041e-06]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.59.down_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([4096, 1536])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[-0.0224609375, 0.0247802734375, -1.1205673217773438e-05, 0.041015625, 1.3262033462524414e-06, 9.179115295410156e-06, -0.00141143798828125, -0.008544921875, 1.537799835205078e-05, 1.8358230590820312e-05]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.59.gate_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[0.007293701171875, 0.0025482177734375, 0.0108642578125, -0.0172119140625, 0.003326416015625, 0.0166015625, 0.0008697509765625, 0.0064697265625, -0.0272216796875, 0.021240234375]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.59.up_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[0.00872802734375, -0.022705078125, -0.0169677734375, -0.011962890625, 0.006744384765625, -0.01458740234375, 0.00018978118896484375, 0.01416015625, 0.025146484375, -0.01007080078125]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.6.down_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([4096, 1536])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[-8.630752563476562e-05, 0.006439208984375, 5.617039278149605e-09, -3.24249267578125e-05, 8.630752563476562e-05, -9.489059448242188e-05, -0.007293701171875, -0.00037384033203125, -0.00010395050048828125, 0.00372314453125]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.6.gate_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[-9.611248970031738e-07, -1.296401023864746e-06, -2.1141022443771362e-07, -7.115304470062256e-07, -1.043081283569336e-06, 2.771615982055664e-06, -1.1874362826347351e-07, -7.338821887969971e-07, 3.0174851417541504e-07, -5.252659320831299e-07]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.6.up_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[9.5367431640625e-07, 1.385807991027832e-06, 7.404014468193054e-08, 5.699694156646729e-07, 1.1101365089416504e-06, -3.6656856536865234e-06, 1.1641532182693481e-07, 7.301568984985352e-07, -2.812594175338745e-07, 4.5821070671081543e-07]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.60.down_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([4096, 1536])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[-3.694822225952521e-13, 3.6060043839825084e-13, -4.743924364447594e-09, 0.000720977783203125, -0.0009918212890625, 3.7061909097246826e-11, 2.5153212845907547e-12, 3.339550858072471e-13, -0.031494140625, -1.7694179454963432e-15]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.60.gate_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[-4.218847493575595e-15, 1.7763568394002505e-15, 2.96637714392034e-16, -1.5126788710517758e-15, -2.896988204881268e-16, 1.3766765505351941e-14, 3.5561831257524545e-17, -7.389922007661198e-16, -2.831068712794149e-15, -1.2073675392798577e-15]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.60.up_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[6.189493362285248e-15, 2.0261570199409107e-15, -4.961309141293668e-16, -4.787836793695988e-16, 4.787836793695988e-16, 6.078471059822732e-15, 1.1872013788716274e-17, -7.945033519973776e-16, -6.140921104957897e-16, 1.2073675392798577e-15]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.61.down_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([4096, 1536])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[5.841255187988281e-05, -2.3692846298217773e-06, -1.4066696166992188e-05, 0.0001468658447265625, 2.944469451904297e-05, -1.1205673217773438e-05, 2.086162567138672e-06, -1.9073486328125e-05, 7.2479248046875e-05, -3.123283386230469e-05]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.61.gate_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[-0.00010156631469726562, 5.543231964111328e-06, 1.3828277587890625e-05, 3.170967102050781e-05, -4.4345855712890625e-05, -4.506111145019531e-05, 2.5704503059387207e-07, -3.528594970703125e-05, 9.012222290039062e-05, -2.777576446533203e-05]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.61.up_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[9.822845458984375e-05, 1.9073486328125e-05, -4.6193599700927734e-06, -2.0384788513183594e-05, -2.726912498474121e-06, 0.00013637542724609375, 4.976987838745117e-06, -3.4809112548828125e-05, -0.00011396408081054688, 0.00010776519775390625]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.62.down_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([4096, 1536])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[7.44648787076585e-12, -0.006927490234375, 0.013671875, -0.00177001953125, 0.001068115234375, 2.753734588623047e-05, -2.6702880859375e-05, -3.282912075519562e-08, 8.153915405273438e-05, -2.5391578674316406e-05]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.62.gate_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[-1.4097167877480388e-10, 2.3010215954855084e-10, 1.1766587704187259e-11, -5.547917680814862e-11, -2.887645678129047e-11, -6.59383658785373e-11, -1.4267698134062812e-11, 6.275513442233205e-11, 5.275069270282984e-10, 8.776623872108757e-11]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.62.up_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[5.711626727133989e-10, -1.5825207810848951e-10, 2.0372681319713593e-10, -5.070432962384075e-11, -1.0231815394945443e-10, 4.911271389573812e-10, 3.055333763768431e-12, -1.014086592476815e-10, 2.6557245291769505e-10, 7.912603905424476e-11]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.63.down_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([4096, 1536])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[0.00010633468627929688, 8.96453857421875e-05, -0.0021514892578125, 0.004974365234375, 4.482269287109375e-05, -0.0038909912109375, 0.0223388671875, 0.006072998046875, 0.00018215179443359375, 0.0013885498046875]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.63.gate_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[1.014086592476815e-10, -5.8548721426632255e-12, 4.661160346586257e-12, 1.1254996934439987e-11, 6.87805368215777e-12, 7.673861546209082e-12, -1.3358203432289883e-12, -2.864908310584724e-11, -1.2789769243681803e-12, 2.2311041902867146e-12]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.63.up_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[-1.014086592476815e-10, 6.252776074688882e-12, -4.376943252282217e-12, -1.1823431123048067e-11, -6.991740519879386e-12, -6.16751094639767e-12, 1.3429257705865894e-12, 2.887645678129047e-11, 7.247535904753022e-13, -2.7569058147491887e-12]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.64.down_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([4096, 1536])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[-0.0150146484375, -0.01275634765625, 0.00052642822265625, 0.01361083984375, -0.0008544921875, -0.00011873245239257812, 0.003326416015625, -9.870529174804688e-05, -0.0021820068359375, -5.269050598144531e-05]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.64.gate_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[-0.00579833984375, 0.003753662109375, -0.007598876953125, 0.009765625, 0.00104522705078125, 0.0146484375, 0.00115203857421875, 0.0006866455078125, 0.006378173828125, -0.01068115234375]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.64.up_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[-0.006988525390625, -0.006378173828125, -0.002838134765625, 0.00555419921875, -0.0022735595703125, 0.0017852783203125, -0.00067901611328125, 0.003662109375, -0.0089111328125, -0.0184326171875]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.65.down_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([4096, 1536])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[-0.000148773193359375, -5.4836273193359375e-05, 0.000213623046875, 0.002166748046875, -9.000301361083984e-06, 0.000385284423828125, -0.0003070831298828125, -2.1457672119140625e-05, -5.1021575927734375e-05, -3.361701965332031e-05]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.65.gate_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[6.151199340820312e-05, 1.621246337890625e-05, 2.5033950805664062e-05, 2.1338462829589844e-05, 1.9669532775878906e-05, 6.389617919921875e-05, 3.1739473342895508e-06, -2.8252601623535156e-05, 1.1682510375976562e-05, -2.6941299438476562e-05]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.65.up_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[1.9550323486328125e-05, 5.936622619628906e-05, 4.3392181396484375e-05, 3.7848949432373047e-06, 2.7060508728027344e-05, -5.364418029785156e-06, 2.8908252716064453e-06, 3.314018249511719e-05, -5.9604644775390625e-05, -2.8252601623535156e-05]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.66.down_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([4096, 1536])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[0.02490234375, -0.002166748046875, -7.486343383789062e-05, 9.298324584960938e-05, 5.435943603515625e-05, -0.00012493133544921875, -3.24249267578125e-05, 2.0265579223632812e-06, 6.771087646484375e-05, 0.0108642578125]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.66.gate_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[-0.011962890625, -0.0021209716796875, 0.0031585693359375, 0.01055908203125, -0.00885009765625, -0.043212890625, 0.00074005126953125, -0.0074462890625, 0.00830078125, 0.0125732421875]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.66.up_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[0.0162353515625, 0.0024871826171875, 0.0032958984375, 0.0010528564453125, -0.00439453125, -0.000782012939453125, -0.00118255615234375, 0.0027923583984375, -0.0101318359375, -0.0040283203125]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.67.down_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([4096, 1536])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[4.482269287109375e-05, 0.00102996826171875, -0.00010061264038085938, -8.903443813323975e-07, -8.630752563476562e-05, 6.4849853515625e-05, 1.9073486328125e-06, 4.267692565917969e-05, 4.917383193969727e-07, -3.680586814880371e-06]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.67.gate_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[2.205371856689453e-05, 0.00011587142944335938, 7.772445678710938e-05, -2.205371856689453e-05, -7.009506225585938e-05, -1.4901161193847656e-05, 5.476176738739014e-07, -0.0001087188720703125, -6.151199340820312e-05, 1.0013580322265625e-05]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.67.up_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[-4.380941390991211e-06, 1.601874828338623e-07, 8.404254913330078e-06, 3.933906555175781e-06, -2.1904706954956055e-06, -6.0498714447021484e-06, 4.2654573917388916e-07, -3.7401914596557617e-06, -1.1026859283447266e-06, 3.5762786865234375e-06]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.68.down_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([4096, 1536])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[-8.96453857421875e-05, -0.0010986328125, -0.0010833740234375, 2.658367156982422e-05, -8.0108642578125e-05, 7.43865966796875e-05, -4.982948303222656e-05, 7.2479248046875e-05, -2.0742416381835938e-05, 0.00012063980102539062]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.68.gate_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[1.4621764421463013e-07, 6.239861249923706e-08, -5.192123353481293e-08, -1.622538547962904e-09, 4.5693013817071915e-09, 1.909211277961731e-08, 2.673914423212409e-10, -3.213062882423401e-08, 2.10711732506752e-08, -4.400499165058136e-08]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.68.up_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[1.51805579662323e-07, 5.657784640789032e-08, -4.7497451305389404e-08, 4.220055416226387e-09, -4.256435204297304e-10, 8.242204785346985e-08, -7.130438461899757e-10, -3.632158041000366e-08, 3.4924596548080444e-08, -4.284083843231201e-08]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.7.down_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([4096, 1536])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[0.005615234375, 1.1205673217773438e-05, -0.052001953125, -7.677078247070312e-05, 0.00775146484375, 6.818771362304688e-05, 5.078315734863281e-05, -0.017333984375, -0.006988525390625, -1.138448715209961e-05]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.7.gate_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[0.031494140625, -0.0062255859375, 0.0064697265625, -0.01708984375, -0.00469970703125, -0.00238037109375, -0.000209808349609375, -0.0030059814453125, -0.0087890625, 0.005157470703125]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.7.up_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[0.00872802734375, 0.0036163330078125, -0.000957489013671875, -0.0126953125, 0.01361083984375, -0.017578125, 0.0006103515625, 0.005523681640625, 0.0010528564453125, 0.00885009765625]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.8.down_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([4096, 1536])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[-9.59634780883789e-06, 0.0177001953125, 1.0788440704345703e-05, -0.0093994140625, -0.01226806640625, -4.0531158447265625e-06, -9.775161743164062e-06, -0.005859375, -1.6927719116210938e-05, -0.0107421875]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.8.gate_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[1.2096279533579946e-10, -9.913492249324918e-11, -5.3717030823463574e-12, 1.2369127944111824e-10, -4.501998773775995e-11, -2.4374458007514477e-10, -1.2079226507921703e-12, -1.944044925039634e-11, -2.1645973902195692e-10, -2.97859514830634e-11]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.8.up_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[-1.3278622645884752e-10, 1.1254996934439987e-11, 8.139977580867708e-11, 7.457856554538012e-11, 4.206412995699793e-11, 6.657501216977835e-10, -9.322320693172514e-12, 8.185452315956354e-11, -2.1100277081131935e-10, -1.9826984498649836e-10]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.9.down_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([4096, 1536])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[-0.01470947265625, 0.00010347366333007812, -0.0005035400390625, -4.32133674621582e-06, 9.834766387939453e-06, -0.00104522705078125, -0.0002613067626953125, -0.0024871826171875, 0.0016326904296875, 0.019287109375]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.9.gate_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[-0.0031585693359375, -0.003265380859375, -0.005615234375, -0.00124359130859375, 0.0002765655517578125, 0.002349853515625, 0.00074005126953125, 0.0086669921875, 0.00156402587890625, -0.0021820068359375]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.experts.9.up_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([1536, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[0.002227783203125, 0.0078125, -0.005340576171875, -0.0184326171875, -0.0024566650390625, 0.00860595703125, 0.0005950927734375, -0.01153564453125, -0.01409912109375, 0.0086669921875]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.mlp.gate.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([128, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[0.0128173828125, -0.06298828125, 0.03759765625, 0.052490234375, -0.035400390625, 0.07373046875, 0.01544189453125, -0.00848388671875, 0.0208740234375, 0.04443359375]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.self_attn.k_norm.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([128])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[1.5703125, 1.9375, 1.03125, 0.07763671875, 1.7265625, 2.046875, 1.1640625, 1.2109375, -0.236328125, 0.52734375]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.self_attn.k_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([512, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[-0.009033203125, -0.0164794921875, 0.0213623046875, 0.0194091796875, -0.000743865966796875, -0.0135498046875, 0.00653076171875, 0.0166015625, -0.01226806640625, 0.0010833740234375]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.self_attn.o_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([4096, 8192])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[-0.0035400390625, 0.004852294921875, 0.008544921875, 0.002655029296875, 0.007110595703125, -0.0250244140625, -0.0118408203125, 0.008544921875, 0.0011444091796875, -0.0194091796875]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.self_attn.q_norm.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([128])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[2.328125, 0.91015625, 0.8203125, 0.83984375, 1.5625, 1.015625, 0.671875, 0.44921875, 0.94140625, 1.3125]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.self_attn.q_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([8192, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[0.01318359375, 0.01177978515625, 0.010009765625, 0.017578125, 0.01165771484375, -0.01611328125, -0.005889892578125, -0.02392578125, 0.0028533935546875, 0.0115966796875]</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">model.layers.0.self_attn.v_proj.weight</div>
+                <div class="card-meta"><span class="card-label">形状:</span>torch.Size([512, 4096])</div>
+                <div class="card-meta"><span class="card-label">数据类型:</span>torch.bfloat16</div>
+                <div class="card-meta"><span class="card-label">前10项权重值:</span></div>
+                <div class="weight-values">[0.0118408203125, 0.0027618408203125, 0.0169677734375, 0.0028839111328125, -0.017822265625, 0.0038909912109375, 0.0223388671875, -0.00311279296875, -0.004486083984375, 0.013427734375]</div>
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>

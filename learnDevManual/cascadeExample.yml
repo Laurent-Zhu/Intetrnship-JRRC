@@ -1,0 +1,168 @@
+  policy:
+    type: string
+    title: 政策(静态数据)
+    ui:customize: cascader
+    ui:options:
+      width: 80%
+      placeholder: 请选择政策
+    enums:
+      type: static
+      config:
+        props:
+          label: label
+          value: value
+          children: children
+          multiple: false
+          emitPath: false
+        options:
+          - value: x1
+            label: 中央预算内投资项目谋划指南（2025年版）
+            children:
+              - value: 0
+                label: 铁路专项
+              - value: 1
+                label: 水运专项
+              - value: 2
+                label: 水利专项
+              - value: 3
+                label: 气象基础设施专项
+              - value: 4
+                label: 城乡冷链和国家物流枢纽建设专项
+              - value: 5
+                label: 防灾减灾能力提升专项
+              - value: 6
+                label: 城市地下管网及设施专项
+              - value: 7
+                label: 保障性安居工程配套基础设施专项
+              - value: 8
+                label: 农业专项
+              - value: 9
+                label: 乡村振兴专项
+              - value: 10
+                label: 以工代赈示范专项
+              - value: 11
+                label: 重大区域发展战略建设专项（长三角一体化发展方向）
+              - value: 12
+                label: 节能降碳专项
+              - value: 13
+                label: 污染治理专项
+              - value: 14
+                label: 生态保护修复专项
+              - value: 15
+                label: 重点流域水环境综合治理专项
+              - value: 16
+                label: 教育强国基础设施建设工程专项
+              - value: 17
+                label: 教育强国基础设施建设工程（公共实训基地方向）
+              - value: 18
+                label: 优质高效医疗卫生服务体系建设专项
+              - value: 19
+                label: 文化保护传承利用工程专项
+              - value: 20
+                label: 社会服务设施建设支持工程专项
+              - value: 21
+                label: 积极应对人口老龄化工程和托育建设专项
+              - value: 22
+                label: 粮食等重要农产品仓储设施专项
+          - value: 23
+            label: 中央预算内投资高标准农田建设项目储备指南
+          - value: x2
+            label: 农业农村部计划财务司关于做好2034年中央预算内投资农业建设项目储备
+            children:
+              - value: 24
+                label: 玉米单产提升工程项目储备指南
+              - value: x3
+                label: 现代种业提升工程项目储备指南
+                children:
+                  - value: 25
+                    label: 农作物和畜禽种业类
+                  - value: 26
+                    label: 饲草种业类
+                  - value: 27
+                    label: 水产良种类
+              - value: 28
+                label: 动植物保护能力提升工程项目储备指南
+              - value: 29
+                label: 农业科技创新能力条件建设项目储备指南
+              - value: 30
+                label: 数字农业建设项目储备指南
+              - value: 31
+                label: 天然橡胶生产能力建设项目储备指南
+              - value: 32
+                label: 农垦公用基础设施建设项目储备指南
+              - value: 33
+                label: 重点流域农业面源污染综合治理项目储备指南
+              - value: 34
+                label: 畜禽粪污资源化利用整县推进项目储备指南
+              - value: 35
+                label: 长江生物多样性保护工程项目储备指南
+          - value: 36
+            label: 两会2025年重点领域重大投资项目
+          - value: x4
+            label: 2025国家发改委政策
+            children:
+              - value: x5
+                label: 中央预算内投资
+                children:       
+                  - value: 37
+                    label: 粮食安全      
+                  - value: 38
+                    label: 能源安全   
+                  - value: 39
+                    label: 产业链供应链稳定安全   
+                  - value: 40
+                    label: 城市基础设施及保障性安居工程基础设施 
+                  - value: 41
+                    label: 生态文明建设 
+                  - value: 42
+                    label: 交通物流重大基础设施    
+                  - value: 43
+                    label: 社会事业 
+                  - value: 44
+                    label: 其他重点领域               
+              - value: x6
+                label: 超长期特别国债
+                children:  
+                  - value: 45
+                    label: 新引擎新赛道   
+                  - value: 46
+                    label: 未来产业 
+                  - value: 47
+                    label: 城乡融合发展和农业转移人口市民化 
+                  - value: 48
+                    label: 扩大优质教育资源 
+                  - value: 49
+                    label: 区域协调发展及交通 
+                  - value: 50
+                    label: 粮食安全 
+                  - value: 51
+                    label: 能源安全 
+                  - value: 52
+                    label: 生态环保 
+                  - value: 53
+                    label: 两新：推动大规模设备更新和消费品以旧换新 
+              - value: x7
+                label: 地方政府专项债券
+                children: 
+                  - value: 54
+                    label: 交通基础设施 
+                  - value: 55
+                    label: 能源 
+                  - value: 56
+                    label: 农林水利 
+                  - value: 57
+                    label: 生态环保 
+                  - value: 58
+                    label: 社会事业 
+                  - value: 59
+                    label: 城乡冷链物流等基础设施 
+                  - value: 60
+                    label: 市政和产业园区基础设施 
+                  - value: 61
+                    label: 国家重大战略项目 
+                  - value: 62
+                    label: 保障性安居工程 
+                  - value: 63
+                    label: 新型基础设施 
+                  - value: 64
+                    label: 其他

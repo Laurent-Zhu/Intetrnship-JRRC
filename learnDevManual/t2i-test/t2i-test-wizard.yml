@@ -1,0 +1,21 @@
+type: object
+name: 文本生成图片
+required:
+  - image_desc
+properties:
+  image_desc:
+    type: string
+    title: 图片描述
+    description: 输入图片的描述（例如“一片星空下的森林”）
+    ui:options:
+      type: textarea
+      rows: 3
+      width: 100%
+      placeholder: 请输入图片描述，例如：一片星空下的森林
+    err:options:
+      required: '请输入图片描述'
+    default: ''
+  flows:
+    type: string
+    ui:hidden: true
+    default: t2i-test-flow.yml

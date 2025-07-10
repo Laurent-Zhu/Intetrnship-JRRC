@@ -1,0 +1,23 @@
+type: object
+name: 图片生成短文
+required:
+  - image_file
+properties:
+  image_file:
+    type: string
+    title: 上传图片
+    description: 上传包含文字的图片（如文档、验证码或海报）
+    ui:customize: select
+    enums:
+      fetch:
+        type: post
+        api: '/api/de-connect/{{current.employee.id}}/topics/docs'
+        payload: '{ "object": { "topic": "{{current.topic.id}}" }, "limit": 20 }'
+      label: filename
+      value: id
+    err:options:
+      required: '请上传图片文件'
+  flows:
+    type: string
+    ui:hidden: true
+    default: zyf-img-to-text-flow.yml

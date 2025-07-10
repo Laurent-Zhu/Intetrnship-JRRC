@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>文件详情</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: "Microsoft YaHei", Arial, sans-serif;
+            background: linear-gradient(120deg, #e0e7ff 0%, #f0fdfa 100%);
+            margin: 0;
+            min-height: 100vh;
+        }
+        .navbar {
+            width: 100%;
+            height: 56px;
+            background: linear-gradient(90deg, #6366f1 0%, #38bdf8 100%);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 32px;
+            box-sizing: border-box;
+            color: #fff;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 100;
+        }
+        .navbar-logo {
+            font-size: 1.3rem;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+        .navbar-menu {
+            list-style: none;
+            display: flex;
+            gap: 32px;
+            margin: 0;
+            padding: 0;
+        }
+        .navbar-menu li a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1.08rem;
+            transition: color 0.2s;
+        }
+        .navbar-menu li a:hover {
+            color: #e0e7ff;
+        }
+        .sidebar {
+            position: fixed;
+            top: 56px;
+            left: 0;
+            width: 200px;
+            height: calc(100vh - 56px);
+            background: #f8fafc;
+            border-right: 1.5px solid #e0e7ef;
+            padding-top: 36px;
+            box-sizing: border-box;
+            box-shadow: 2px 0 12px #e0e7ef1a;
+            transition: box-shadow 0.2s;
+            z-index: 10;
+        }
+        .sidebar ul {
+            list-style: none;
+            padding: 0 0 0 24px;
+            margin: 0;
+        }
+        .sidebar ul li {
+            margin-bottom: 22px;
+        }
+        .sidebar ul li a {
+            display: block;
+            color: #2563eb;
+            text-decoration: none;
+            font-size: 1.12rem;
+            font-weight: 500;
+            border-radius: 8px 0 0 8px;
+            padding: 8px 0 8px 16px;
+            transition: background 0.18s, color 0.18s, font-weight 0.18s;
+        }
+        .sidebar ul li a:hover,
+        .sidebar ul li a.active {
+            background: linear-gradient(90deg, #e0e7ff 0%, #f0fdfa 100%);
+            color: #1d4ed8;
+            font-weight: 700;
+        }
+        .main-content {
+            margin-left: 200px;
+            margin-top: 72px;
+            padding: 32px 24px;
+        }
+        @media (max-width: 900px) {
+            .sidebar { display: none; }
+            .main-content { margin-left: 0; }
+            .navbar { padding: 0 12px; }
+        }
+        .container { max-width: 950px; margin: 0 auto; background: #fff; border-radius: 18px; box-shadow: 0 4px 24px #dbeafe; padding: 40px 24px; }
+        h1 { color: #2563eb; font-size: 2.2rem; letter-spacing: 1px; margin-bottom: 24px; text-align: center; }
+        table { width: 100%; border-collapse: collapse; margin-top: 24px; background: #f8fafc; border-radius: 10px; overflow: hidden; }
+        th, td { padding: 16px 10px; border-bottom: 1px solid #e5e7eb; text-align: left; font-size: 1.08rem; }
+        th { background: linear-gradient(90deg, #6366f1 0%, #38bdf8 100%); color: #fff; }
+        tr:last-child td { border-bottom: none; }
+        a { color: #2563eb; text-decoration: none; font-weight: 600; }
+        a:hover { text-decoration: underline; }
+        /* 权重卡片美化 */
+        .weight-card-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 28px;
+            justify-content: center;
+            margin-top: 24px;
+        }
+        .card {
+            background: #f8fafc;
+            border-radius: 14px;
+            box-shadow: 0 2px 8px #e0e7ef;
+            padding: 24px 32px;
+            min-width: 260px;
+            max-width: 340px;
+            margin-bottom: 12px;
+            transition: box-shadow 0.2s;
+        }
+        .card:hover {
+            box-shadow: 0 6px 24px #bae6fd;
+        }
+        .card-title {
+            font-size: 1.15rem;
+            font-weight: bold;
+            color: #2563eb;
+            margin-bottom: 10px;
+        }
+        .card-meta {
+            color: #64748b;
+            font-size: 1.01rem;
+            margin-bottom: 6px;
+        }
+        .card-label {
+            display: inline-block;
+            background: #e0e7ff;
+            color: #6366f1;
+            border-radius: 6px;
+            padding: 2px 8px;
+            font-size: 0.98rem;
+            margin-right: 6px;
+        }
+        .weight-values {
+            background: #f1f5f9;
+            border-radius: 6px;
+            padding: 8px 10px;
+            font-family: 'JetBrains Mono', 'Consolas', 'Menlo', monospace;
+            font-size: 0.98rem;
+            color: #334155;
+            overflow-x: auto;
+            margin-top: 4px;
+        }
+        pre {
+            background: #f8fafc;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px #e0e7ef;
+            padding: 22px 18px;
+            font-size: 1.05rem;
+            color: #334155;
+            margin-top: 24px;
+            overflow-x: auto;
+        }
+        @media (max-width: 900px) {
+            .weight-card-list { flex-direction: column; align-items: center; }
+            .card { min-width: 90%; max-width: 98%; }
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部导航栏和侧边栏同上 -->
+    <!-- 可放在 <body> 内最前面 -->
+    <nav class="navbar">
+        <div class="navbar-logo">数智员工管理平台</div>
+        <ul class="navbar-menu">
+            <li><a href="model_demo.html">首页</a></li>
+            <!-- <li><a href="model_files.html">模型文件</a></li> -->
+            <li><a href="#">关于</a></li>
+        </ul>
+    </nav>
+    <aside class="sidebar">
+        <ul>
+            <li><a href="model_demo.html">模型总览</a></li>
+            <!-- <li><a href="model_files.html">文件列表</a></li> -->
+            <li><a href="model_data_dashboard.html">数据看板</a></li>
+        </ul>
+    </aside>
+    <div class="container">
+        <h1>文件详情</h1>
+        <div id="file-content">
+            <!-- JS动态插入内容 -->
+        </div>
+    </div>
+    <script>
+    // 获取文件名参数
+    function getQueryVariable(variable) {
+        var query = window.location.search.substring(1);
+        var vars = query.split("&");
+        for (var i = 0; i < vars.length; i++) {
+            var pair = vars[i].split("=");
+            if (pair[0] === variable) {
+                return decodeURIComponent(pair[1]);
+            }
+        }
+        return null;
+    }
+    // 静态模拟数据
+    const staticData = {
+        'model-00001-of-00118.safetensors': {
+            type: 'weight',
+            weights: [
+                {name: 'layer1.weight', shape: '(1024, 4096)', dtype: 'float32', values: '[0.001, -0.002, 0.003, ...]'},
+                {name: 'layer1.bias', shape: '(4096,)', dtype: 'float32', values: '[0.01, 0.02, 0.03, ...]'}
+            ]
+        },
+        'config.json': {
+            type: 'json',
+            content: `{
+    "hidden_size": 4096,
+    "num_attention_heads": 32,
+    "num_layers": 48,
+    "vocab_size": 151936
+}`
+        },
+        'merges.txt': {
+            type: 'txt',
+            content: `# merges.txt 示例\n!\nth\nhe\nre\n...`
+        },
+        'model.safetensors.index.json': {
+            type: 'json',
+            content: `{
+    "weight_map": {
+        "layer1.weight": "model-00001-of-00118.safetensors",
+        "layer1.bias": "model-00001-of-00118.safetensors"
+    },
+    "metadata": {}
+}`
+        }
+    };
+    function renderContent() {
+        const file = getQueryVariable('file') || 'model-00001-of-00118.safetensors';
+        const data = staticData[file];
+        const container = document.getElementById('file-content');
+        if (!data) {
+            container.innerHTML = `<div style='color:#64748b;font-size:1.1rem;'>暂不支持该文件类型的预览。</div>`;
+            return;
+        }
+        if (data.type === 'weight') {
+            let html = `<div class='weight-card-list'>`;
+            data.weights.forEach(w => {
+                html += `<div class='card'>
+                    <div class='card-title'>${w.name}</div>
+                    <div class='card-meta'><span class='card-label'>形状:</span>${w.shape}</div>
+                    <div class='card-meta'><span class='card-label'>数据类型:</span>${w.dtype}</div>
+                    <div class='card-meta'><span class='card-label'>前10项权重值:</span></div>
+                    <div class='weight-values'>${w.values}</div>
+                </div>`;
+            });
+            html += `</div>`;
+            container.innerHTML = html;
+        } else if (data.type === 'json' || data.type === 'txt') {
+            container.innerHTML = `<pre>${data.content}</pre>`;
+        } else {
+            container.innerHTML = `<div style='color:#64748b;font-size:1.1rem;'>暂不支持该文件类型的预览。</div>`;
+        }
+    }
+    document.addEventListener('DOMContentLoaded', renderContent);
+    </script>
+</body>
+</html>

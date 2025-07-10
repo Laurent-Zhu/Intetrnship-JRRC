@@ -1,0 +1,100 @@
+type: object
+name: 人天估计
+required:
+  - needNewPage
+  - requirementDesc
+  - requirementSelect
+properties:
+  flows:
+    type: string
+    ui:hidden: true
+    default: estimateManDay-Flow.yml
+
+  needNewPage:
+    type: string
+    title: 是否需要新开发界面
+    err:options:
+      required: '请告诉我是否需要开发新界面'
+    ui:customize: cascader
+    ui:options:
+      width: 80%
+      placeholder: 选择是否需要新开发界面
+    enums:
+      type: static
+      config:
+        props:
+          label: label
+          value: value
+          children: children
+          multiple: false
+          emitPath: false
+        options:
+          - value: x1
+            label: 是
+            children:
+              - value: 0
+                label: 无操作平台，需要重新设计一套前后端
+          - value: x2
+            label: 否
+            children:
+              - value: 1
+                label: 适配需求方的本地界面
+              - value: 2
+                label: 使用jrrc的数智平台
+              - value: 3
+                label: 采用联网的方式
+          - value: 4
+            label: 不清楚，转人工交流
+
+  requirementSelect:
+    type: string
+    title: 需求类型选择
+    description: 选择需求类型
+    ui:customize: cascader
+    ui:options:
+      width: 100%
+      placeholder: 选择需求类型
+    enums:
+      type: static
+      config:
+        props:
+          label: label
+          value: value
+          children: children
+          multiple: true
+          emitPath: false
+        options:
+          - value: x1
+            label: 问答
+            children:
+              - value: 0
+                label: 政策类
+              - value: 1
+                label: 流程类
+              - value: 2
+                label: 专业性强的（如医疗、金融、法律等）或者涉及用户隐私信息的
+          - value: x2
+            label: 生文
+            children:
+              - value: 3
+                label: 采用模板生文，全文字数不多
+              - value: 4
+                label: 字数很多的生文需求，如项目书、可行性报告等
+              - value: 5
+                label: 仅调整原文本格式，无生文逻辑
+    err:options:
+      required: '请选择需求类型'
+    default: ''
+
+  requirementDesc:
+    type: string
+    title: 更具体的需求描述
+    description: 输入更具体的需求描述
+    ui:options:
+      type: textarea
+      rows: 2
+      width: 100%
+      placeholder: 输入更具体的需求描述
+    err:options:
+      required: '请输入需求描述'
+    default: ''    

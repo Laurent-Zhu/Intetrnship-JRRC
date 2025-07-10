@@ -1,0 +1,61 @@
+- code: declared.operations
+  name: 初始化环境
+  function_desc: 为图片生成插件设置环境
+  props:
+    design: 2b352afb089049bca92180956279efaf
+  args:
+    payload:
+      llm:
+        name: gpt-4o
+        temperature: 0.7
+        slaves:
+          - name: qwen2-72b-instruct-gptq-int8
+  sinks:
+    logging: true
+
+- code: midware.operations#dall_image_generate
+  name: 根据文本生成图片
+  function_desc: 使用DALL-E生成图片
+  props:
+    design: 8c7d6e5f-9012-3456-abcd-789012345678
+  args:
+    prompt: "{context#content}"
+    size: "1024x1024"
+    quality: "standard"
+    model: dall-e-3
+    profile: de-employee-vision
+    attachment: true
+  sinks:
+    context:
+      - name: answer
+        type: set-props
+    logging: true
+
+# - code: memories.storage#put
+#   name: 持久化保存对话内容
+#   function_desc: 保存用户输入的描述和生成的图片URL
+#   props:
+#     design: 9e8f7a6b-2345-6789-abcd-1234567890ab
+#   args:
+#     messages:
+#       - role: user
+#         content: 图片描述：{context#image_desc}
+#       - role: assistant
+#         content: 生成的图片URL：{context#image_url}
+#   sinks:
+#     logging: true
+
+- code: reply.operations
+  name: 输出图片URL到前端
+  function_desc: 将生成的图片URL以Markdown格式显示
+  props:
+    design: f944185977e74063af349eef36a50f70
+  args:
+    pending: |-
+      ## 生成的图片
+      ![Generated Image]({context#answer})
+  reply: pending
+
+- code: refs.operations
+  args:
+    flows: chat-memories-flush.yml

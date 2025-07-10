@@ -1,0 +1,51 @@
+# type: object
+# name: 项目总结报告
+# required:
+#   - project_name
+#   - project_desc
+# properties:
+#   project_name:
+#     type: string
+#     title: 项目名称
+#     ui:options:
+#       type: input
+#     err:options:
+#       required: '请输入项目名称'
+#     default: ''
+#   project_desc:
+#     type: string
+#     title: 项目描述
+#     description: 请详细描述项目内容和目标
+#     ui:options:
+#       type: textarea
+#       rows: 4
+#       width: 100%
+#       placeholder: 输入项目描述，例如目标、进展或成果
+#     err:options:
+#       required: '请输入项目描述'
+#     default: ''
+#   flows:
+#     type: string
+#     ui:hidden: true
+#     default: zyf-test.yml
+type: object
+name: 关键词生成短文
+required:
+  - content
+properties:
+  content:
+    type: string
+    title: 关键词
+    description: 输入1-3个关键词，用逗号分隔（如“科技, 未来, 创新”）
+    ui:options:
+      type: textarea
+      rows: 2
+      width: 100%
+      placeholder: 请输入关键词，例如：科技, 未来, 创新
+    err:options:
+      required: '请输入关键词'
+    default: ''
+  flows:
+    type: string
+    ui:hidden: true
+    default: zyf-test.yml

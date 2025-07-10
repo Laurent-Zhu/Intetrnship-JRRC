@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>模型数据看板</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 引入 ECharts CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <style>
+        body {
+            font-family: "Microsoft YaHei", Arial, sans-serif;
+            background: linear-gradient(120deg, #e0e7ff 0%, #f0fdfa 100%);
+            margin: 0;
+            min-height: 100vh;
+        }
+        .navbar {
+            width: 100%;
+            height: 56px;
+            background: linear-gradient(90deg, #6366f1 0%, #38bdf8 100%);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 32px;
+            box-sizing: border-box;
+            color: #fff;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 100;
+        }
+        .navbar-logo {
+            font-size: 1.3rem;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+        .navbar-menu {
+            list-style: none;
+            display: flex;
+            gap: 32px;
+            margin: 0;
+            padding: 0;
+        }
+        .navbar-menu li a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1.08rem;
+            transition: color 0.2s;
+        }
+        .navbar-menu li a:hover {
+            color: #e0e7ff;
+        }
+        .sidebar {
+            position: fixed;
+            top: 56px;
+            left: 0;
+            width: 220px;
+            height: calc(100vh - 56px);
+            background: #f8fafc;
+            border-right: 1px solid #e5e7eb;
+            padding-top: 32px;
+            box-sizing: border-box;
+            overflow-y: auto;
+        }
+        .sidebar ul {
+            list-style: none;
+            padding: 0 0 0 24px;
+            margin: 0;
+        }
+        .sidebar ul li {
+            margin-bottom: 18px;
+        }
+        .sidebar ul li.section-title {
+            color: #64748b;
+            font-weight: bold;
+            margin-top: 32px;
+            margin-bottom: 10px;
+            font-size: 1.05rem;
+        }
+        .sidebar ul li a {
+            color: #2563eb;
+            text-decoration: none;
+            font-size: 1.08rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        .sidebar ul li a:hover {
+            color: #38bdf8;
+        }
+        .main-content {
+            margin-left: 240px;
+            margin-top: 72px;
+            padding: 32px 24px;
+        }
+        @media (max-width: 900px) {
+            .sidebar { display: none; }
+            .main-content { margin-left: 0; }
+            .navbar { padding: 0 12px; }
+        }
+        .container { max-width: 1100px; margin: 0 auto; background: #fff; border-radius: 18px; box-shadow: 0 4px 24px #dbeafe; padding: 40px 24px; }
+        h1 { color: #2563eb; font-size: 2.2rem; letter-spacing: 1px; margin-bottom: 24px; text-align: center; }
+        .dashboard-controls { display: flex; gap: 24px; justify-content: center; margin-bottom: 32px; flex-wrap: wrap; }
+        .dashboard-controls select {
+            padding: 8px 16px;
+            border-radius: 6px;
+            border: 1px solid #cbd5e1;
+            font-size: 1.05rem;
+            background: #f8fafc;
+        }
+        .dashboard-cards {
+            display: flex;
+            gap: 32px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 32px;
+        }
+        .data-card {
+            background: #f8fafc;
+            border-radius: 14px;
+            box-shadow: 0 2px 8px #e0e7ef;
+            padding: 28px 36px;
+            min-width: 220px;
+            text-align: center;
+        }
+        .data-card-title {
+            color: #64748b;
+            font-size: 1.08rem;
+            margin-bottom: 10px;
+        }
+        .data-card-value {
+            color: #2563eb;
+            font-size: 2.1rem;
+            font-weight: bold;
+        }
+        #chart {
+            width: 100%;
+            height: 340px;
+            background: #f8fafc;
+            border-radius: 12px;
+            margin-bottom: 24px;
+            box-shadow: 0 2px 8px #e0e7ef;
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部导航栏 -->
+    <nav class="navbar">
+        <div class="navbar-logo">数智员工管理平台</div>
+        <ul class="navbar-menu">
+            <li><a href="../model_html_demo/model_demo.html">首页</a></li>
+            <li><a href="../model_html_demo/model_files.html">模型文件</a></li>
+            <li><a href="#">关于</a></li>
+        </ul>
+    </nav>
+    <!-- 侧边栏 -->
+    <aside class="sidebar">
+        <ul>
+            <li><a href="../model_html_demo/model_demo.html">模型总览</a></li>
+            <li><a href="../model_html_demo/model_files.html">文件列表</a></li>
+            <li><a href="#">系统设置</a></li>
+            <li class="section-title">数智员工</li>
+            <li><a href="#">灿小福</a></li>
+            <li><a href="#">小团1</a></li>
+            <li><a href="#">顾小今</a></li>
+            <li><a href="#">政务政策AI数智员工</a></li>
+            <li><a href="#">招小今</a></li>
+            <li><a href="#">次小今</a></li>
+            <li><a href="#">智能客服</a></li>
+            <li><a href="#">小范</a></li>
+            <li><a href="#">小道</a></li>
+            <li><a href="#">民小福</a></li>
+            <li><a href="#">企小福</a></li>
+            <li><a href="#">外事谈参数智员工</a></li>
+            <li><a href="#">演示数智员工</a></li>
+            <li><a href="#">应急服务数智员工</a></li>
+            <li><a href="#">商小福</a></li>
+            <li><a href="#">政务数据服务数智员工</a></li>
+            <li><a href="#">政务数智秘书</a></li>
+            <li><a href="#">小仲</a></li>
+        </ul>
+    </aside>
+    <!-- 主内容区 -->
+    <div class="main-content">
+        <div class="container">
+            <h1>模型数据看板</h1>
+            <div class="dashboard-controls">
+                <select id="agent-select">
+                    <option>通义千问3</option>
+                    <option>小明智能体</option>
+                    <option>灿小福</option>
+                    <option>小团1</option>
+                    <option>顾小今</option>
+                </select>
+                <select id="time-select">
+                    <option>今日</option>
+                    <option>本周</option>
+                    <option>本月</option>
+                    <option>自定义</option>
+                </select>
+                <select id="data-type-select">
+                    <option>访问人数</option>
+                    <option>Token数</option>
+                    <option>调用次数</option>
+                    <option>平均响应时间</option>
+                </select>
+            </div>
+            <div class="dashboard-cards">
+                <div class="data-card">
+                    <div class="data-card-title">访问人数</div>
+                    <div class="data-card-value" id="user-count">1234</div>
+                </div>
+                <div class="data-card">
+                    <div class="data-card-title">Token数</div>
+                    <div class="data-card-value" id="token-count">567,890</div>
+                </div>
+                <div class="data-card">
+                    <div class="data-card-title">调用次数</div>
+                    <div class="data-card-value" id="call-count">321</div>
+                </div>
+                <div class="data-card">
+                    <div class="data-card-title">平均响应时间</div>
+                    <div class="data-card-value" id="avg-time">0.82s</div>
+                </div>
+            </div>
+            <div id="chart"></div>
+        </div>
+    </div>
+    <script>
+        // 模拟数据
+        const chartData = {
+            "通义千问3": {
+                "今日": {
+                    "访问人数": [120, 132, 101, 134, 90, 230, 210],
+                    "Token数": [32000, 33200, 30100, 33400, 39000, 33000, 32000],
+                    "调用次数": [220, 182, 191, 234, 290, 330, 310],
+                    "平均响应时间": [0.8, 0.82, 0.81, 0.85, 0.79, 0.83, 0.82]
+                },
+                "本周": {
+                    "访问人数": [820, 932, 901, 934, 1290, 1330, 1320],
+                    "Token数": [132000, 133200, 130100, 133400, 139000, 133000, 132000],
+                    "调用次数": [1220, 1182, 1191, 1234, 1290, 1330, 1310],
+                    "平均响应时间": [0.82, 0.81, 0.83, 0.85, 0.80, 0.84, 0.82]
+                }
+            },
+            "小明智能体": {
+                "今日": {
+                    "访问人数": [60, 72, 81, 94, 100, 110, 120],
+                    "Token数": [12000, 13200, 14100, 14400, 14900, 15300, 16000],
+                    "调用次数": [110, 120, 130, 140, 150, 160, 170],
+                    "平均响应时间": [0.9, 0.92, 0.91, 0.95, 0.89, 0.93, 0.92]
+                },
+                "本周": {
+                    "访问人数": [420, 532, 601, 634, 690, 730, 820],
+                    "Token数": [62000, 73200, 81000, 84400, 89000, 93000, 102000],
+                    "调用次数": [510, 520, 530, 540, 550, 560, 570],
+                    "平均响应时间": [0.92, 0.91, 0.93, 0.95, 0.90, 0.94, 0.92]
+                }
+            }
+            // 其他智能体可继续补充
+        };
+
+        const xAxisLabels = {
+            "今日": ["8:00", "10:00", "12:00", "14:00", "16:00", "18:00", "20:00"],
+            "本周": ["周一", "周二", "周三", "周四", "周五", "周六", "周日"],
+            "本月": ["1周", "2周", "3周", "4周", "5周", "6周", "7周"]
+        };
+
+        function getCurrentData() {
+            const agent = document.getElementById('agent-select').value;
+            const time = document.getElementById('time-select').value;
+            const type = document.getElementById('data-type-select').value;
+            // 默认数据
+            let data = (chartData[agent] && chartData[agent][time] && chartData[agent][time][type]) || [0,0,0,0,0,0,0];
+            let xLabels = xAxisLabels[time] || ["A","B","C","D","E","F","G"];
+            return {data, xLabels};
+        }
+
+        function renderChart() {
+            const {data, xLabels} = getCurrentData();
+            const type = document.getElementById('data-type-select').value;
+            const chartDom = document.getElementById('chart');
+            const myChart = echarts.init(chartDom);
+            const option = {
+                tooltip: { trigger: 'axis' },
+                xAxis: { type: 'category', data: xLabels },
+                yAxis: { type: 'value', name: type },
+                series: [{
+                    data: data,
+                    type: 'line',
+                    smooth: true,
+                    areaStyle: { color: '#bae6fd' },
+                    lineStyle: { color: '#38bdf8' },
+                    symbol: 'circle',
+                    symbolSize: 8
+                }]
+            };
+            myChart.setOption(option);
+        }
+
+        // 监听下拉框变化
+        document.addEventListener('DOMContentLoaded', function() {
+            renderChart();
+            document.getElementById('agent-select').addEventListener('change', renderChart);
+            document.getElementById('time-select').addEventListener('change', renderChart);
+            document.getElementById('data-type-select').addEventListener('change', renderChart);
+        });
+    </script>
+</body>
+</html>

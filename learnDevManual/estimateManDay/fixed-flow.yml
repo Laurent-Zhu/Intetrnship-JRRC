@@ -1,0 +1,102 @@
+- code: declared.operations
+  name: 初始化环境
+  function_desc: 为人天估算设置大模型环境
+  props:
+    design: 2b352afb089049bca92180956279efaf
+  args:
+    payload:
+      llm:
+        name: gpt-4o
+        temperature: 0.7
+        slaves:
+          - name: qwen2-72b-instruct-gptq-int8
+
+- code: sources.execution
+  name: 计算人天估算
+  description: 根据输入和规则生成人天估算表格
+  props:
+    design: 8c7d6e5f-9012-3456-abcd-789012345678
+  args:
+    source: |-
+      desc = "{context#requirementDesc}"
+      business_count = 1  # 默认1种业务
+      # if "{context#requirementSelect}" == "x1-1":  # 流程类
+      #     keywords = ["流程", "业务", "步骤", "办理", "注册", "变更", "注销"]
+      #     for keyword in keywords:
+      #         business_count += desc.count(keyword)
+
+      need_new_page = "{context#needNewPage}"
+      req_select = "{context#requirementSelect}"
+      # desc = "{context#requirementDesc}".lower()
+      business_count = str(business_count)
+
+      # 初始化结果
+      table = ["## 人天估算结果", "", "| 功能点 | 人天估算 | 实施阶段 | 备注 |", "|-------|----------|----------|------|"]
+      total_days = 0
+      complexity_adjust = 0
+
+      # 界面需求
+      if need_new_page == "0":
+          table.append("| 新开发前后端 | 25 | 一期 | 前端15人天+后端10人天，复杂UI/UX |")
+          total_days += 25
+      elif need_new_page == "适配需求方的本地界面":
+          table.append("| 适配本地界面 | 5 | 一期 | 前端3人天+后端2人天，样式调整 |")
+          total_days += 5
+      elif need_new_page == "使用jrrc的数智平台":
+          table.append("| 使用jrrc数智平台 | 2 | 一期 | 前端1人天+后端1人天，简单适配 |")
+          total_days += 2
+      elif need_new_page == "采用联网的方式":
+          table.append("| 联网方式 | 4 | 一期 | 前端2人天+后端2人天，API调用 |")
+          total_days += 4
+      else:
+          # return "需进一步沟通，建议转人工。"
+
+      # 需求类型
+      if req_select == "政策类":
+          table.append("| 政策类问答 | 5 | 一期 | 基于法律法规，知识库+问答逻辑 |")
+          total_days += 5
+      elif req_select == "流程类":
+          days = business_count * 5
+          table.append(f"| 流程类问答 | {days} | 一期 | {business_count}种业务×5人天 |")
+          total_days += days
+      elif req_select == "专业性强的（如医疗、金融、法律等）或者涉及用户隐私信息的":
+          # return "专业性强或涉及隐私的问答需求暂不支持。"
+      elif req_select == "采用模板生文，全文字数不多":
+          table.append("| 模板生文 | 5 | 一期 | 生成模板化材料，字数不多 |")
+          total_days += 5
+      elif req_select == "字数很多的生文需求，如项目书、可行性报告等":
+          # return "长文本生文需求暂不支持。"
+      elif req_select == "仅调整原文本格式，无生文逻辑":
+          table.append("| 格式调整 | 2 | 一期 | 数据处理，简单格式调整 |")
+          total_days += 2
+
+      # 复杂性调整
+      if "多功能" in desc or "多种" in desc or len(desc.split()) > 50:
+          complexity_adjust = 2
+          table.append(f"| 复杂性调整 | {complexity_adjust} | 一期 | 需求描述复杂，增加人天 |")
+          total_days += complexity_adjust
+
+      # 部署及运维
+      deploy_ops = round(total_days * 0.43)
+      table.append(f"| **总计** | {total_days} |  | 部署及运维约{deploy_ops}人天 |")
+
+      return "\n".join(table)
+  sinks:
+    context:
+      - name: estimate_result
+        type: set-props
+    logging: true
+
+- code: reply.operations
+  name: 输出估算结果到前端
+  description: 将人天估算结果以Markdown格式显示
+  props:
+    design: f944185977e74063af349eef36a50f70
+  args:
+    pending: "{context#estimate_result}"
+  reply: pending
+
+- code: refs.operations
+  name: 保存历史记录
+  args:
+    flows: chat-memories-flush.yml

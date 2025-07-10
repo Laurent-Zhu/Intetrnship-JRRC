@@ -1,0 +1,102 @@
+- code: declared.operations
+  name: 初始化环境
+  function_desc: 为人天估算设置大模型环境
+  props:
+    design: 2b352afb089049bca92180956279efaf
+  args:
+    payload:
+      llm:
+        name: gpt-4o
+        temperature: 0.7
+        slaves:
+          - name: qwen2-72b-instruct-gptq-int8
+  sinks:
+    logging: true
+- code: sources.execution
+  name: 解析业务种类数量
+  function_desc: 从需求描述中提取流程类业务的种类数量
+  props:
+    design: 7c7c990a58e5466ea9f268d1d8e04e87
+  args:
+    source: |-
+      desc = "{context#requirementDesc}"
+      business_count = 1  # 默认1种业务
+      if "{context#requirementSelect}" == "x1-1":  # 流程类
+        # 简单计数关键词，如“注册流程”“变更流程”
+        keywords = ["流程", "业务", "步骤"]
+        for keyword in keywords:
+          business_count += desc.count(keyword)
+      return str(business_count)
+  sinks:
+    context:
+      - name: business_count
+        type: set-props
+    logging: true
+- code: llmx.predict.chat
+  name: 估算人天
+  function_desc: 根据用户输入和新规则估算开发人天
+  props:
+    design: 8c7d6e5f-9012-3456-abcd-789012345678
+  args:
+    messages:
+      - type: system
+        template: |-
+          你是一个人天估算助手，基于以下输入和新规则估算开发人天，输出Markdown格式的表格，包含功能点、人天估算、实施阶段和备注：
+          - 是否需要新界面：{context#needNewPage}
+          - 需求类型：{context#requirementSelect}
+          - 具体描述：{context#requirementDesc}
+          - 流程类业务种类数量：{context#business_count}
+          估算规则：
+          - 新开发前后端（x1-0）：前端15人天，后端10人天。
+          - 适配本地界面（x2-1）：前端3人天，后端2人天。
+          - 使用jrrc数智平台（x2-2）：前端1人天，后端1人天。
+          - 联网方式（x2-3）：前端2人天，后端2人天。
+          - 转人工（4）：返回“需进一步沟通，建议转人工”。
+          - 问答-政策类（x1-0）：5-10人天（默认8人天）。
+          - 问答-流程类（x1-1）：每种业务5人天。
+          - 问答-专业性强或隐私（x1-2）：返回“专业性强或涉及隐私的问答需求暂不支持”。
+          - 生文-模板（x2-3）：5-10人天（默认8人天）。
+          - 生文-长文本（x2-4）：返回“长文本生文需求暂不支持”。
+          - 生文-格式调整（x2-5）：2-3人天（默认3人天）。
+          - 若具体描述复杂（如多功能组合），增加2-5人天（默认3人天）。
+          - 部署及运维按开发人天的43%估算。
+          若无法估算，返回“输入信息不足，需进一步沟通”。
+      - type: human
+        template: |-
+          是否需要新界面：{context#needNewPage}
+          需求类型：{context#requirementSelect}
+          具体描述：{context#requirementDesc}
+          流程类业务种类数量：{context#business_count}
+  sinks:
+    context:
+      - name: estimate_result
+        type: set-props
+    logging: true
+# - code: memories.storage#put
+#   name: 保存估算记录
+#   function_desc: 持久化用户输入和估算结果
+#   props:
+#     design: 9e8f7a6b-2345-6789-abcd-1234567890ab
+#   args:
+#     messages:
+#       - role: user
+#         content: |-
+#           是否需要新界面：{context#needNewPage}
+#           需求类型：{context#requirementSelect}
+#           具体描述：{context#requirementDesc}
+#       - role: assistant
+#         content: "{context#estimate_result}"
+#   sinks:
+#     logging: true
+- code: reply.operations
+  name: 输出估算结果到前端
+  function_desc: 将人天估算结果以Markdown格式显示
+  props:
+    design: f944185977e74063af349eef36a50f70
+  args:
+    pending: "{context#estimate_result}"
+  reply: pending
+- code: refs.operations
+  name: 保存历史记录
+  args:
+    flows: chat-memories-flush.yml

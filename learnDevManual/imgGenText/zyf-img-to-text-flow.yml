@@ -1,0 +1,99 @@
+- code: declared.operations
+  name: 定义大语言模型
+  function_desc: 设置使用gpt-4o模型生成短文
+  props:
+    design: 2b352afb089049bca92180956279efaf
+  args:
+    payload:
+      llm:
+        name: gpt-4o
+        temperature: 0.7
+        slaves:
+          - name: qwen2-72b-instruct-gptq-int8
+  sinks:
+    logging: true
+
+- code: topics.docs.operations#get
+  name: 获取图片信息
+  function_desc: 获取用户上传图片的文件信息
+  props:
+    design: f944185977e74063af349eef36a50f70
+  args:
+    document: "{context#image_file}"
+  sinks:
+    context:
+      - name: file_info
+    logging: true
+
+- code: topics.docs.operations#bytes
+  name: 读取图片二进制数据
+  function_desc: 获取图片的二进制内容供OCR使用
+  props:
+    design: 73c901538f78450cbe06496f0fca7fe3
+  args:
+    document: "{context#image_file}"
+  sinks:
+    context:
+      - name: image_bytes
+    logging: true
+
+- code: midware.operations#ocr_huawei_convert
+  name: OCR识别图片文本
+  function_desc: 使用华为云OCR提取图片中的文本
+  props:
+    design: 8c7d6e5f-9012-3456-abcd-789012345678
+  args:
+    data: "{context#image_bytes}"
+  sinks:
+    context:
+      - name: ocr_text
+    logging: true
+
+- code: llmx.predict.chat
+  name: 根据OCR文本生成短文
+  function_desc: 使用OCR提取的文本生成200-300字短文
+  props:
+    design: 7c7c990a58e5466ea9f268d1d8e04e87
+  args:
+    messages:
+      - type: system
+        template: |-
+          你是一个专业的短文生成助手。根据从图片中提取的文本，生成一篇200-300字的短文，内容连贯、逻辑清晰，格式为Markdown。短文应包含：
+          - 标题：基于文本内容的核心主题（使用 <center> 标签）
+          - 正文：围绕文本内容展开，结构为引言、主体和结尾
+          - 语言：简洁生动，适合通用读者
+          如果文本为空或无法生成，说明图片内容不可用，并返回提示信息。
+      - type: human
+        template: 提取的文本：{context#ocr_text}
+  sinks:
+    context:
+      - name: article_result
+    logging: true
+
+- code: memories.storage#put
+  name: 持久化保存对话内容
+  function_desc: 保存图片ID和生成的短文
+  props:
+    design: 9e8f7a6b-2345-6789-abcd-1234567890ab
+  args:
+    messages:
+      - role: user
+        content: 上传的图片ID：{context#image_file}
+      - role: assistant
+        content: "{context#article_result}"
+  sinks:
+    logging: true
+
+- code: reply.operations
+  name: 输出短文到前端
+  function_desc: 将生成的短文以Markdown格式显示
+  props:
+    design: f944185977e74063af349eef36a50f70
+  args:
+    pending: "{context#article_result}"
+  reply: pending
+
+- code: refs.operations
+  name: 保存历史记录
+  args:
+    flows: chat-memories-flush.yml

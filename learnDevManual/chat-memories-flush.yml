@@ -1,0 +1,11 @@
+code: plans.structured
+name: 保存历史记录
+args:
+  - code: memories.storage0#put
+    args:
+      messages:
+        - role: human
+          content: "{context#content}"
+        - role: ai
+          content: "{context#answer}"
+  - code: memories.storage0#flush
