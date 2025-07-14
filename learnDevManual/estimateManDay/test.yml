@@ -1,0 +1,181 @@
+- code: declared.operations
+  name: 初始化环境
+  function_desc: 为人天估算设置大模型环境
+  props:
+    design: 2b352afb089049bca92180956279efaf
+  args:
+    payload:
+      llm:
+        name: gpt-4o
+        temperature: 0.7
+        slaves:
+          - name: qwen2-72b-instruct-gptq-int8
+
+- code: sources.execution
+  name: 规则式计算人天估算
+  description: 根据输入和规则生成人天估算表格
+  props:
+    design: 8c7d6e5f-9012-3456-abcd-789012345678
+  args:
+    source: |-
+      desc = "{context#requirementDesc}"
+      business_count = 1  # 默认1种业务
+      # 解析需求类型
+      business_count = {context#countBusiness}
+
+      need_new_page = "{context#needNewPage}"
+      req_select = {context#requirementSelect}
+
+      # 初始化结果
+      table = ["## 人天估算结果", "", "| 功能点 | 人天估算 | 实施阶段 | 备注 |", "|-------|----------|----------|------|"]
+      total_days = 0
+
+      # 界面需求
+      if need_new_page == "0":
+          print("--------------------------新开发前后端------------------------------")
+          table.append("| 新开发前后端 | 25 | 一期 | 前端15人天+后端10人天, 复杂UI/UX |")
+          total_days += 25
+      elif need_new_page == "1":
+          table.append("| 适配本地界面 | 5 | 一期 | 前端3人天+后端2人天, 样式调整 |")
+          total_days += 5
+      elif need_new_page == "2":
+          table.append("| 使用jrrc数智平台 | 2 | 一期 | 前端1人天+后端1人天, 简单适配 |")
+          total_days += 2
+      elif need_new_page == "3":
+          table.append("| 联网方式 | 4 | 一期 | 前端2人天+后端2人天, API调用 |")
+          total_days += 4
+      elif need_new_page == "4":
+          print("需进一步沟通，建议转人工")
+          # table = "需进一步沟通，建议转人工。"
+
+      # 需求类型
+      if 0 in req_select:
+          print("政策类问答")
+          table.append("| 政策类问答 | 5 | 一期 | 基于法律法规, 知识库+问答逻辑 |")
+          total_days += 5
+      if 1 in req_select:
+          print("流程类问答")
+          days = business_count * 5
+          table.append(f"| 流程类问答 | {days} | 一期 | {business_count}种业务 x 5人天 |")
+          total_days += days
+      if 2 in req_select:
+          print("专业性强或隐私的问答需求")
+          print("专业性强或涉及隐私的问答需求暂不支持")
+          # table = "专业性强或涉及隐私的问答需求暂不支持。"
+      if 3 in req_select:
+          print("模板生文")
+          table.append("| 模板生文 | 5 | 一期 | 生成模板化材料, 字数不多 |")
+          total_days += 5
+      if 4 in req_select:
+          print("长文本生文")
+          print("长文本生文需求暂不支持")
+          # table = "长文本生文需求暂不支持。"
+      if 5 in req_select:
+          print("格式调整生文")
+          table.append("| 格式调整 | 2 | 一期 | 数据处理，简单格式调整 |")
+          total_days += 2
+
+      # 部署及运维
+      deploy_ops = round(total_days * 0.43)
+      table.append(f"| **总计** | {total_days} |  | 部署及运维约{deploy_ops}人天 |")
+
+      res = ""
+
+      if 2 in req_select or 4 in req_select or need_new_page == "4":
+          # 收集错误/不支持信息
+          if 2 in req_select:
+              res += "专业性强或涉及隐私的问答需求暂不支持。\n"
+          if 4 in req_select:
+              res += "长文本生文需求暂不支持。\n"
+          if need_new_page == "4":
+              res += "需进一步沟通，建议转人工。\n"
+
+      # 正常输出估算表
+      else:
+          res = "\n".join(table) + f"\n\n总人天估算：{total_days}人天（部署及运维约{deploy_ops}人天）"
+
+      return res
+  sinks:
+    context:
+      - name: compute_result
+        type: set-props
+    logging: true
+
+- code: llmx.predict.chat
+  name: 判断需求复杂性
+  function_desc: 使用大模型根据描述判断需求的复杂程度，返回建议增加的人天数（0~5）
+  props:
+    design: 93dfaa6d-e9f0-4b8f-b0ea-llm-complexity-adjust
+  args:
+    messages:
+      - type: system
+        template: |
+          你是一个产品经理助手，请根据以下用户的需求描述，判断其开发复杂度。
+          返回一个合理的整数，代表需要额外增加的人天数（仅用于复杂性调整）。
+          目前的估算规则如下：
+          - 是否需要新界面：{context#needNewPage}
+          - 需求类型：{context#requirementSelect}
+          - 具体描述：{context#requirementDesc}
+          - 流程类业务种类数量：{context#business_count}
+          估算规则：
+          - 新开发前后端（x1-0）：前端15人天，后端10人天。
+          - 适配本地界面（x2-1）：前端3人天，后端2人天。
+          - 使用jrrc数智平台（x2-2）：前端1人天，后端1人天。
+          - 联网方式（x2-3）：前端2人天，后端2人天。
+          - 转人工（4）：返回“需进一步沟通，建议转人工”。
+          - 问答-政策类（x1-0）：5-10人天（默认8人天）。
+          - 问答-流程类（x1-1）：每种业务5人天。
+          - 问答-专业性强或隐私（x1-2）：返回“专业性强或涉及隐私的问答需求暂不支持”。
+          - 生文-模板（x2-3）：5-10人天（默认8人天）。
+          - 生文-长文本（x2-4）：返回“长文本生文需求暂不支持”。
+          - 生文-格式调整（x2-5）：2-3人天（默认3人天）。
+          - 若具体描述复杂（如多功能组合），增加2-5人天（默认3人天）。
+          - 部署及运维按开发人天的43%估算。
+          返回格式：仅返回代表复杂度的数字，不要输出其他内容。
+      - type: human
+        template: |
+          用户补充的需求描述如下：
+          {context#requirementDesc}
+          目前已经根据需求类型和界面需求进行了初步估算，当前结果如下：
+          {context#compute_result}
+          请判断该需求的复杂性，并返回一个合适的的整数，代表根据补充需要额外增加的人天数。
+  sinks:
+    context:
+      - name: complexity_adjust
+        type: set-props
+    logging: true
+
+- code: sources.execution
+  name: 整合规则式计算的人天估算和llm补充的复杂性调整
+  function_desc: 根据输入和规则生成人天估算表格，并整合复杂
+  props:
+    design: 8c7d6e5f-9012-3456-abcd-789012345678
+  args:
+    source: |-
+      complexity_adjust = {context#complexity_adjust}
+
+      # 复杂性调整
+      complex = "应用复杂性调整(调用llm评判), 应该增加" + complexity_adjust + "人天"
+
+      res = {context#compute_result}
+
+      return res + "\n" + complex
+  sinks:
+    context:
+      - name: estimate_result
+        type: set-props
+    logging: true
+
+- code: reply.operations
+  name: 输出估算结果到前端
+  description: 将人天估算结果以Markdown格式显示
+  props:
+    design: f944185977e74063af349eef36a50f70
+  args:
+    pending: "{context#estimate_result}"
+  reply: pending
+
+- code: refs.operations
+  name: 保存历史记录
+  args:
+    flows: chat-memories-flush.yml

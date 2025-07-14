@@ -98,3 +98,16 @@ properties:
     err:options:
       required: '请输入需求描述'
     default: ''    
+
+  countBusiness:
+    type: number
+    title: 业务种类数量
+    description: 若选择了流程类问答需求，则请输入流程类业务种类数量
+    ui:options:
+      type: textarea
+      rows: 2
+      width: 100%
+      placeholder: 若选择了流程类问答需求，则请输入流程类业务种类数量
+    # err:options:
+    #   required: '请输入需求描述'
+    default: ''   

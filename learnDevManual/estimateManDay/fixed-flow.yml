@@ -18,17 +18,17 @@
     design: 8c7d6e5f-9012-3456-abcd-789012345678
   args:
     source: |-
+      if 'desc' not in locals():
+        desc = ""  # 或者提供默认值
       desc = "{context#requirementDesc}"
       business_count = 1  # 默认1种业务
-      # if "{context#requirementSelect}" == "x1-1":  # 流程类
-      #     keywords = ["流程", "业务", "步骤", "办理", "注册", "变更", "注销"]
-      #     for keyword in keywords:
-      #         business_count += desc.count(keyword)
+      # 解析需求类型
+      business_count = {context#countBusiness}
+
 
       need_new_page = "{context#needNewPage}"
-      req_select = "{context#requirementSelect}"
-      # desc = "{context#requirementDesc}".lower()
-      business_count = str(business_count)
+      req_select = {context#requirementSelect}
+
 
       # 初始化结果
       table = ["## 人天估算结果", "", "| 功能点 | 人天估算 | 实施阶段 | 备注 |", "|-------|----------|----------|------|"]
@@ -37,50 +37,99 @@
 
       # 界面需求
       if need_new_page == "0":
+          print("--------------------------新开发前后端------------------------------")
           table.append("| 新开发前后端 | 25 | 一期 | 前端15人天+后端10人天，复杂UI/UX |")
           total_days += 25
-      elif need_new_page == "适配需求方的本地界面":
+      elif need_new_page == "1":
           table.append("| 适配本地界面 | 5 | 一期 | 前端3人天+后端2人天，样式调整 |")
           total_days += 5
-      elif need_new_page == "使用jrrc的数智平台":
+      elif need_new_page == "2":
           table.append("| 使用jrrc数智平台 | 2 | 一期 | 前端1人天+后端1人天，简单适配 |")
           total_days += 2
-      elif need_new_page == "采用联网的方式":
+      elif need_new_page == "3":
           table.append("| 联网方式 | 4 | 一期 | 前端2人天+后端2人天，API调用 |")
           total_days += 4
-      else:
-          # return "需进一步沟通，建议转人工。"
+      elif need_new_page == "4":
+          print("需进一步沟通，建议转人工")
+          # table = "需进一步沟通，建议转人工。"
 
       # 需求类型
-      if req_select == "政策类":
+      if 0 in req_select:
+          print("政策类问答")
           table.append("| 政策类问答 | 5 | 一期 | 基于法律法规，知识库+问答逻辑 |")
           total_days += 5
-      elif req_select == "流程类":
+      if 1 in req_select:
+          print("流程类问答")
           days = business_count * 5
           table.append(f"| 流程类问答 | {days} | 一期 | {business_count}种业务×5人天 |")
           total_days += days
-      elif req_select == "专业性强的（如医疗、金融、法律等）或者涉及用户隐私信息的":
-          # return "专业性强或涉及隐私的问答需求暂不支持。"
-      elif req_select == "采用模板生文，全文字数不多":
+      if 2 in req_select:
+          print("专业性强或隐私的问答需求")
+          print("专业性强或涉及隐私的问答需求暂不支持")
+          # table = "专业性强或涉及隐私的问答需求暂不支持。"
+      if 3 in req_select:
+          print("模板生文")
           table.append("| 模板生文 | 5 | 一期 | 生成模板化材料，字数不多 |")
           total_days += 5
-      elif req_select == "字数很多的生文需求，如项目书、可行性报告等":
-          # return "长文本生文需求暂不支持。"
-      elif req_select == "仅调整原文本格式，无生文逻辑":
+      if 4 in req_select:
+          print("长文本生文")
+          print("长文本生文需求暂不支持")
+          # table = "长文本生文需求暂不支持。"
+      if 5 in req_select:
+          print("格式调整生文")
           table.append("| 格式调整 | 2 | 一期 | 数据处理，简单格式调整 |")
           total_days += 2
 
-      # 复杂性调整
-      if "多功能" in desc or "多种" in desc or len(desc.split()) > 50:
-          complexity_adjust = 2
-          table.append(f"| 复杂性调整 | {complexity_adjust} | 一期 | 需求描述复杂，增加人天 |")
-          total_days += complexity_adjust
+      # # 复杂性调整
+      # # 基础规则估算
+      # complex_keywords = ["流程", "注册", "变更", "模块", "业务", "步骤", "系统", "页面", "数据", "权限", "报表"]
+      # weight = sum(desc.count(k) for k in complex_keywords)
+      # word_count = len(desc.split())
+
+      # complexity_adjust = 0
+      # if weight >= 8 or word_count >= 100:
+      #     complexity_adjust = 5
+      # elif weight >= 5 or word_count >= 60:
+      #     complexity_adjust = 3
+      # elif weight >= 2 or word_count >= 30:
+      #     complexity_adjust = 2
+
+      # if 'desc' not in locals():
+      #     desc = ""  # 或者提供默认值
+      # # 多功能或并列需求
+      # if "多功能" in desc or ("流程" in desc and "问答" in desc and "模板" in desc):
+      #     complexity_adjust += 1
+
+      # table.append(f"| 复杂性调整 | {complexity_adjust} | 一期 | 需求描述复杂，增加人天 |")
+      # total_days += complexity_adjust
+      # # if "多功能" in desc or "多种" in desc or len(desc.split()) > 50:
+      # #     print("复杂性调整")
+      # #     complexity_adjust = 2
+      # #     table.append(f"| 复杂性调整 | {complexity_adjust} | 一期 | 需求描述复杂，增加人天 |")
+      # #     total_days += complexity_adjust
 
       # 部署及运维
       deploy_ops = round(total_days * 0.43)
       table.append(f"| **总计** | {total_days} |  | 部署及运维约{deploy_ops}人天 |")
 
-      return "\n".join(table)
+      res = ""
+
+      if 2 in req_select or 4 in req_select or need_new_page == "4":
+          # 收集错误/不支持信息
+          if 2 in req_select:
+              res += "专业性强或涉及隐私的问答需求暂不支持。\n"
+          if 4 in req_select:
+              res += "长文本生文需求暂不支持。\n"
+          if need_new_page == "4":
+              res += "需进一步沟通，建议转人工。\n"
+
+      # 正常输出估算表
+      else:
+          res = "\n".join(table) + f"\n\n总人天估算：{total_days}人天（部署及运维约{deploy_ops}人天）"
+
+      return res
+
+
   sinks:
     context:
       - name: estimate_result

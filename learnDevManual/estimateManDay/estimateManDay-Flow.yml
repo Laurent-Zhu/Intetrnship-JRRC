@@ -72,22 +72,7 @@
       - name: estimate_result
         type: set-props
     logging: true
-# - code: memories.storage#put
-#   name: 保存估算记录
-#   function_desc: 持久化用户输入和估算结果
-#   props:
-#     design: 9e8f7a6b-2345-6789-abcd-1234567890ab
-#   args:
-#     messages:
-#       - role: user
-#         content: |-
-#           是否需要新界面：{context#needNewPage}
-#           需求类型：{context#requirementSelect}
-#           具体描述：{context#requirementDesc}
-#       - role: assistant
-#         content: "{context#estimate_result}"
-#   sinks:
-#     logging: true
+
 - code: reply.operations
   name: 输出估算结果到前端
   function_desc: 将人天估算结果以Markdown格式显示

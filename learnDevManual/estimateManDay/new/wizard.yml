@@ -1,0 +1,136 @@
+type: object
+name: 人天估计
+required:
+  - needNewPageStatus
+  - needNewPage
+  - requirementDesc
+  - requirementSelect
+properties:
+  flows:
+    type: string
+    ui:hidden: true
+    default: estimateManDay-Flow.yml
+
+  # 是否需要新开发界面状态
+  needNewPageStatus:
+    title: 是否需要新开发界面
+    type: string
+    default: dontKnow
+    enum:
+      - needNewPage
+      - noNeedNewPage
+      - dontKnow
+    enumNames:
+      - 需要重新开发界面
+      - 不需要新开发界面
+      - 不清楚，转人工交流
+    ui:widget: RadioWidget
+
+  needNewPageDynamic:
+    type: number
+    title: 选择如何开发全新的界面
+    err:options:
+      required: '请告诉我是否需要开发新界面'
+    default: 0
+    enum:
+      - 1
+    enumNames:
+      - 无操作平台，需要重新设计一套前后端
+    ui:hidden: "{{rootFormData.needNewPageStatus != 'needNewPage'}}"
+      
+      
+  noNeedNewPageDynamic:
+    type: number
+    title: 基于何种形式开发界面
+    err:options:
+      required: '请告诉我是否需要开发新界面'
+    default: 0
+    enum:
+      - 1
+      - 2
+      - 3
+    enumNames:
+      - 适配需求方的本地界面
+      - 使用jrrc的数智平台
+      - 采用联网的方式
+    ui:hidden: "{{rootFormData.needNewPageStatus != 'noNeedNewPage'}}"
+
+  requirementTypeStatus1:
+    type: string
+    title: 需求类型选择状态
+    default: genText
+    enum:
+      - genText
+      - qNa
+    enumNames:
+      - 生文
+      - 问答
+    ui:widget: RadioWidget
+    config:
+      props:
+        multiple: true
+
+  requirementSelect1:
+    type: string
+    title: 问答类需求类型选择
+    description: 选择问答类需求类型
+    default: policy
+    enum:
+      - policy
+      - process
+      - professional
+    enumNames:
+      - 政策类
+      - 流程类
+      - 专业性强的（如医疗、金融、法律等）或者涉及用户隐私信息的
+    ui:hidden: "{{rootFormData.requirementTypeStatus1 != 'qNa'}}"
+    ui:width: 80%
+    config:
+      props:
+        multiple: true
+
+  requirementSelect2:
+    type: string
+    title: 生文类需求类型选择
+    description: 选择生文类需求类型
+    default: template
+    enum:
+      - template
+      - longText
+      - formatAdjust
+    enumNames:
+      - 采用模板生文，全文字数不多
+      - 字数很多的生文需求，如项目书、可行性报告等
+      - 仅调整原文本格式，无生文逻辑
+    ui:hidden: "{{rootFormData.requirementTypeStatus1 != 'genText'}}"
+    ui:width: 80%
+    config:
+      props:
+        multiple: true
+
+  countBusiness:
+    type: number
+    title: 业务种类数量
+    description: 若选择了流程类问答需求，则请输入流程类业务种类数量
+    ui:options:
+      type: textarea
+      rows: 2
+      width: 100%
+      placeholder: 若选择了流程类问答需求，则请输入流程类业务种类数量
+    # err:options:
+    #   required: '请输入需求描述'
+    default: 0
+    ui:hidden: "{{rootFormData.requirementSelect1 != 'process'}}"
+
+  requirementDesc:
+    type: string
+    title: 更具体的需求描述
+    description: 输入更具体的需求描述
+    ui:options:
+      type: textarea
+      rows: 2
+      width: 100%
+      placeholder: 输入更具体的需求描述
+    err:options:
+      required: '请输入需求描述'
+    default: ''    

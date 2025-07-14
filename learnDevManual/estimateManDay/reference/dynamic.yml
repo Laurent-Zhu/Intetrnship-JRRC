@@ -1,0 +1,95 @@
+title: 智能出题
+description: 智能出题
+type: object
+required:
+  - policy_file
+  - document
+  - question_num
+  - department
+  - file_status
+properties:
+  content:
+    type: string
+    ui:hidden: true
+    default: 智能出题
+  flows:
+    type: string
+    ui:hidden: true
+    default: sykj-knowledge-question.yml
+  document:
+    type: array
+    title: 出题资料
+    items:
+      type: string
+    ui:customize: select
+    enums:
+      fetch:
+        type: post
+        api: '/api/de-connect/{{current.employee.id}}/topics/docs'
+        payload: '{ "object": { "topic": "{{current.topic.id}}" } }'
+      label: filename
+      value: id
+      multiple: true
+    ui:options:
+      placeholder: 请输入想要出题的资料
+      width: 50%
+    err:options:
+      required: 请输入想要出题的资料
+  # 部门
+
+  # 文件状态
+  file_status:
+    title: 文件状态
+    type: string
+    default: change
+    enum:
+      - change
+      - add
+    enumNames:
+      - 文件修改
+      - 文件新增
+    ui:widget: RadioWidget
+  excel_tpl_id:
+    type: string
+    ui:hidden: true
+    default: 402880ad94e472530194e50a3a024f15
+  department:
+    type: string
+    title: 考试岗位
+    default: 集团信息运维人员+集团各公司IT管理员
+    ui:options:
+      width: 100%
+  dynamicComponent: 
+    type: object
+    properties: 
+      # 出题数和分数要求描述
+      change:
+        type: string
+        title: 题型设置
+        ui:options:
+          width: 100%
+          type: textarea
+          rows: 4
+          placeholder: |-
+            为空则设置为以下值：
+            - 单选题：5道（每题10分）
+            - 多选题：2道（每题15分，漏选得5分）
+            - 判断题：4道（每题5分）
+            合计：11道题  满分100分
+        default: |-
+          - 单选题：5道（每题10分）
+          - 多选题：2道（每题15分，漏选得5分）
+          - 判断题：4道（每题5分）
+          合计：11道题  满分100分
+        ui:hidden: "{{rootFormData.file_status == 'change'}}"
+     
+  # 其他要求
+  other_requirements:
+    type: string
+    title: 其他要求
+    ui:options:
+      width: 100%
+      type: textarea
+      rows: 2
+    default: |-
+      出题尽量全面不重复！
