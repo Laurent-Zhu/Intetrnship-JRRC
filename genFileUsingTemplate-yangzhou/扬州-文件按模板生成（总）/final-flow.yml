@@ -1,0 +1,1389 @@
+- code: sources.execution
+  name: 初始化模板列表
+  args:
+    source: |-
+      def f():
+        templates = [
+          {"name": "成员大会决议(注销)", "id": "c0a8002d97f38283019807c8d7e71ad8", "fields": ["market", "date", "members", "leader"]},
+          {"name": "成员代表大会决议(注销)", "id": "c0a8002d97f38283019807c8d7fd1ada", "fields": ["market", "date", "members", "leader"]},
+          {"name": "非公司法人企业清算报告", "id": "c0a8002d97f38283019807c8d8121adc", "fields": ["market", "date"]},
+          {"name": "个人独资企业清算报告", "id": "c0a8002d98091d6b01980c03abaf0390", "fields": ["market", "date"]},
+          {"name": "公司清算报告", "id": "c0a8002d98091d6b01980c03abcc0392", "fields": ["market", "date1", "date2"]},
+          {"name": "股东会会议记录(注销)", "id": "c0a8002d98091d6b01980c03abe50394", "fields": ["market", "date", "host", "director", "members", "leader"]},
+          {"name": "股东会决议(注销)", "id": "c0a8002d98091d6b01980c03abfe0396", "fields": ["market", "date", "members", "leader"]},
+          {"name": "股东决定(注销)", "id": "c0a8002d98091d6b01980c03ac170398", "fields": ["market", "date", "members", "leader"]},
+          {"name": "合伙企业清算报告", "id": "c0a8002d98091d6b01980c03ac32039a", "fields": ["market", "date"]},
+          {"name": "合伙企业注销决议", "id": "c0a8002d98091d6b01980c03ac4b039c", "fields": ["market", "date", "members"]},
+          {"name": "简易注销全体投资人承诺书", "id": "c0a8002d98091d6b01980c03ac64039e", "fields": ["market"]},
+          {"name": "农民专业合作社登记(备案)申请书(注销)", "id": "c0a8002d98091d6b01980c03ac7d03a0", "fields": ["market", "code"]},
+          {"name": "农民专业合作社清算报告", "id": "c0a8002d98091d6b01980c03ac9e03a2", "fields": ["market", "date1", "date2"]},
+          {"name": "企业注销登记申请书", "id": "c0a8002d98091d6b01980c03acb703a4", "fields": ["market", "code", "department"]},
+          {"name": "确认清算报告的成员大会决议", "id": "c0a8002d98091d6b01980c03acb903a6", "fields": ["market", "date1", "date2"]},
+          {"name": "确认清算报告的成员代表大会决议", "id": "c0a8002d98091d6b01980c03ace903a8", "fields": ["market", "date1", "date2"]},
+          {"name": "确认清算报告的股东会会议记录", "id": "c0a8002d98091d6b01980c03ad0303aa", "fields": ["market", "date1", "date2", "host", "director"]},
+          {"name": "确认清算报告的股东会决议", "id": "c0a8002d98091d6b01980c03ad1c03ac", "fields": ["market", "date1", "date2"]},
+          {"name": "主管部门(出资人)决定(注销)", "id": "c0a8002d98091d6b01980c03ad3503ae", "fields": ["date"]}
+        ]
+        return templates
+      return f()
+  sinks:
+    logging: true
+    context: templates
+
+# - code: sources.execution
+#   name: 转换
+#   args:
+#     source: |-
+#       import json
+#       tpl_ids = json.loads(docx_tpl_id_select)
+#       return tpl_ids
+#   sinks:
+#     logging: true
+#     context: tpl_ids
+
+- code: logics.case
+  name: 处理模板
+  args:
+    - when: 1 in docx_tpl_id_select
+      then:
+        - code: plans.structured
+          name: docx 模板输出 - 成员大会决议(注销)
+          args:
+            - code: sources.execution
+              name: 生成中文日期
+              args:
+                source: |-
+                  year, month, day = date_1.split('-')
+                  month = str(int(month))
+                  day = str(int(day))
+                  output_date_1 = year + '年' + month + '月' + day + '日'
+                  return output_date_1
+              sinks:
+                logging: true
+                context: date_1_chinese
+            - code: sources.execution
+              name: getMembers
+              args:
+                source: |-
+                  result = '、'.join(members_1.split())
+                  return result
+              sinks:
+                logging: true
+                context: members_list_1
+            - code: knowledge.docs.operations#bytes
+              args:
+                document: "{context#docx_tpl_id_1}"
+              sinks:
+                context: tpl_bytes
+                logging: true
+            - code: midware.operations#docxtpl_render
+              args:
+                template: "{context#tpl_bytes}"
+                variables:
+                  date: "{context#date_1_chinese}"
+                  market: "{context#market_1}"
+                  members: "{context#members_list_1}"
+                  leader: "{context#leader_1}"
+              sinks:
+                context: docx_bytes
+            - code: sources.execution
+              args: 
+                source: |-
+                  import time
+                  current_time = time.localtime()
+                  formatted_time = time.strftime('%Y-%m-%d %H:%M:%S', current_time)
+                  timestamp = int(time.mktime(current_time))
+                  return timestamp
+              sinks:
+                logging: true
+                context: time_stamp
+            - code: apis.operations
+              args:
+                - code: upload
+                  args:
+                    location: "{props#commons.vfs.defaults}:///$private/de/temps/{context#market_1}{context#time_stamp}.docx"
+                    bytes: "{context#docx_bytes}"
+                    attachment: true
+                  sinks:
+                    context: docx_url_1
+            - code: formats.operations
+              args:
+                target:
+                  - type: context-format
+                    pattern: |-
+                      点击下载：[成员大会决议(注销)]({context#docx_url_1})
+              sinks:
+                reply: pending
+            - code: reply.operations
+              args:
+                pending: "\n" 
+- code: logics.case
+  args:
+    - when: 2 in docx_tpl_id_select
+      then:
+        - code: plans.structured
+          name: docx 模板输出 - 成员代表大会决议(注销)
+          args:
+            - code: sources.execution
+              name: 生成中文日期
+              args:
+                source: |-
+                  year, month, day = date_2.split('-')
+                  month = str(int(month))
+                  day = str(int(day))
+                  output_date_2 = year + '年' + month + '月' + day + '日'
+                  return output_date_2
+              sinks:
+                logging: true
+                context: date_2_chinese
+            - code: sources.execution
+              name: getMembers
+              args:
+                source: |-
+                  result = '、'.join(members_2.split())
+                  return result
+              sinks:
+                logging: true
+                context: members_list_2
+            - code: knowledge.docs.operations#bytes
+              args:
+                document: "{context#docx_tpl_id_2}"
+              sinks:
+                context: tpl_bytes
+                logging: true
+            - code: midware.operations#docxtpl_render
+              args:
+                template: "{context#tpl_bytes}"
+                variables:
+                  date: "{context#date_2_chinese}"
+                  market: "{context#market_2}"
+                  members: "{context#members_list_2}"
+                  leader: "{context#leader_2}"
+              sinks:
+                context: docx_bytes
+            - code: sources.execution
+              args: 
+                source: |-
+                  import time
+                  current_time = time.localtime()
+                  formatted_time = time.strftime('%Y-%m-%d %H:%M:%S', current_time)
+                  timestamp = int(time.mktime(current_time))
+                  return timestamp
+              sinks:
+                logging: true
+                context: time_stamp
+            - code: apis.operations
+              args:
+                - code: upload
+                  args:
+                    location: "{props#commons.vfs.defaults}:///$private/de/temps/{context#market_2}{context#time_stamp}.docx"
+                    bytes: "{context#docx_bytes}"
+                    attachment: true
+                  sinks:
+                    context: docx_url_2
+            - code: formats.operations
+              args:
+                target:
+                  - type: context-format
+                    pattern: |-
+                      点击下载：[成员代表大会决议(注销)]({context#docx_url_2})
+              sinks:
+                reply: pending
+            - code: reply.operations
+              args:
+                pending: "\n" 
+- code: logics.case
+  args:
+    - when: 3 in docx_tpl_id_select
+      then:
+        - code: plans.structured
+          name: docx 模板输出 - 非公司法人企业清算报告
+          args:
+            - code: sources.execution
+              name: 生成中文日期
+              args:
+                source: |-
+                  year, month, day = date_3.split('-')
+                  month = str(int(month))
+                  day = str(int(day))
+                  output_date_3 = year + '年' + month + '月' + day + '日'
+                  return output_date_3
+              sinks:
+                logging: true
+                context: date_3_chinese
+            - code: knowledge.docs.operations#bytes
+              args:
+                document: "{context#docx_tpl_id_3}"
+              sinks:
+                context: tpl_bytes
+                logging: true
+            - code: midware.operations#docxtpl_render
+              args:
+                template: "{context#tpl_bytes}"
+                variables:
+                  date: "{context#date_3_chinese}"
+                  market: "{context#market_3}"
+              sinks:
+                context: docx_bytes
+            - code: sources.execution
+              args: 
+                source: |-
+                  import time
+                  current_time = time.localtime()
+                  formatted_time = time.strftime('%Y-%m-%d %H:%M:%S', current_time)
+                  timestamp = int(time.mktime(current_time))
+                  return timestamp
+              sinks:
+                logging: true
+                context: time_stamp
+            - code: apis.operations
+              args:
+                - code: upload
+                  args:
+                    location: "{props#commons.vfs.defaults}:///$private/de/temps/{context#market_3}{context#time_stamp}.docx"
+                    bytes: "{context#docx_bytes}"
+                    attachment: true
+                  sinks:
+                    context: docx_url_、手册
+                    context: docx_url_3
+            - code: formats.operations
+              args:
+                target:
+                  - type: context-format
+                    pattern: |-
+                      点击下载：[非公司法人企业清算报告]({context#docx_url_3})
+              sinks:
+                reply: pending
+            - code: reply.operations
+              args:
+                pending: "\n" 
+- code: logics.case
+  args:
+    - when: 4 in docx_tpl_id_select
+      then:
+        - code: plans.structured
+          name: docx 模板输出 - 个人独资企业清算报告
+          args:
+            - code: sources.execution
+              name: 生成中文日期
+              args:
+                source: |-
+                  year, month, day = date_4.split('-')
+                  month = str(int(month))
+                  day = str(int(day))
+                  output_date_4 = year + '年' + month + '月' + day + '日'
+                  return output_date_4
+              sinks:
+                logging: true
+                context: date_4_chinese
+            - code: knowledge.docs.operations#bytes
+              args:
+                document: "{context#docx_tpl_id_4}"
+              sinks:
+                context: tpl_bytes
+                logging: true
+            - code: midware.operations#docxtpl_render
+              args:
+                template: "{context#tpl_bytes}"
+                variables:
+                  date: "{context#date_4_chinese}"
+                  market: "{context#market_4}"
+              sinks:
+                context: docx_bytes
+            - code: sources.execution
+              args: 
+                source: |-
+                  import time
+                  current_time = time.localtime()
+                  formatted_time = time.strftime('%Y-%m-%d %H:%M:%S', current_time)
+                  timestamp = int(time.mktime(current_time))
+                  return timestamp
+              sinks:
+                logging: true
+                context: time_stamp
+            - code: apis.operations
+              args:
+                - code: upload
+                  args:
+                    location: "{props#commons.vfs.defaults}:///$private/de/temps/{context#market_4}{context#time_stamp}.docx"
+                    bytes: "{context#docx_bytes}"
+                    attachment: true
+                  sinks:
+                    context: docx_url_4
+            - code: formats.operations
+              args:
+                target:
+                  - type: context-format
+                    pattern: |-
+                      点击下载：[个人独资企业清算报告]({context#docx_url_4})
+              sinks:
+                 reply: pending
+            - code: reply.operations
+              args:
+                pending: "\n" 
+- code: logics.case
+  args:
+    - when: 5 in docx_tpl_id_select
+      then:
+        - code: plans.structured
+          name: docx 模板输出 - 公司清算报告
+          args:
+            - code: sources.execution
+              name: 生成中文日期1
+              args:
+                source: |-
+                  year, month, day = date1_5.split('-')
+                  month = str(int(month))
+                  day = str(int(day))
+                  output_date1_5 = year + '年' + month + '月' + day + '日'
+                  return output_date1_5
+              sinks:
+                logging: true
+                context: date1_5_chinese
+            - code: sources.execution
+              name: 生成中文日期2
+              args:
+                source: |-
+                  year, month, day = date2_5.split('-')
+                  month = str(int(month))
+                  day = str(int(day))
+                  output_date2_5 = year + '年' + month + '月' + day + '日'
+                  return output_date2_5
+              sinks:
+                logging: true
+                context: date2_5_chinese
+            - code: knowledge.docs.operations#bytes
+              args:
+                document: "{context#docx_tpl_id_5}"
+              sinks:
+                context: tpl_bytes
+                logging: true
+            - code: midware.operations#docxtpl_render
+              args:
+                template: "{context#tpl_bytes}"
+                variables:
+                  date1: "{context#date1_5_chinese}"
+                  date2: "{context#date2_5_chinese}"
+                  market: "{context#market_5}"
+              sinks:
+                context: docx_bytes
+            - code: sources.execution
+              args: 
+                source: |-
+                  import time
+                  current_time = time.localtime()
+                  formatted_time = time.strftime('%Y-%m-%d %H:%M:%S', current_time)
+                  timestamp = int(time.mktime(current_time))
+                  return timestamp
+              sinks:
+                logging: true
+                context: time_stamp
+            - code: apis.operations
+              args:
+                - code: upload
+                  args:
+                    location: "{props#commons.vfs.defaults}:///$private/de/temps/{context#market_5}{context#time_stamp}.docx"
+                    bytes: "{context#docx_bytes}"
+                    attachment: true
+                  sinks:
+                    context: docx_url_5
+            - code: formats.operations
+              args:
+                target:
+                  - type: context-format
+                    pattern: |-
+                      点击下载：[公司清算报告]({context#docx_url_5})
+              sinks:
+                reply: pending
+            - code: reply.operations
+              args:
+                pending: "\n" 
+- code: logics.case
+  args:
+    - when: 6 in docx_tpl_id_select
+      then:
+        - code: plans.structured
+          name: docx 模板输出 - 股东会会议记录(注销)
+          args:
+            - code: sources.execution
+              name: 生成中文日期
+              args:
+                source: |-
+                  year, month, day = date_6.split('-')
+                  month = str(int(month))
+                  day = str(int(day))
+                  output_date_6 = year + '年' + month + '月' + day + '日'
+                  return output_date_6
+              sinks:
+                logging: true
+                context: date_6_chinese
+            - code: sources.execution
+              name: getMembers
+              args:
+                source: |-
+                  result = '、'.join(members_6.split())
+                  return result
+              sinks:
+                logging: true
+                context: members_list_6
+            - code: knowledge.docs.operations#bytes
+              args:
+                document: "{context#docx_tpl_id_6}"
+              sinks:
+                context: tpl_bytes
+                logging: true
+            - code: midware.operations#docxtpl_render
+              args:
+                template: "{context#tpl_bytes}"
+                variables:
+                  date: "{context#date_6_chinese}"
+                  market: "{context#market_6}"
+                  host: "{context#host_6}"
+                  director: "{context#director_6}"
+                  members: "{context#members_list_6}"
+                  leader: "{context#leader_6}"
+              sinks:
+                context: docx_bytes
+            - code: sources.execution
+              args: 
+                source: |-
+                  import time
+                  current_time = time.localtime()
+                  formatted_time = time.strftime('%Y-%m-%d %H:%M:%S', current_time)
+                  timestamp = int(time.mktime(current_time))
+                  return timestamp
+              sinks:
+                logging: true
+                context: time_stamp
+            - code: apis.operations
+              args:
+                - code: upload
+                  args:
+                    location: "{props#commons.vfs.defaults}:///$private/de/temps/{context#market_6}{context#time_stamp}.docx"
+                    bytes: "{context#docx_bytes}"
+                    attachment: true
+                  sinks:
+                    context: docx_url_6
+            - code: formats.operations
+              args:
+                target:
+                  - type: context-format
+                    pattern: |-
+                      点击下载：[股东会会议记录(注销)]({context#docx_url_6})
+              sinks:
+                reply: pending
+            - code: reply.operations
+              args:
+                pending: "\n" 
+- code: logics.case
+  args:
+    - when: 7 in docx_tpl_id_select
+      then:
+        - code: plans.structured
+          name: docx 模板输出 - 股东会决议(注销)
+          args:
+            - code: sources.execution
+              name: 生成中文日期
+              args:
+                source: |-
+                  year, month, day = date_7.split('-')
+                  month = str(int(month))
+                  day = str(int(day))
+                  output_date_7 = year + '年' + month + '月' + day + '日'
+                  return output_date_7
+              sinks:
+                logging: true
+                context: date_7_chinese
+            - code: sources.execution
+              name: getMembers
+              args:
+                source: |-
+                  result = '、'.join(members_7.split())
+                  return result
+              sinks:
+                logging: true
+                context: members_list_7
+            - code: knowledge.docs.operations#bytes
+              args:
+                document: "{context#docx_tpl_id_7}"
+              sinks:
+                context: tpl_bytes
+                logging: true
+            - code: midware.operations#docxtpl_render
+              args:
+                template: "{context#tpl_bytes}"
+                variables:
+                  date: "{context#date_7_chinese}"
+                  market: "{context#market_7}"
+                  members: "{context#members_list_7}"
+                  leader: "{context#leader_7}"
+              sinks:
+                context: docx_bytes
+            - code: sources.execution
+              args: 
+                source: |-
+                  import time
+                  current_time = time.localtime()
+                  formatted_time = time.strftime('%Y-%m-%d %H:%M:%S', current_time)
+                  timestamp = int(time.mktime(current_time))
+                  return timestamp
+              sinks:
+                logging: true
+                context: time_stamp
+            - code: apis.operations
+              args:
+                - code: upload
+                  args:
+                    location: "{props#commons.vfs.defaults}:///$private/de/temps/{context#market_7}{context#time_stamp}.docx"
+                    bytes: "{context#docx_bytes}"
+                    attachment: true
+                  sinks:
+                    context: docx_url_7
+            - code: formats.operations
+              args:
+                target:
+                  - type: context-format
+                    pattern: |-
+                      点击下载：[股东会决议(注销)]({context#docx_url_7})
+              sinks:
+                reply: pending
+            - code: reply.operations
+              args:
+                pending: "\n" 
+- code: logics.case
+  args:
+    - when: 8 in docx_tpl_id_select
+      then:
+        - code: plans.structured
+          name: docx 模板输出 - 股东决定(注销)
+          args:
+            - code: sources.execution
+              name: 生成中文日期
+              args:
+                source: |-
+                  year, month, day = date_8.split('-')
+                  month = str(int(month))
+                  day = str(int(day))
+                  output_date_8 = year + '年' + month + '月' + day + '日'
+                  return output_date_8
+              sinks:
+                logging: true
+                context: date_8_chinese
+            - code: sources.execution
+              name: getMembers
+              args:
+                source: |-
+                  result = '、'.join(members_8.split())
+                  return result
+              sinks:
+                logging: true
+                context: members_list_8
+            - code: knowledge.docs.operations#bytes
+              args:
+                document: "{context#docx_tpl_id_8}"
+              sinks:
+                context: tpl_bytes
+                logging: true
+            - code: midware.operations#docxtpl_render
+              args:
+                template: "{context#tpl_bytes}"
+                variables:
+                  date: "{context#date_8_chinese}"
+                  market: "{context#market_8}"
+                  members: "{context#members_list_8}"
+                  leader: "{context#leader_8}"
+              sinks:
+                context: docx_bytes
+            - code: sources.execution
+              args: 
+                source: |-
+                  import time
+                  current_time = time.localtime()
+                  formatted_time = time.strftime('%Y-%m-%d %H:%M:%S', current_time)
+                  timestamp = int(time.mktime(current_time))
+                  return timestamp
+              sinks:
+                logging: true
+                context: time_stamp
+            - code: apis.operations
+              args:
+                - code: upload
+                  args:
+                    location: "{props#commons.vfs.defaults}:///$private/de/temps/{context#market_8}{context#time_stamp}.docx"
+                    bytes: "{context#docx_bytes}"
+                    attachment: true
+                  sinks:
+                    context: docx_url_8
+            - code: formats.operations
+              args:
+                target:
+                  - type: context-format
+                    pattern: |-
+                      点击下载：[股东决定(注销)]({context#docx_url_8})
+              sinks:
+                reply: pending
+            - code: reply.operations
+              args:
+                pending: "\n" 
+- code: logics.case
+  args:
+    - when: 9 in docx_tpl_id_select
+      then:
+        - code: plans.structured
+          name: docx 模板输出 - 合伙企业清算报告
+          args:
+            - code: sources.execution
+              name: 生成中文日期
+              args:
+                source: |-
+                  year, month, day = date_9.split('-')
+                  month = str(int(month))
+                  day = str(int(day))
+                  output_date_9 = year + '年' + month + '月' + day + '日'
+                  return output_date_9
+              sinks:
+                logging: true
+                context: date_9_chinese
+            - code: knowledge.docs.operations#bytes
+              args:
+                document: "{context#docx_tpl_id_9}"
+              sinks:
+                context: tpl_bytes
+                logging: true
+            - code: midware.operations#docxtpl_render
+              args:
+                template: "{context#tpl_bytes}"
+                variables:
+                  date: "{context#date_9_chinese}"
+                  market: "{context#market_9}"
+              sinks:
+                context: docx_bytes
+            - code: sources.execution
+              args: 
+                source: |-
+                  import time
+                  current_time = time.localtime()
+                  formatted_time = time.strftime('%Y-%m-%d %H:%M:%S', current_time)
+                  timestamp = int(time.mktime(current_time))
+                  return timestamp
+              sinks:
+                logging: true
+                context: time_stamp
+            - code: apis.operations
+              args:
+                - code: upload
+                  args:
+                    location: "{props#commons.vfs.defaults}:///$private/de/temps/{context#market_9}{context#time_stamp}.docx"
+                    bytes: "{context#docx_bytes}"
+                    attachment: true
+                  sinks:
+                    context: docx_url_9
+            - code: formats.operations
+              args:
+                target:
+                  - type: context-format
+                    pattern: |-
+                      点击下载：[合伙企业清算报告]({context#docx_url_9})
+              sinks:
+                reply: pending
+            - code: reply.operations
+              args:
+                pending: "\n" 
+- code: logics.case
+  args:
+    - when: 10 in docx_tpl_id_select
+      then:
+        - code: plans.structured
+          name: docx 模板输出 - 合伙企业注销决议
+          args:
+            - code: sources.execution
+              name: 生成中文日期
+              args:
+                source: |-
+                  year, month, day = date_10.split('-')
+                  month = str(int(month))
+                  day = str(int(day))
+                  output_date_10 = year + '年' + month + '月' + day + '日'
+                  return output_date_10
+              sinks:
+                logging: true
+                context: date_10_chinese
+            - code: sources.execution
+              name: getMembers
+              args:
+                source: |-
+                  result = '、'.join(members_10.split())
+                  return result
+              sinks:
+                logging: true
+                context: members_list_10
+            - code: knowledge.docs.operations#bytes
+              args:
+                document: "{context#docx_tpl_id_10}"
+              sinks:
+                context: tpl_bytes
+                logging: true
+            - code: midware.operations#docxtpl_render
+              args:
+                template: "{context#tpl_bytes}"
+                variables:
+                  date: "{context#date_10_chinese}"
+                  market: "{context#market_10}"
+                  members: "{context#members_list_10}"
+              sinks:
+                context: docx_bytes
+            - code: sources.execution
+              args: 
+                source: |-
+                  import time
+                  current_time = time.localtime()
+                  formatted_time = time.strftime('%Y-%m-%d %H:%M:%S', current_time)
+                  timestamp = int(time.mktime(current_time))
+                  return timestamp
+              sinks:
+                logging: true
+                context: time_stamp
+            - code: apis.operations
+              args:
+                - code: upload
+                  args:
+                    location: "{props#commons.vfs.defaults}:///$private/de/temps/{context#market_10}{context#time_stamp}.docx"
+                    bytes: "{context#docx_bytes}"
+                    attachment: true
+                  sinks:
+                    context: docx_url_10
+            - code: formats.operations
+              args:
+                target:
+                  - type: context-format
+                    pattern: |-
+                      点击下载：[合伙企业注销决议]({context#docx_url_10})
+              sinks:
+                reply: pending
+            - code: reply.operations
+              args:
+                pending: "\n" 
+- code: logics.case
+  args:
+    - when: 11 in docx_tpl_id_select
+      then:
+        - code: plans.structured
+          name: docx 模板输出 - 简易注销全体投资人承诺书
+          args:
+            - code: knowledge.docs.operations#bytes
+              args:
+                document: "{context#docx_tpl_id_11}"
+              sinks:
+                context: tpl_bytes
+                logging: true
+            - code: midware.operations#docxtpl_render
+              args:
+                template: "{context#tpl_bytes}"
+                variables:
+                  market: "{context#market_11}"
+              sinks:
+                context: docx_bytes
+            - code: sources.execution
+              args: 
+                source: |-
+                  import time
+                  current_time = time.localtime()
+                  formatted_time = time.strftime('%Y-%m-%d %H:%M:%S', current_time)
+                  timestamp = int(time.mktime(current_time))
+                  return timestamp
+              sinks:
+                logging: true
+                context: time_stamp
+            - code: apis.operations
+              args:
+                - code: upload
+                  args:
+                    location: "{props#commons.vfs.defaults}:///$private/de/temps/{context#market_11}{context#time_stamp}.docx"
+                    bytes: "{context#docx_bytes}"
+                    attachment: true
+                  sinks:
+                    context: docx_url_11
+            - code: formats.operations
+              args:
+                target:
+                  - type: context-format
+                    pattern: |-
+                      点击下载：[简易注销全体投资人承诺书]({context#docx_url_11})
+              sinks:
+                reply: pending
+            - code: reply.operations
+              args:
+                pending: "\n" 
+- code: logics.case
+  args:
+    - when: 12 in docx_tpl_id_select
+      then:
+        - code: plans.structured
+          name: docx 模板输出 - 农民专业合作社登记(备案)申请书(注销)
+          args:
+            - code: knowledge.docs.operations#bytes
+              args:
+                document: "{context#docx_tpl_id_12}"
+              sinks:
+                context: tpl_bytes
+                logging: true
+            - code: midware.operations#docxtpl_render
+              args:
+                template: "{context#tpl_bytes}"
+                variables:
+                  market: "{context#market_12}"
+                  code: "{context#code_12}"
+              sinks:
+                context: docx_bytes
+            - code: sources.execution
+              args: 
+                source: |-
+                  import time
+                  current_time = time.localtime()
+                  formatted_time = time.strftime('%Y-%m-%d %H:%M:%S', current_time)
+                  timestamp = int(time.mktime(current_time))
+                  return timestamp
+              sinks:
+                logging: true
+                context: time_stamp
+            - code: apis.operations
+              args:
+                - code: upload
+                  args:
+                    location: "{props#commons.vfs.defaults}:///$private/de/temps/{context#market_12}{context#time_stamp}.docx"
+                    bytes: "{context#docx_bytes}"
+                    attachment: true
+                  sinks:
+                    context: docx_url_12
+            - code: formats.operations
+              args:
+                target:
+                  - type: context-format
+                    pattern: |-
+                      点击下载：[农民专业合作社登记(备案)申请书(注销)]({context#docx_url_12})
+              sinks:
+                reply: pending
+            - code: reply.operations
+              args:
+                pending: "\n" 
+- code: logics.case
+  args:
+    - when: 13 in docx_tpl_id_select
+      then:
+        - code: plans.structured
+          name: docx 模板输出 - 农民专业合作社清算报告
+          args:
+            - code: sources.execution
+              name: 生成中文日期1
+              args:
+                source: |-
+                  year, month, day = date1_13.split('-')
+                  month = str(int(month))
+                  day = str(int(day))
+                  output_date1_13 = year + '年' + month + '月' + day + '日'
+                  return output_date1_13
+              sinks:
+                logging: true
+                context: date1_13_chinese
+            - code: sources.execution
+              name: 生成中文日期2
+              args:
+                source: |-
+                  year, month, day = date2_13.split('-')
+                  month = str(int(month))
+                  day = str(int(day))
+                  output_date2_13 = year + '年' + month + '月' + day + '日'
+                  return output_date2_13
+              sinks:
+                logging: true
+                context: date2_13_chinese
+            - code: knowledge.docs.operations#bytes
+              args:
+                document: "{context#docx_tpl_id_13}"
+              sinks:
+                context: tpl_bytes
+                logging: true
+            - code: midware.operations#docxtpl_render
+              args:
+                template: "{context#tpl_bytes}"
+                variables:
+                  date1: "{context#date1_13_chinese}"
+                  date2: "{context#date2_13_chinese}"
+                  market: "{context#market_13}"
+              sinks:
+                context: docx_bytes
+            - code: sources.execution
+              args: 
+                source: |-
+                  import time
+                  current_time = time.localtime()
+                  formatted_time = time.strftime('%Y-%m-%d %H:%M:%S', current_time)
+                  timestamp = int(time.mktime(current_time))
+                  return timestamp
+              sinks:
+                logging: true
+                context: time_stamp
+            - code: apis.operations
+              args:
+                - code: upload
+                  args:
+                    location: "{props#commons.vfs.defaults}:///$private/de/temps/{context#market_13}{context#time_stamp}.docx"
+                    bytes: "{context#docx_bytes}"
+                    attachment: true
+                  sinks:
+                    context: docx_url_13
+            - code: formats.operations
+              args:
+                target:
+                  - type: context-format
+                    pattern: |-
+                      点击下载：[农民专业合作社清算报告]({context#docx_url_13})
+              sinks:
+                reply: pending
+            - code: reply.operations
+              args:
+                pending: "\n" 
+- code: logics.case
+  args:
+    - when: 14 in docx_tpl_id_select
+      then:
+        - code: plans.structured
+          name: docx 模板输出 - 企业注销登记申请书
+          args:
+            - code: knowledge.docs.operations#bytes
+              args:
+                document: "{context#docx_tpl_id_14}"
+              sinks:
+                context: tpl_bytes
+                logging: true
+            - code: midware.operations#docxtpl_render
+              args:
+                template: "{context#tpl_bytes}"
+                variables:
+                  market: "{context#market_14}"
+                  code: "{context#code_14}"
+                  department: "{context#department_14}"
+              sinks:
+                context: docx_bytes
+            - code: sources.execution
+              args: 
+                source: |-
+                  import time
+                  current_time = time.localtime()
+                  formatted_time = time.strftime('%Y-%m-%d %H:%M:%S', current_time)
+                  timestamp = int(time.mktime(current_time))
+                  return timestamp
+              sinks:
+                logging: true
+                context: time_stamp
+            - code: apis.operations
+              args:
+                - code: upload
+                  args:
+                    location: "{props#commons.vfs.defaults}:///$private/de/temps/{context#market_14}{context#time_stamp}.docx"
+                    bytes: "{context#docx_bytes}"
+                    attachment: true
+                  sinks:
+                    context: docx_url_14
+            - code: formats.operations
+              args:
+                target:
+                  - type: context-format
+                    pattern: |-
+                      点击下载：[企业注销登记申请书]({context#docx_url_14})
+              sinks:
+                reply: pending
+            - code: reply.operations
+              args:
+                pending: "\n" 
+- code: logics.case
+  args:
+    - when: 15 in docx_tpl_id_select
+      then:
+        - code: plans.structured
+          name: docx 模板输出 - 确认清算报告的成员大会决议
+          args:
+            - code: sources.execution
+              name: 生成中文日期1
+              args:
+                source: |-
+                  year, month, day = date1_15.split('-')
+                  month = str(int(month))
+                  day = str(int(day))
+                  output_date1_15 = year + '年' + month + '月' + day + '日'
+                  return output_date1_15
+              sinks:
+                logging: true
+                context: date1_15_chinese
+            - code: sources.execution
+              name: 生成中文日期2
+              args:
+                source: |-
+                  year, month, day = date2_15.split('-')
+                  month = str(int(month))
+                  day = str(int(day))
+                  output_date2_15 = year + '年' + month + '月' + day + '日'
+                  return output_date2_15
+              sinks:
+                logging: true
+                context: date2_15_chinese
+            - code: knowledge.docs.operations#bytes
+              args:
+                document: "{context#docx_tpl_id_15}"
+              sinks:
+                context: tpl_bytes
+                logging: true
+            - code: midware.operations#docxtpl_render
+              args:
+                template: "{context#tpl_bytes}"
+                variables:
+                  date1: "{context#date1_15_chinese}"
+                  date2: "{context#date2_15_chinese}"
+                  market: "{context#market_15}"
+              sinks:
+                context: docx_bytes
+            - code: sources.execution
+              args: 
+                source: |-
+                  import time
+                  current_time = time.localtime()
+                  formatted_time = time.strftime('%Y-%m-%d %H:%M:%S', current_time)
+                  timestamp = int(time.mktime(current_time))
+                  return timestamp
+              sinks:
+                logging: true
+                context: time_stamp
+            - code: apis.operations
+              args:
+                - code: upload
+                  args:
+                    location: "{props#commons.vfs.defaults}:///$private/de/temps/{context#market_15}{context#time_stamp}.docx"
+                    bytes: "{context#docx_bytes}"
+                    attachment: true
+                  sinks:
+                    context: docx_url_15
+            - code: formats.operations
+              args:
+                target:
+                  - type: context-format
+                    pattern: |-
+                      点击下载：[确认清算报告的成员大会决议]({context#docx_url_15})
+              sinks:
+                reply: pending
+            - code: reply.operations
+              args:
+                pending: "\n" 
+- code: logics.case
+  args:
+    - when: 16 in docx_tpl_id_select
+      then:
+        - code: plans.structured
+          name: docx 模板输出 - 确认清算报告的成员代表大会决议
+          args:
+            - code: sources.execution
+              name: 生成中文日期1
+              args:
+                source: |-
+                  year, month, day = date1_16.split('-')
+                  month = str(int(month))
+                  day = str(int(day))
+                  output_date1_16 = year + '年' + month + '月' + day + '日'
+                  return output_date1_16
+              sinks:
+                logging: true
+                context: date1_16_chinese
+            - code: sources.execution
+              name: 生成中文日期2
+              args:
+                source: |-
+                  year, month, day = date2_16.split('-')
+                  month = str(int(month))
+                  day = str(int(day))
+                  output_date2_16 = year + '年' + month + '月' + day + '日'
+                  return output_date2_16
+              sinks:
+                logging: true
+                context: date2_16_chinese
+            - code: knowledge.docs.operations#bytes
+              args:
+                document: "{context#docx_tpl_id_16}"
+              sinks:
+                context: tpl_bytes
+                logging: true
+            - code: midware.operations#docxtpl_render
+              args:
+                template: "{context#tpl_bytes}"
+                variables:
+                  date1: "{context#date1_16_chinese}"
+                  date2: "{context#date2_16_chinese}"
+                  market: "{context#market_16}"
+              sinks:
+                context: docx_bytes
+            - code: sources.execution
+              args: 
+                source: |-
+                  import time
+                  current_time = time.localtime()
+                  formatted_time = time.strftime('%Y-%m-%d %H:%M:%S', current_time)
+                  timestamp = int(time.mktime(current_time))
+                  return timestamp
+              sinks:
+                logging: true
+                context: time_stamp
+            - code: apis.operations
+              args:
+                - code: upload
+                  args:
+                    location: "{props#commons.vfs.defaults}:///$private/de/temps/{context#market_16}{context#time_stamp}.docx"
+                    bytes: "{context#docx_bytes}"
+                    attachment: true
+                  sinks:
+                    context: docx_url_16
+            - code: formats.operations
+              args:
+                target:
+                  - type: context-format
+                    pattern: |-
+                      点击下载：[确认清算报告的成员代表大会决议]({context#docx_url_16})
+              sinks:
+                reply: pending
+            - code: reply.operations
+              args:
+                pending: "\n" 
+- code: logics.case
+  args:
+    - when: 17 in docx_tpl_id_select
+      then:
+        - code: plans.structured
+          name: docx 模板输出 - 确认清算报告的股东会会议记录
+          args:
+            - code: sources.execution
+              name: 生成中文日期1
+              args:
+                source: |-
+                  year, month, day = date1_17.split('-')
+                  month = str(int(month))
+                  day = str(int(day))
+                  output_date1_17 = year + '年' + month + '月' + day + '日'
+                  return output_date1_17
+              sinks:
+                logging: true
+                context: date1_17_chinese
+            - code: sources.execution
+              name: 生成中文日期2
+              args:
+                source: |-
+                  year, month, day = date2_17.split('-')
+                  month = str(int(month))
+                  day = str(int(day))
+                  output_date2_17 = year + '年' + month + '月' + day + '日'
+                  return output_date2_17
+              sinks:
+                logging: true
+                context: date2_17_chinese
+            - code: knowledge.docs.operations#bytes
+              args:
+                document: "{context#docx_tpl_id_17}"
+              sinks:
+                context: tpl_bytes
+                logging: true
+            - code: midware.operations#docxtpl_render
+              args:
+                template: "{context#tpl_bytes}"
+                variables:
+                  date1: "{context#date1_17_chinese}"
+                  date2: "{context#date2_17_chinese}"
+                  market: "{context#market_17}"
+                  host: "{context#host_17}"
+                  director: "{context#director_17}"
+              sinks:
+                context: docx_bytes
+            - code: sources.execution
+              args: 
+                source: |-
+                  import time
+                  current_time = time.localtime()
+                  formatted_time = time.strftime('%Y-%m-%d %H:%M:%S', current_time)
+                  timestamp = int(time.mktime(current_time))
+                  return timestamp
+              sinks:
+                logging: true
+                context: time_stamp
+            - code: apis.operations
+              args:
+                - code: upload
+                  args:
+                    location: "{props#commons.vfs.defaults}:///$private/de/temps/{context#market_17}{context#time_stamp}.docx"
+                    bytes: "{context#docx_bytes}"
+                    attachment: true
+                  sinks:
+                    context: docx_url_17
+            - code: formats.operations
+              args:
+                target:
+                  - type: context-format
+                    pattern: |-
+                      点击下载：[确认清算报告的股东会会议记录]({context#docx_url_17})
+              sinks:
+                reply: pending
+            - code: reply.operations
+              args:
+                pending: "\n" 
+- code: logics.case
+  args:
+    - when: 18 in docx_tpl_id_select
+      then:
+        - code: plans.structured
+          name: docx 模板输出 - 确认清算报告的股东会决议
+          args:
+            - code: sources.execution
+              name: 生成中文日期1
+              args:
+                source: |-
+                  year, month, day = date1_18.split('-')
+                  month = str(int(month))
+                  day = str(int(day))
+                  output_date1_18 = year + '年' + month + '月' + day + '日'
+                  return output_date1_18
+              sinks:
+                logging: true
+                context: date1_18_chinese
+            - code: sources.execution
+              name: 生成中文日期2
+              args:
+                source: |-
+                  year, month, day = date2_18.split('-')
+                  month = str(int(month))
+                  day = str(int(day))
+                  output_date2_18 = year + '年' + month + '月' + day + '日'
+                  return output_date2_18
+              sinks:
+                logging: true
+                context: date2_18_chinese
+            - code: knowledge.docs.operations#bytes
+              args:
+                document: "{context#docx_tpl_id_18}"
+              sinks:
+                context: tpl_bytes
+                logging: true
+            - code: midware.operations#docxtpl_render
+              args:
+                template: "{context#tpl_bytes}"
+                variables:
+                  date1: "{context#date1_18_chinese}"
+                  date2: "{context#date2_18_chinese}"
+                  market: "{context#market_18}"
+              sinks:
+                context: docx_bytes
+            - code: sources.execution
+              args: 
+                source: |-
+                  import time
+                  current_time = time.localtime()
+                  formatted_time = time.strftime('%Y-%m-%d %H:%M:%S', current_time)
+                  timestamp = int(time.mktime(current_time))
+                  return timestamp
+              sinks:
+                logging: true
+                context: time_stamp
+            - code: apis.operations
+              args:
+                - code: upload
+                  args:
+                    location: "{props#commons.vfs.defaults}:///$private/de/temps/{context#market_18}{context#time_stamp}.docx"
+                    bytes: "{context#docx_bytes}"
+                    attachment: true
+                  sinks:
+                    context: docx_url_18
+            - code: formats.operations
+              args:
+                target:
+                  - type: context-format
+                    pattern: |-
+                      点击下载：[确认清算报告的股东会决议]({context#docx_url_18})
+              sinks:
+                reply: pending
+            - code: reply.operations
+              args:
+                pending: "\n" 
+- code: logics.case
+  args:
+    - when: 19 in docx_tpl_id_select
+      then:
+        - code: plans.structured
+          name: docx 模板输出 - 主管部门(出资人)决定(注销)
+          args:
+            - code: sources.execution
+              name: 生成中文日期
+              args:
+                source: |-
+                  year, month, day = date_19.split('-')
+                  month = str(int(month))
+                  day = str(int(day))
+                  output_date_19 = year + '年' + month + '月' + day + '日'
+                  return output_date_19
+              sinks:
+                logging: true
+                context: date_19_chinese
+            - code: knowledge.docs.operations#bytes
+              args:
+                document: "{context#docx_tpl_id_19}"
+              sinks:
+                context: tpl_bytes
+                logging: true
+            - code: midware.operations#docxtpl_render
+              args:
+                template: "{context#tpl_bytes}"
+                variables:
+                  date: "{context#date_19_chinese}"
+              sinks:
+                context: docx_bytes
+            - code: sources.execution
+              args: 
+                source: |-
+                  import time
+                  current_time = time.localtime()
+                  formatted_time = time.strftime('%Y-%m-%d %H:%M:%S', current_time)
+                  timestamp = int(time.mktime(current_time))
+                  return timestamp
+              sinks:
+                logging: true
+                context: time_stamp
+            - code: apis.operations
+              args:
+                - code: upload
+                  args:
+                    location: "{props#commons.vfs.defaults}:///$private/de/temps/主管部门(出资人)决定{context#time_stamp}.docx"
+                    bytes: "{context#docx_bytes}"
+                    attachment: true
+                  sinks:
+                    context: docx_url_19
+            - code: formats.operations
+              args:
+                target:
+                  - type: context-format
+                    pattern: |-
+                      点击下载：[主管部门(出资人)决定(注销)]({context#docx_url_19})
+              sinks:
+                reply: pending
+            - code: reply.operations
+              args:
+                pending: "\n" 
+# - code: reply.operations
+#   args:
+#     target:
+#       - type: context-format
+#         pattern: |-
+#           成员大会决议(注销)已生成，点击下载：
+#           {context#urls}
+#     flows: chat-memories-flush.yml
+
+# - code: reply.operations
+#   args:
+#     pending: "## 点击对应的链接下载\n\n{context#urls}"
+#   reply: pending
+
+- code: refs.operations
+  name: 保存历史记录
+  args:
+    flows: chat-memories-flush.yml

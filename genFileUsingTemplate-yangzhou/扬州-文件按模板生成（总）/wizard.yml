@@ -1,0 +1,94 @@
+type: object
+name: 扬州-文件按模板生成
+required:
+  - date
+  - market
+  - members
+  - leader
+properties:
+  content:
+    type: string
+    ui:hidden: true
+    default: 扬州-文件按模板生成
+  flows:
+    type: string
+    ui:hidden: true
+    default: yangzhou-file-generation-using-templates.yml
+  docx_tpl_id_select:
+    type: string
+    ui:customize: cascader
+    ui:options:
+      width: 100%
+      placeholder: 选择文档模板
+    enums:
+      type: static
+      config:
+        props:
+          label: label
+          value: value
+          children: children
+          multiple: true
+          emitPath: false
+        options:
+          - value: 1
+            label: 成员大会决议(注销)
+          - value: 2
+            label: 成员代表大会决议(注销)
+          - value: 3
+            label: 非公司法人企业清算报告
+          - value: 4
+            label: 个人独资企业清算报告
+          - value: 5
+            label: 公司清算报告
+          - value: 6
+            label: 股东会会议记录(注销)
+          - value: 7
+            label: 股东会决议(注销)
+          - value: 8
+            label: 股东决定(注销)
+          - value: 9
+            label: 合伙企业清算报告
+          - value: 10
+            label: 合伙企业注销决议
+          - value: 11
+            label: 简易注销全体投资人承诺书
+          - value: 12
+            label: 农民专业合作社登记(备案)申请书(注销)
+          - value: 13
+            label: 农民专业合作社清算报告
+          - value: 14
+            label: 企业注销登记申请书
+          - value: 15
+            label: 确认清算报告的成员大会决议
+          - value: 16
+            label: 确认清算报告的成员代表大会决议
+          - value: 17
+            label: 确认清算报告的股东会会议记录
+          - value: 18
+            label: 确认清算报告的股东会决议
+          - value: 19
+            label: 主管部门(出资人)决定(注销)
+  date:
+    type: string
+    title: 日期
+    format: date
+    err:options:
+      required: '请输入日期'
+  market:
+    type: string
+    title: 市场主体名称
+    default: 扬州某市场主体
+    err:options:
+      required: '请输入市场主体名称'
+  members:
+    type: string
+    title: 清算组成员（清算人）姓名
+    default: 张三 李四
+    err:options:
+      required: '请输入清算组成员（清算人）姓名，多个成员用空格分隔'
+  leader:
+    type: string
+    title: 清算组负责人
+    default: 张三
+    err:options:
+      required: '请输入清算组负责人姓名'

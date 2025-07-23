@@ -3,7 +3,7 @@ name: 人天估计
 required:
   - needNewPageStatus
   - needNewPage
-  - requirementDesc
+  - requireDesc
   - requirementSelect
 properties:
   flows:
@@ -55,9 +55,9 @@ properties:
       - 采用联网的方式
     ui:hidden: "{{rootFormData.needNewPageStatus != 'noNeedNewPage'}}"
 
-  requirementTypeStatus1:
+  requirementTypeStatus:
     type: string
-    title: 需求类型选择状态
+    title: 需求类型选择
     default: genText
     enum:
       - genText
@@ -66,9 +66,7 @@ properties:
       - 生文
       - 问答
     ui:widget: RadioWidget
-    config:
-      props:
-        multiple: true
+    ui:hidden: "{{rootFormData.needNewPageStatus == 'dontKnow'}}"
 
   requirementSelect1:
     type: string
@@ -83,7 +81,7 @@ properties:
       - 政策类
       - 流程类
       - 专业性强的（如医疗、金融、法律等）或者涉及用户隐私信息的
-    ui:hidden: "{{rootFormData.requirementTypeStatus1 != 'qNa'}}"
+    ui:hidden: "{{rootFormData.requirementTypeStatus != 'qNa' || rootFormData.needNewPageStatus == 'dontKnow'}}"
     ui:width: 80%
     config:
       props:
@@ -102,7 +100,7 @@ properties:
       - 采用模板生文，全文字数不多
       - 字数很多的生文需求，如项目书、可行性报告等
       - 仅调整原文本格式，无生文逻辑
-    ui:hidden: "{{rootFormData.requirementTypeStatus1 != 'genText'}}"
+    ui:hidden: "{{rootFormData.requirementTypeStatus != 'genText' || rootFormData.needNewPageStatus == 'dontKnow'}}"
     ui:width: 80%
     config:
       props:
@@ -120,7 +118,7 @@ properties:
     # err:options:
     #   required: '请输入需求描述'
     default: 0
-    ui:hidden: "{{rootFormData.requirementSelect1 != 'process'}}"
+    ui:hidden: "{{rootFormData.requirementSelect1 != 'process' || rootFormData.needNewPageStatus == 'dontKnow'}}"
 
   requirementDesc:
     type: string
@@ -133,4 +131,5 @@ properties:
       placeholder: 输入更具体的需求描述
     err:options:
       required: '请输入需求描述'
-    default: ''    
+    default: ''
+    ui:hidden: "{{rootFormData.needNewPageStatus == 'dontKnow' || rootFormData.requirementTypeStatus == 'genText' && rootFormData.requirementSelect2 == 'longText' || rootFormData.requirementTypeStatus == 'qNa' && rootFormData.requirementSelect1 == 'professional'}}"

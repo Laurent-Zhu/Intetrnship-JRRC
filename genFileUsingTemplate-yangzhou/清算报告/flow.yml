@@ -1,0 +1,76 @@
+- code: sources.execution
+  name: 生成中文日期
+  args:
+    source: |-
+      year, month, day = date.split('-')
+      month = str(int(month))
+      day = str(int(day))
+      output_date = year + '年' + month + '月' + day + '日'
+      return output_date
+  sinks:
+    logging: true
+    context: date_chinese
+- code: plans.structured
+  name: docx 模板输出
+  args:
+    - code: knowledge.docs.operations#bytes
+      args:
+        document: "{context#docx_tpl_id}"
+      sinks:
+        context: tpl_bytes
+    - code: midware.operations#docxtpl_render
+      args:
+        template: "{context#tpl_bytes}"
+        variables:
+          date: "{context#date_chinese}"
+          market: "{context#market}"
+      sinks:
+        context: docx_bytes
+    # - code: sources.execution
+    #   args: 
+    #     source: |-
+    #       import hashlib
+
+    #       multiline_text = '''{context#body}'''
+    #       text_bytes = multiline_text.encode('utf-8')
+    #       hash_object = hashlib.sha256()
+    #       hash_object.update(text_bytes)
+    #       hash_hex = hash_object.hexdigest()
+    #       short_hash = hash_hex[:8]
+    #       return short_hash
+    #   sinks:
+    #     logging: true
+    #     context: short_hash
+    - code: sources.execution
+      args: 
+        source: |-
+            import time
+
+            current_time = time.localtime()
+            formatted_time = time.strftime('%Y-%m-%d %H:%M:%S', current_time)
+            timestamp = int(time.mktime(current_time))
+            return timestamp
+      sinks:
+        logging: true
+        context: time_stamp
+    - code: apis.operations
+      args:
+        - code: upload
+          args:
+            location: "{props#commons.vfs.defaults}:///$private/de/temps/{context#market}{context#time_stamp}.docx"
+            bytes: "{context#docx_bytes}"
+            attachment: true
+          sinks:
+            context: docx_url
+    - code: formats.operations
+      args:
+        target:
+          - type: context-format
+            pattern: |-
+              点击下载：[{context#market}清算报告]({context#docx_url})
+      sinks:
+        reply: pending
+- code: refs.operations
+  name: 保存历史记录
+  args:
+    flows: chat-memories-flush.yml

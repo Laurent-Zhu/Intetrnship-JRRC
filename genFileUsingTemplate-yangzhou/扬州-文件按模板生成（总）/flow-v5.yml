@@ -1,0 +1,272 @@
+- code: declared.operations
+  args:
+    payload:
+      llm:
+        name: gpt-4o-azure
+        slaves:
+          - name: qwen-plus
+
+- code: memories.storage0#messages
+  sinks:
+    context: history
+
+- code: sources.execution
+  name: 初始化模板列表
+  args:
+    source: |-
+      def f():
+        # templates = [
+        #   {"name": "成员大会决议(注销)", "id": "c0a8002d97f38283019807c8d7e71ad8", "fields": ["market", "date", "members", "leader"]},
+        #   {"name": "成员代表大会决议(注销)", "id": "c0a8002d97f38283019807c8d7fd1ada", "fields": ["market", "date", "members", "leader"]},
+        #   {"name": "非公司法人企业清算报告", "id": "c0a8002d97f38283019807c8d8121adc", "fields": ["market", "date"]},
+        #   {"name": "个人独资企业清算报告", "id": "c0a8002d98091d6b01980c03abaf0390", "fields": ["market", "date"]},
+        #   {"name": "公司清算报告", "id": "c0a8002d98091d6b01980c03abcc0392", "fields": ["market", "date1", "date2"]},
+        #   {"name": "股东会会议记录(注销)", "id": "c0a8002d98091d6b01980c03abe50394", "fields": ["market", "date", "host", "director", "members", "leader"]},
+        #   {"name": "股东会决议(注销)", "id": "c0a8002d98091d6b01980c03abfe0396", "fields": ["market", "date", "members", "leader"]},
+        #   {"name": "股东决定(注销)", "id": "c0a8002d98091d6b01980c03ac170398", "fields": ["market", "date", "members", "leader"]},
+        #   {"name": "合伙企业清算报告", "id": "c0a8002d98091d6b01980c03ac32039a", "fields": ["market", "date"]},
+        #   {"name": "合伙企业注销决议", "id": "c0a8002d98091d6b01980c03ac4b039c", "fields": ["market", "date", "members"]},
+        #   {"name": "简易注销全体投资人承诺书", "id": "c0a8002d98091d6b01980c03ac64039e", "fields": ["market"]},
+        #   {"name": "农民专业合作社登记(备案)申请书(注销)", "id": "c0a8002d98091d6b01980c03ac7d03a0", "fields": ["market", "code"]},
+        #   {"name": "农民专业合作社清算报告", "id": "c0a8002d98091d6b01980c03ac9e03a2", "fields": ["market", "date1", "date2"]},
+        #   {"name": "企业注销登记申请书", "id": "c0a8002d98091d6b01980c03acb703a4", "fields": ["market", "code", "department"]},
+        #   {"name": "确认清算报告的成员大会决议", "id": "c0a8002d98091d6b01980c03acb903a6", "fields": ["market", "date1", "date2"]},
+        #   {"name": "确认清算报告的成员代表大会决议", "id": "c0a8002d98091d6b01980c03ace903a8", "fields": ["market", "date1", "date2"]},
+        #   {"name": "确认清算报告的股东会会议记录", "id": "c0a8002d98091d6b01980c03ad0303aa", "fields": ["market", "date1", "date2", "host", "director"]},
+        #   {"name": "确认清算报告的股东会决议", "id": "c0a8002d98091d6b01980c03ad1c03ac", "fields": ["market", "date1", "date2"]},
+        #   {"name": "主管部门(出资人)决定(注销)", "id": "c0a8002d98091d6b01980c03ad3503ae", "fields": ["market", "date"]}
+        # ]
+        templates = [
+            {
+                "name": "成员大会决议(注销)",
+                "id": "c0a8002d97f38283019807c8d7e71ad8",
+                "fields": {
+                    "market": "市场主体名称",
+                    "date": "成立清算组或指派清算人的时间",
+                    "members": "清算组成员（清算人）姓名",
+                    "leader": "清算组负责人"
+                }
+            },
+            {
+                "name": "成员代表大会决议(注销)",
+                "id": "c0a8002d97f38283019807c8d7fd1ada",
+                "fields": {
+                    "market": "市场主体名称",
+                    "date": "成立清算组或指派清算人的时间",
+                    "members": "清算组成员（清算人）姓名",
+                    "leader": "清算组负责人"
+                }
+            },
+            {
+                "name": "非公司法人企业清算报告",
+                "id": "c0a8002d97f38283019807c8d8121adc",
+                "fields": {
+                    "market": "市场主体名称",
+                    "date": "清算报告出具日期"
+                }
+            },
+            {
+                "name": "个人独资企业清算报告",
+                "id": "c0a8002d98091d6b01980c03abaf0390",
+                "fields": {
+                    "market": "市场主体名称",
+                    "date": "清算报告出具日期"
+                }
+            },
+            {
+                "name": "公司清算报告",
+                "id": "c0a8002d98091d6b01980c03abcc0392",
+                "fields": {
+                    "market": "市场主体名称",
+                    "date1": "清算报告出具日期",
+                    "date2": "成立清算组或指派清算人的时间"
+                }
+            },
+            {
+                "name": "股东会会议记录(注销)",
+                "id": "c0a8002d98091d6b01980c03abe50394",
+                "fields": {
+                    "market": "市场主体名称",
+                    "date": "成立清算组或指派清算人的时间",
+                    "host": "会议主持人姓名",
+                    "director": "与会董事姓名",
+                    "members": "清算组成员（清算人）姓名",
+                    "leader": "清算组负责人"
+                }
+            },
+            {
+                "name": "股东会决议(注销)",
+                "id": "c0a8002d98091d6b01980c03abfe0396",
+                "fields": {
+                    "market": "市场主体名称",
+                    "date": "成立清算组或指派清算人的时间",
+                    "members": "清算组成员（清算人）姓名",
+                    "leader": "清算组负责人"
+                }
+            },
+            {
+                "name": "股东决定(注销)",
+                "id": "c0a8002d98091d6b01980c03ac170398",
+                "fields": {
+                    "market": "市场主体名称",
+                    "date": "成立清算组或指派清算人的时间",
+                    "members": "清算组成员（清算人）姓名",
+                    "leader": "清算组负责人"
+                }
+            },
+            {
+                "name": "合伙企业清算报告",
+                "id": "c0a8002d98091d6b01980c03ac32039a",
+                "fields": {
+                    "market": "市场主体名称",
+                    "date": "清算报告出具日期"
+                }
+            },
+            {
+                "name": "合伙企业注销决议",
+                "id": "c0a8002d98091d6b01980c03ac4b039c",
+                "fields": {
+                    "market": "市场主体名称",
+                    "date": "成立清算组或指派清算人的时间",
+                    "members": "清算组成员（清算人）姓名"
+                }
+            },
+            {
+                "name": "简易注销全体投资人承诺书",
+                "id": "c0a8002d98091d6b01980c03ac64039e",
+                "fields": {
+                    "market": "市场主体名称"
+                }
+            },
+            {
+                "name": "农民专业合作社登记(备案)申请书(注销)",
+                "id": "c0a8002d98091d6b01980c03ac7d03a0",
+                "fields": {
+                    "market": "市场主体名称",
+                    "code": "统一社会信用代码或注册号"
+                }
+            },
+            {
+                "name": "农民专业合作社清算报告",
+                "id": "c0a8002d98091d6b01980c03ac9603a2",
+                "fields": {
+                    "market": "市场主体名称",
+                    "date1": "清算报告出具日期",
+                    "date2": "成立清算组或指派清算人的时间"
+                }
+            },
+            {
+                "name": "企业注销登记申请书",
+                "id": "c0a8002d98091d6b01980c03acb103a4",
+                "fields": {
+                    "market": "市场主体名称",
+                    "code": "统一社会信用代码或注册号",
+                    "department": "主管部门（出资人）"
+                }
+            },
+            {
+                "name": "确认清算报告的成员大会决议",
+                "id": "c0a8002d98091d6b01980c03acd003a6",
+                "fields": {
+                    "market": "市场主体名称",
+                    "date1": "确认清算报告的会议召开日期",
+                    "date2": "清算报告出具日期"
+                }
+            },
+            {
+                "name": "确认清算报告的成员代表大会决议",
+                "id": "c0a8002d98091d6b01980c03ace903a8",
+                "fields": {
+                    "market": "市场主体名称",
+                    "date1": "确认清算报告的会议召开日期",
+                    "date2": "清算报告出具日期"
+                }
+            },
+            {
+                "name": "确认清算报告的股东会会议记录",
+                "id": "c0a8002d98091d6b01980c03ad0303aa",
+                "fields": {
+                    "market": "市场主体名称",
+                    "date1": "确认清算报告的会议召开日期",
+                    "date2": "清算报告出具日期",
+                    "host": "会议主持人姓名",
+                    "director": "与会董事姓名"
+                }
+            },
+            {
+                "name": "确认清算报告的股东会决议",
+                "id": "c0a8002d98091d6b01980c03ad1c03ac",
+                "fields": {
+                    "market": "市场主体名称",
+                    "date1": "确认清算报告的会议召开日期",
+                    "date2": "清算报告出具日期"
+                }
+            },
+            {
+                "name": "主管部门(出资人)决定(注销)",
+                "id": "c0a8002d98091d6b01980c03ad3503ae",
+                "fields": {
+                    "date": "成立清算组或指派清算人的时间"
+                }
+            }
+        ]
+        return templates
+      return f()
+  sinks:
+    logging: true
+    context: templates
+
+- code: sources.execution
+  name: 构造模板展示文本
+  args:
+    locals:
+      templates: "{context#templates}"
+    source: |-
+      def main(templates):
+          lines = []
+          for i, t in enumerate(templates):
+              lines.append(f"{i+1}. {t['name']}")
+          return "\n".join(lines)
+      _answer_ = main(templates)
+  sinks:
+    context: template_list_text
+
+- code: llmx.predict.chat
+  name: 历史记录判断
+  args:
+    messages:
+      - type: system
+        template: |-
+          - Role: 你是一个历史记录判断助手，请根据当前对话的历史记录，返回当前对话的状态。
+          - Goal: 
+            你需要根据历史对话记录，返回当前对话的状态。
+            若对话刚开始或者没有历史记录或者用户上一次选择的所有模板的所有字段都已经填写完毕，则返回整数1，表示新一轮循环的开始。
+            若对话中上一条用户输入是模板编号，则返回整数2，表示要开始填写字段了。
+            若对话中上一条用户输入是模板字段值，并且当前模板的字段还没有填写完，则返回整数3，表示要继续填写当前模板的字段。
+            若对话中上一条用户输入是模板字段值，并且当前模板的字段已经填写完，则返回整数4，表示要开始填写下一个模板的字段了。
+          - Constrains:
+            必须严格按照Goal的要求返回整数1、2、3或4。
+          - 模板知识库：
+          --------
+          {context#template_list_text}
+          --------
+      - type: placeholder
+        variable: history
+      - type: human
+        template: |-
+          - Role: 你是一个历史记录判断助手，请根据当前对话的历史记录，返回当前对话的状态。
+          - Goal: 
+            你需要根据历史对话记录，返回当前对话的状态。
+            若对话刚开始或者没有历史记录或者用户上一次选择的所有模板的所有字段都已经填写完毕，则返回整数1，表示新一轮循环的开始。
+            若对话中上一条用户输入是模板编号，则返回整数2，表示要开始填写字段了。
+            若对话中上一条用户输入是模板字段值，并且当前模板的字段还没有填写完，则返回整数3，表示要继续填写当前模板的字段。
+            若对话中上一条用户输入是模板字段值，并且当前模板的字段已经填写完，则返回整数4，表示要开始填写下一个模板的字段了。
+          - Constrains:
+            必须严格按照Goal的要求返回整数1、2、3或4。
+          - 模板知识库：
+          --------
+          {context#template_list_text}
+          --------
+  sinks:
+    context: conversation_state
+

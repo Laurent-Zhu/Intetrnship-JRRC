@@ -1,0 +1,308 @@
+- name: Initialize variables
+  code: declared.operations
+  args:
+    payload:
+      templates: |-
+        [
+          {
+            "name": "成员大会决议(注销)",
+            "id": "c0a8002d97f38283019807c8d7e71ad8",
+            "fields": ["market", "date", "members", "leader"]
+          },
+          {
+            "name": "成员代表大会决议(注销)",
+            "id": "c0a8002d97f38283019807c8d7fd1ada",
+            "fields": ["market", "date", "members", "leader"]
+          },
+          {
+            "name": "非公司法人企业清算报告",
+            "id": "c0a8002d97f38283019807c8d8121adc",
+            "fields": ["market", "date"]
+          },
+          {
+            "name": "个人独资企业清算报告",
+            "id": "c0a8002d98091d6b01980c03abaf0390",
+            "fields": ["market", "date"]
+          },
+          {
+            "name": "公司清算报告",
+            "id": "c0a8002d98091d6b01980c03abcc0392",
+            "fields": ["market", "date1", "date2"]
+          },
+          {
+            "name": "股东会会议记录(注销)",
+            "id": "c0a8002d98091d6b01980c03abe50394",
+            "fields": ["market", "date", "host", "director", "members", "leader"]
+          },
+          {
+            "name": "股东会决议(注销)",
+            "id": "c0a8002d98091d6b01980c03abfe0396",
+            "fields": ["market", "date", "members", "leader"]
+          },
+          {
+            "name": "股东决定(注销)",
+            "id": "c0a8002d98091d6b01980c03ac170398",
+            "fields": ["market", "date", "members", "leader"]
+          },
+          {
+            "name": "合伙企业清算报告",
+            "id": "c0a8002d98091d6b01980c03ac32039a",
+            "fields": ["market", "date"]
+          },
+          {
+            "name": "合伙企业注销决议",
+            "id": "c0a8002d98091d6b01980c03ac4b039c",
+            "fields": ["market", "date", "members"]
+          },
+          {
+            "name": "简易注销全体投资人承诺书",
+            "id": "c0a8002d98091d6b01980c03ac64039e",
+            "fields": ["market"]
+          },
+          {
+            "name": "农民专业合作社登记(备案)申请书(注销)",
+            "id": "c0a8002d98091d6b01980c03ac7d03a0",
+            "fields": ["market", "code"]
+          },
+          {
+            "name": "农民专业合作社清算报告",
+            "id": "c0a8002d98091d6b01980c03ac9e03a2",
+            "fields": ["market", "date1", "date2"]
+          },
+          {
+            "name": "企业注销登记申请书",
+            "id": "c0a8002d98091d6b01980c03acb703a4",
+            "fields": ["market", "code", "department"]
+          },
+          {
+            "name": "确认清算报告的成员大会决议",
+            "id": "c0a8002d98091d6b01980c03acb903a6",
+            "fields": ["market", "date1", "date2"]
+          },
+          {
+            "name": "确认清算报告的成员代表大会决议",
+            "id": "c0a8002d98091d6b01980c03ace903a8",
+            "fields": ["market", "date1", "date2"]
+          },
+          {
+            "name": "确认清算报告的股东会会议记录",
+            "id": "c0a8002d98091d6b01980c03ad0303aa",
+            "fields": ["market", "date1", "date2", "host", "director"]
+          },
+          {
+            "name": "确认清算报告的股东会决议",
+            "id": "c0a8002d98091d6b01980c03ad1c03ac",
+            "fields": ["market", "date1", "date2"]
+          },
+          {
+            "name": "主管部门(出资人)决定(注销)",
+            "id": "c0a8002d98091d6b01980c03ad3503ae",
+            "fields": ["market", "date"]
+          }
+        ]
+  sinks:
+    context: templates
+    logging: true
+
+- name: Display template list
+  code: sources.execution
+  args:
+    source: |-
+      templates = {context#templates}
+      template_list = [f"{idx + 1}. {tpl['name']} (ID: {tpl['id']})" for idx, tpl in enumerate(templates)]
+      return "\n".join(["请选择模板:"] + template_list + ["请输入模板编号 (1-19):"])
+  sinks:
+    reply: pending
+    logging: true
+
+- name: Collect template selection
+  code: llmx.predict.chat
+  args:
+    messages:
+      - type: system
+        template: |-
+          Role: 你是模板选择助手，任务是根据用户输入的模板编号选择对应的模板。
+          Input: 用户输入的模板编号 (1-19)。
+          Templates: {context#templates}
+          Output: 返回选中的模板对象 (包含 name, id, fields)，格式为 JSON。
+          Constraints:
+            - 如果输入不是有效编号 (1-19)，返回 {"error": "无效的模板编号，请输入1-19之间的数字。"}
+            - 仅输出 JSON，不包含任何额外说明。
+      - type: human
+        template: |-
+          {content}
+    sinks:
+      format:
+        type: load-json-object
+      context: selected_template
+      logging: true
+
+- name: Check for template selection error
+  code: logics.case
+  args:
+    - when: "'error' in {context#selected_template}"
+      then:
+        - name: Display error and retry
+          code: reply.operations
+          args:
+            pending: "{context#selected_template.error}"
+        - name: Abort to restart
+          code: abort.operations
+      - else:
+        - name: Store selected template details
+          code: sources.execution
+          args:
+            source: |-
+              selected_template = {context#selected_template}
+              return {
+                "template_id": selected_template["id"],
+                "template_name": selected_template["name"],
+                "fields": selected_template["fields"]
+              }
+          sinks:
+            context: template_details
+            logging: true
+
+- name: Initialize field collection
+  code: sources.execution
+  args:
+    source: |-
+      fields = {context#template_details.fields}
+      return {
+        "current_field_index": 0,
+        "fields": fields,
+        "collected_fields": {}
+      }
+  sinks:
+    context: field_collection
+    logging: true
+
+- name: Loop through fields
+  code: logics.loop
+  args:
+    iterable: "{context#field_collection.fields}"
+    consumer:
+      - name: Prompt for field input
+        code: reply.operations
+        args:
+          pending: "请输入 {context#x} 的值："
+      - name: Collect field value
+        code: llmx.predict.chat
+        args:
+          messages:
+            - type: system
+              template: |-
+                Role: 你是字段输入收集助手。
+                Task: 收集用户输入的字段值，并返回 JSON 格式。
+                Current Field: {context#x}
+                Output: {"field": "{context#x}", "value": "<用户输入>"}
+            - type: human
+              template: |-
+                {content}
+          sinks:
+            format:
+              type: load-json-object
+            context: field_value
+            logging: true
+      - name: Update collected fields
+        code: sources.execution
+        args:
+          source: |-
+            collected_fields = {context#field_collection.collected_fields}
+            field_value = {context#field_value}
+            field_name = field_value["field"]
+            field_value = field_value["value"]
+            collected_fields[field_name] = field_value
+            return {
+              "current_field_index": {context#field_collection.current_field_index} + 1,
+              "fields": {context#field_collection.fields},
+              "collected_fields": collected_fields
+            }
+          sinks:
+            context: field_collection
+            logging: true
+  sinks:
+    logging: true
+
+- name: Generate Chinese date
+  code: sources.execution
+  args:
+    source: |-
+      from datetime import datetime
+      current_time = datetime.now()
+      formatted_date = current_time.strftime('%Y年%m月%d日')
+      return formatted_date
+  sinks:
+    context: date_chinese
+    logging: true
+
+- name: Prepare template rendering variables
+  code: sources.execution
+  args:
+    source: |-
+      collected_fields = {context#field_collection.collected_fields}
+      variables = {
+        "date": "{context#date_chinese}",
+        "market": collected_fields.get("market", ""),
+        "members": collected_fields.get("members", ""),
+        "leader": collected_fields.get("leader", ""),
+        "host": collected_fields.get("host", ""),
+        "director": collected_fields.get("director", ""),
+        "date1": collected_fields.get("date1", ""),
+        "date2": collected_fields.get("date2", ""),
+        "code": collected_fields.get("code", ""),
+        "department": collected_fields.get("department", "")
+      }
+      return variables
+  sinks:
+    context: template_variables
+    logging: true
+
+- name: Render and generate download link
+  code: plans.structured
+  name: docx 模板输出
+  args:
+    - code: knowledge.docs.operations#bytes
+      args:
+        document: "{context#template_details.template_id}"
+      sinks:
+        context: tpl_bytes
+    - code: midware.operations#docxtpl_render
+      args:
+        template: "{context#tpl_bytes}"
+        variables: "{context#template_variables}"
+      sinks:
+        context: docx_bytes
+    - code: sources.execution
+      args: 
+        source: |-
+          import time
+          current_time = time.localtime()
+          formatted_time = time.strftime('%Y-%m-%d %H:%M:%S', current_time)
+          timestamp = int(time.mktime(current_time))
+          return timestamp
+      sinks:
+        logging: true
+        context: time_stamp
+    - code: apis.operations
+      args:
+        - code: upload
+          args:
+            location: "{props#commons.vfs.defaults}:///$private/de/temps/{context#template_details.template_name}{context#time_stamp}.docx"
+            bytes: "{context#docx_bytes}"
+            attachment: true
+          sinks:
+            context: docx_url
+    - code: formats.operations
+      args:
+        target:
+          - type: context-format
+            pattern: |-
+              点击下载：[{context#template_details.template_name}]({context#docx_url})
+      sinks:
+        reply: pending
+
+- name: Save history
+  code: refs.operations
+  args:
+    flows: chat-memories-flush.yml

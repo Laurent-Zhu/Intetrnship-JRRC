@@ -1,0 +1,30 @@
+type: object
+name: 清算报告-扬州
+required:
+  - date
+  - market
+properties:
+  content:
+    type: string
+    ui:hidden: true
+    default: 清算报告-扬州
+  flows:
+    type: string
+    ui:hidden: true
+    default: yangzhou-liquidation-report-flow.yml
+  docx_tpl_id:
+    type: string
+    ui:hidden: true
+    default: c0a8002d97f38283019807c8d8121adc
+  date:
+    type: string
+    title: 日期
+    format: date
+    err:options:
+      required: '请输入日期'
+  market:
+    type: string
+    title: 市场主体名称
+    default: 扬州某市场主体
+    err:options:
+      required: '请输入市场主体名称'

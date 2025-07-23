@@ -1,0 +1,600 @@
+- code: declared.operations
+  args:
+    payload:
+      llm:
+        name: gpt-4o-azure
+        slaves:
+          - name: qwen-plus
+
+- code: memories.storage0#messages
+  sinks:
+    context: history
+
+- code: sources.execution
+  name: 初始化模板列表
+  args:
+    source: |-
+      def f():
+        # templates = [
+        #   {"name": "成员大会决议(注销)", "id": "c0a8002d97f38283019807c8d7e71ad8", "fields": ["market", "date", "members", "leader"]},
+        #   {"name": "成员代表大会决议(注销)", "id": "c0a8002d97f38283019807c8d7fd1ada", "fields": ["market", "date", "members", "leader"]},
+        #   {"name": "非公司法人企业清算报告", "id": "c0a8002d97f38283019807c8d8121adc", "fields": ["market", "date"]},
+        #   {"name": "个人独资企业清算报告", "id": "c0a8002d98091d6b01980c03abaf0390", "fields": ["market", "date"]},
+        #   {"name": "公司清算报告", "id": "c0a8002d98091d6b01980c03abcc0392", "fields": ["market", "date1", "date2"]},
+        #   {"name": "股东会会议记录(注销)", "id": "c0a8002d98091d6b01980c03abe50394", "fields": ["market", "date", "host", "director", "members", "leader"]},
+        #   {"name": "股东会决议(注销)", "id": "c0a8002d98091d6b01980c03abfe0396", "fields": ["market", "date", "members", "leader"]},
+        #   {"name": "股东决定(注销)", "id": "c0a8002d98091d6b01980c03ac170398", "fields": ["market", "date", "members", "leader"]},
+        #   {"name": "合伙企业清算报告", "id": "c0a8002d98091d6b01980c03ac32039a", "fields": ["market", "date"]},
+        #   {"name": "合伙企业注销决议", "id": "c0a8002d98091d6b01980c03ac4b039c", "fields": ["market", "date", "members"]},
+        #   {"name": "简易注销全体投资人承诺书", "id": "c0a8002d98091d6b01980c03ac64039e", "fields": ["market"]},
+        #   {"name": "农民专业合作社登记(备案)申请书(注销)", "id": "c0a8002d98091d6b01980c03ac7d03a0", "fields": ["market", "code"]},
+        #   {"name": "农民专业合作社清算报告", "id": "c0a8002d98091d6b01980c03ac9e03a2", "fields": ["market", "date1", "date2"]},
+        #   {"name": "企业注销登记申请书", "id": "c0a8002d98091d6b01980c03acb703a4", "fields": ["market", "code", "department"]},
+        #   {"name": "确认清算报告的成员大会决议", "id": "c0a8002d98091d6b01980c03acb903a6", "fields": ["market", "date1", "date2"]},
+        #   {"name": "确认清算报告的成员代表大会决议", "id": "c0a8002d98091d6b01980c03ace903a8", "fields": ["market", "date1", "date2"]},
+        #   {"name": "确认清算报告的股东会会议记录", "id": "c0a8002d98091d6b01980c03ad0303aa", "fields": ["market", "date1", "date2", "host", "director"]},
+        #   {"name": "确认清算报告的股东会决议", "id": "c0a8002d98091d6b01980c03ad1c03ac", "fields": ["market", "date1", "date2"]},
+        #   {"name": "主管部门(出资人)决定(注销)", "id": "c0a8002d98091d6b01980c03ad3503ae", "fields": ["market", "date"]}
+        # ]
+        templates = [
+            {
+                "name": "成员大会决议(注销)",
+                "id": "c0a8002d97f38283019807c8d7e71ad8",
+                "fields": {
+                    "market": "市场主体名称",
+                    "date": "成立清算组或指派清算人的时间",
+                    "members": "清算组成员（清算人）姓名",
+                    "leader": "清算组负责人"
+                }
+            },
+            {
+                "name": "成员代表大会决议(注销)",
+                "id": "c0a8002d97f38283019807c8d7fd1ada",
+                "fields": {
+                    "market": "市场主体名称",
+                    "date": "成立清算组或指派清算人的时间",
+                    "members": "清算组成员（清算人）姓名",
+                    "leader": "清算组负责人"
+                }
+            },
+            {
+                "name": "非公司法人企业清算报告",
+                "id": "c0a8002d97f38283019807c8d8121adc",
+                "fields": {
+                    "market": "市场主体名称",
+                    "date": "清算报告出具日期"
+                }
+            },
+            {
+                "name": "个人独资企业清算报告",
+                "id": "c0a8002d98091d6b01980c03abaf0390",
+                "fields": {
+                    "market": "市场主体名称",
+                    "date": "清算报告出具日期"
+                }
+            },
+            {
+                "name": "公司清算报告",
+                "id": "c0a8002d98091d6b01980c03abcc0392",
+                "fields": {
+                    "market": "市场主体名称",
+                    "date1": "清算报告出具日期",
+                    "date2": "成立清算组或指派清算人的时间"
+                }
+            },
+            {
+                "name": "股东会会议记录(注销)",
+                "id": "c0a8002d98091d6b01980c03abe50394",
+                "fields": {
+                    "market": "市场主体名称",
+                    "date": "成立清算组或指派清算人的时间",
+                    "host": "会议主持人姓名",
+                    "director": "与会董事姓名",
+                    "members": "清算组成员（清算人）姓名",
+                    "leader": "清算组负责人"
+                }
+            },
+            {
+                "name": "股东会决议(注销)",
+                "id": "c0a8002d98091d6b01980c03abfe0396",
+                "fields": {
+                    "market": "市场主体名称",
+                    "date": "成立清算组或指派清算人的时间",
+                    "members": "清算组成员（清算人）姓名",
+                    "leader": "清算组负责人"
+                }
+            },
+            {
+                "name": "股东决定(注销)",
+                "id": "c0a8002d98091d6b01980c03ac170398",
+                "fields": {
+                    "market": "市场主体名称",
+                    "date": "成立清算组或指派清算人的时间",
+                    "members": "清算组成员（清算人）姓名",
+                    "leader": "清算组负责人"
+                }
+            },
+            {
+                "name": "合伙企业清算报告",
+                "id": "c0a8002d98091d6b01980c03ac32039a",
+                "fields": {
+                    "market": "市场主体名称",
+                    "date": "清算报告出具日期"
+                }
+            },
+            {
+                "name": "合伙企业注销决议",
+                "id": "c0a8002d98091d6b01980c03ac4b039c",
+                "fields": {
+                    "market": "市场主体名称",
+                    "date": "成立清算组或指派清算人的时间",
+                    "members": "清算组成员（清算人）姓名"
+                }
+            },
+            {
+                "name": "简易注销全体投资人承诺书",
+                "id": "c0a8002d98091d6b01980c03ac64039e",
+                "fields": {
+                    "market": "市场主体名称"
+                }
+            },
+            {
+                "name": "农民专业合作社登记(备案)申请书(注销)",
+                "id": "c0a8002d98091d6b01980c03ac7d03a0",
+                "fields": {
+                    "market": "市场主体名称",
+                    "code": "统一社会信用代码或注册号"
+                }
+            },
+            {
+                "name": "农民专业合作社清算报告",
+                "id": "c0a8002d98091d6b01980c03ac9603a2",
+                "fields": {
+                    "market": "市场主体名称",
+                    "date1": "清算报告出具日期",
+                    "date2": "成立清算组或指派清算人的时间"
+                }
+            },
+            {
+                "name": "企业注销登记申请书",
+                "id": "c0a8002d98091d6b01980c03acb103a4",
+                "fields": {
+                    "market": "市场主体名称",
+                    "code": "统一社会信用代码或注册号",
+                    "department": "主管部门（出资人）"
+                }
+            },
+            {
+                "name": "确认清算报告的成员大会决议",
+                "id": "c0a8002d98091d6b01980c03acd003a6",
+                "fields": {
+                    "market": "市场主体名称",
+                    "date1": "确认清算报告的会议召开日期",
+                    "date2": "清算报告出具日期"
+                }
+            },
+            {
+                "name": "确认清算报告的成员代表大会决议",
+                "id": "c0a8002d98091d6b01980c03ace903a8",
+                "fields": {
+                    "market": "市场主体名称",
+                    "date1": "确认清算报告的会议召开日期",
+                    "date2": "清算报告出具日期"
+                }
+            },
+            {
+                "name": "确认清算报告的股东会会议记录",
+                "id": "c0a8002d98091d6b01980c03ad0303aa",
+                "fields": {
+                    "market": "市场主体名称",
+                    "date1": "确认清算报告的会议召开日期",
+                    "date2": "清算报告出具日期",
+                    "host": "会议主持人姓名",
+                    "director": "与会董事姓名"
+                }
+            },
+            {
+                "name": "确认清算报告的股东会决议",
+                "id": "c0a8002d98091d6b01980c03ad1c03ac",
+                "fields": {
+                    "market": "市场主体名称",
+                    "date1": "确认清算报告的会议召开日期",
+                    "date2": "清算报告出具日期"
+                }
+            },
+            {
+                "name": "主管部门(出资人)决定(注销)",
+                "id": "c0a8002d98091d6b01980c03ad3503ae",
+                "fields": {
+                    "date": "成立清算组或指派清算人的时间"
+                }
+            }
+        ]
+        return templates
+      return f()
+  sinks:
+    logging: true
+    context: templates
+
+- code: sources.execution
+  name: 构造模板展示文本
+  args:
+    locals:
+      templates: "{context#templates}"
+    source: |-
+      def main(templates):
+          lines = []
+          for i, t in enumerate(templates):
+              lines.append(f"{i+1}. {t['name']}")
+          return "\n".join(lines)
+      _answer_ = main(templates)
+  sinks:
+    context: template_list_text
+
+- code: llmx.predict.chat
+  name: 历史记录判断
+  args:
+    messages:
+      - type: system
+        template: |-
+          - Role: 你是一个历史记录判断助手，请根据当前对话的历史记录，返回当前对话的状态。
+          - Goal: 
+            你需要根据历史对话记录，返回当前对话的状态。
+            若对话刚开始或者没有历史记录或者用户上一次选择的所有模板的所有字段都已经填写完毕，则返回整数1，表示新一轮循环的开始。
+            若对话中上一条用户输入是模板编号，则返回整数2，表示要开始填写字段了。
+            若对话中上一条用户输入是模板字段值，并且当前模板的字段还没有填写完，则返回整数3，表示要继续填写当前模板的字段。
+            若对话中上一条用户输入是模板字段值，并且当前模板的字段已经填写完，则返回整数4，表示要开始填写下一个模板的字段了。
+          - Constrains:
+            必须严格按照Goal的要求返回整数1、2、3或4。
+          - 模板知识库：
+          --------
+          {context#template_list_text}
+          --------
+      - type: placeholder
+        variable: history
+      - type: human
+        template: |-
+          - Role: 你是一个历史记录判断助手，请根据当前对话的历史记录，返回当前对话的状态。
+          - Goal: 
+            你需要根据历史对话记录，返回当前对话的状态。
+            若对话刚开始或者没有历史记录或者用户上一次选择的所有模板的所有字段都已经填写完毕，则返回整数1，表示新一轮循环的开始。
+            若对话中上一条用户输入是模板编号，则返回整数2，表示要开始填写字段了。
+            若对话中上一条用户输入是模板字段值，并且当前模板的字段还没有填写完，则返回整数3，表示要继续填写当前模板的字段。
+            若对话中上一条用户输入是模板字段值，并且当前模板的字段已经填写完，则返回整数4，表示要开始填写下一个模板的字段了。
+          - Constrains:
+            必须严格按照Goal的要求返回整数1、2、3或4。
+          - 模板知识库：
+          --------
+          {context#template_list_text}
+          --------
+  sinks:
+    context: conversation_state
+
+- code: logic.case
+  name: 判断对话状态1
+  args:
+    - when:
+        code: sources.execution
+        args:
+          source: |-
+            flag = False
+            state = "{context#conversation_state}"
+            if state == "1":
+                flag = True 
+            else:
+                flag = False
+            return flag
+        sinks:
+          logging: true
+          context: is_state_one
+      then:
+        - code: reply.operations
+          args:
+            pending: |-
+              请选择要生成的模板的序号，可以多选，如1,3,5：
+              {context#template_list_text}
+          reply: pending
+
+- code: logic.case
+  name: 判断对话状态2
+  args:
+    - when:
+        code: sources.execution
+        args:
+          source: |-
+            flag = False
+            state = "{context#conversation_state}"
+            if state == "2":
+                flag = True 
+            else:
+                flag = False
+            return flag
+        sinks:
+          logging: true
+          context: is_state_two
+      then:
+        - code: llmx.predict.chat
+          args:
+            messages:
+              - type: system
+                template: |-
+                  - Role: 你是一个内容整理助手，请根据用户的输入，帮助用户整理输入，以正确的格式返回。
+
+                  - Goal: 
+                    你需要根据历史对话记录，将用户上一条对话记录选择的模板编号以数组形式返回。
+                  
+                  - Constrains:
+                    严格按照Goal的要求返回一个数组，数组中的元素为用户选择的模板编号。
+              - type: placeholder
+                variable: history
+              - type: human
+                template: |-
+                  - Role: 你是一个内容整理助手，请根据用户的输入，帮助用户整理输入，以正确的格式返回。
+
+                  - Goal: 
+                    你需要根据历史对话记录，将用户上一条对话记录选择的模板编号以数组形式返回。
+                  
+                  - Constrains:
+                    严格按照Goal的要求返回一个数组，数组中的元素为用户选择的模板编号。
+          sinks:
+            logging: true
+
+- code: logic.case
+  name: 判断对话状态3
+  args:
+    - when:
+        code: sources.execution
+        args:
+          source: |-
+            flag = False
+            state = "{context#conversation_state}"
+            if state == "3":
+                flag = True 
+            else:
+                flag = False
+            return flag
+        sinks:
+          logging: true
+          context: is_state_three
+      then:
+        - code: llmx.predict.chat
+          args:
+            messages:
+              - type: system
+                template: |-
+                  - Role: 你是一个内容整理助手，请根据用户的输入，帮助用户整理输入，以正确的格式返回。
+
+                  - Goal: 
+                    你需要根据历史对话记录，向用户索要当前模板的字段值，并将用户输入的字段值以数组形式返回。
+                  
+                  - Constrains:
+                    严格按照Goal的要求返回一个数组，数组中的元素为用户输入的字段值。
+              - type: placeholder
+                variable: history
+              - type: human
+                template: |-
+                  请填写当前模板的字段值，例如：市场,2023-01-01,张三,李四。
+          sinks:
+            logging: true
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+- code: llmx.predict.chat
+  args:
+    messages:
+      - type: system
+        template: |-
+          - Role: 你是一个内容整理助手，请根据用户的输入，帮助用户整理输入，以正确的格式返回。
+
+          - Goal: 
+            你需要根据历史对话记录，向用户索要选择的模板序号或者对应的模板所需要的字段值的输入。
+            在让用户选择模板时，展示所有可用的模板列表，并提示用户输入要生成的模板编号或名称（多选，用逗号分隔）。
+            如果历史记录中，上一条用户输入的内容是模板序号，则你需要根据各个模板的字段要求，提示用户输入对应的字段值。
+            在这个场景下执行这样的循环：
+            1.询问用户要生成哪些模板
+            2.用户输入选择模板
+            3.根据用户输入的历史信息，遍历每个选择的模板
+            4.对于当前模板，询问用户填写需要的字段
+            5.用户填写字段值
+
+          - Constrains:
+            1.不回答与Goal无关问题。
+            2.保持语气温和、专业，避免使用激烈或情绪化的表述。
+            3.回答尽量根据知识库内容。
+          
+          - 模板知识库：
+          --------
+          {context#template_list_text}
+          --------
+      - type: placeholder
+        variable: history
+      - type: human
+        template:  |-
+          1.若对话刚开始或者请输入您要生成的模板编号或名称，例如：1,3,5，模板列表如下：
+          {template_list_text}
+    reply: pending
+  sinks:
+    context: user_selected_templates_raw
+
+
+# - code: sources.execution
+#   name: 解析用户选择
+#   args:
+#     locals:
+#       user_input: "{context#user_selected_templates_raw}"
+#       templates: "{context#templates}"
+#     source: |-
+#       selected = []
+#       for i, tpl in enumerate(templates):
+#           if str(i+1) in user_input or tpl['name'] in user_input:
+#               selected.append(tpl)
+#       return selected
+#   sinks:
+#     context: selected_templates
+# - code: sources.execution
+#   name: 解析用户选择的模板
+#   args:
+#     locals:
+#       templates: "{context#templates}"
+#       user_input: "{context#user_selected_templates_raw}"
+#     source: |-
+#       def main():
+#         templates = "{context#templates}"
+#         user_input = "{context#user_selected_templates_raw}"
+#         if not templates or not user_input:
+#             return []
+#         selected = []
+#         for i, tpl in enumerate(templates):
+#             if str(i + 1) in user_input or tpl['name'] in user_input:
+#                 selected.append(tpl)
+#         return selected
+#       return main()
+#   sinks:
+#     context: selected_templates
+- code: sources.execution
+  name: 解析用户选择的模板
+  args:
+    locals:
+      templates: "{context#templates}"
+      user_input: "{context#user_selected_templates_raw}"
+    source: |-
+      import json
+      def main(templates, user_input):
+          try:
+              # 确保 templates 是 Python 列表对象
+              if isinstance(templates, str):
+                  templates = json.loads(templates)
+              elif not isinstance(templates, list):
+                  return {"error": "模板数据格式错误，必须为列表或有效的 JSON 字符串"}
+              
+              # 验证 user_input 是否有效
+              if not user_input or not isinstance(user_input, str):
+                  return {"error": "用户输入为空或格式错误"}
+              
+              selected = []
+              # 分割用户输入（支持逗号分隔的编号或名称）
+              user_inputs = [x.strip() for x in user_input.split(",") if x.strip()]
+              
+              for i, tpl in enumerate(templates):
+                  # 检查是否为有效模板对象
+                  if not isinstance(tpl, dict) or 'name' not in tpl or 'id' not in tpl:
+                      continue
+                  # 支持编号或名称匹配
+                  if str(i + 1) in user_inputs or tpl['name'] in user_inputs:
+                      selected.append(tpl)
+              
+              if not selected:
+                  return {"error": "未找到匹配的模板，请检查输入的编号或名称"}
+              
+              return selected
+          except json.JSONDecodeError:
+              return {"error": "模板数据解析失败，请检查模板格式"}
+          except Exception as e:
+              return {"error": f"处理模板选择时发生错误: {str(e)}"}
+      return main(templates, user_input)
+  sinks:
+    context: selected_templates
+    logging: true
+
+
+- code: logics.loop
+  name: 遍历模板接收用户输入
+  args:
+    iterable: "{context#selected_templates}"
+    consumer:
+      - code: logics.loop
+        name: 请用户填写字段
+        args:
+          iterable: "{context#x.fields}"
+          consumer:
+            - code: reply.operations
+              args:
+                pending: "\n" 
+            - code: llmx.predict.chat
+              args:
+                messages:
+                  - type: human
+                    template: \n请输入字段 {context#x} 的值：
+                reply: pending
+              sinks:
+                context:
+                  name: filled_fields
+
+      - code: knowledge.docs.operations#bytes
+        name: 加载模板
+        args:
+          document: "{context#x.id}"
+        sinks:
+          context: tpl_bytes
+
+      - code: midware.operations#docxtpl_render
+        name: 渲染文档
+        args:
+          template: "{context#tpl_bytes}"
+          variables: "{context#filled_fields}"
+        sinks:
+          context: docx_bytes
+
+      - code: sources.execution
+        name: 生成时间戳
+        args:
+          source: |
+            import time
+            return int(time.time())
+        sinks:
+          context: time_stamp
+
+      - code: apis.operations
+        name: 上传文档
+        args:
+          - code: upload
+            args:
+              location: "{props#commons.vfs.defaults}:///$private/de/temps/{context#filled_fields.market}_{context#x.name}_{context#time_stamp}.docx"
+              bytes: "{context#docx_bytes}"
+              attachment: true
+            sinks:
+              context: docx_url
+
+      - code: formats.operations
+        name: 返回链接
+        args:
+          target:
+            - type: context-format
+              pattern: 【{context#x.name}】文档已生成：[{context#filled_fields.market}]({context#docx_url})
+        sinks:
+          context:
+            type: append
+            name: docx_links
+
+- code: reply.operations
+  name: 展示所有链接
+  args:
+    pending: |
+      以下是生成完成的文档：
+      {context#docx_links}
+
+- code: refs.operations
+  name: 保存历史记录
+  args:
+    flows: chat-memories-flush.yml

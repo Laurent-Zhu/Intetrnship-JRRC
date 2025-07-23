@@ -27,6 +27,7 @@
       not_need_new_page = "{context#noNeedNewPageDynamic}"
       need_new_page_status = "{context#needNewPageStatus}"
       # 解析需求类型
+      req_status = "{context#requirementTypeStatus}"  # 需求类型
       req_select1 = "{context#requirementSelect1}"  # 问答类
       req_select2 = "{context#requirementSelect2}"  # 生文类
 
@@ -35,17 +36,17 @@
       total_days = 0
 
       # 界面需求
-      if need_new_page == "1":
+      if need_new_page == "1" and need_new_page_status == "needNewPage":
           print("--------------------------新开发前后端------------------------------")
           table.append("| 新开发前后端 | 25 | 一期 | 前端15人天+后端10人天，复杂UI/UX |")
           total_days += 25
-      if not_need_new_page == "1":
+      if not_need_new_page == "1" and need_new_page_status == "noNeedNewPage":
           table.append("| 适配需求方的本地界面 | 5 | 一期 | 前端3人天+后端2人天，样式调整 |")
           total_days += 5
-      elif not_need_new_page == "2":
+      elif not_need_new_page == "2" and need_new_page_status == "noNeedNewPage":
           table.append("| 使用jrrc数智平台 | 2 | 一期 | 前端1人天+后端1人天，简单适配 |")
           total_days += 2
-      elif not_need_new_page == "3":
+      elif not_need_new_page == "3" and need_new_page_status == "noNeedNewPage":
           table.append("| 联网方式 | 4 | 一期 | 前端2人天+后端2人天，API调用 |")
           total_days += 4
       elif need_new_page_status == "dontKnow":
@@ -53,28 +54,28 @@
           # table = "需进一步沟通，建议转人工。"
 
       # 需求类型
-      if "policy" in req_select1:
+      if "policy" in req_select1 and req_status == "qNa":
           print("政策类问答")
           table.append("| 政策类问答 | 5 | 一期 | 基于法律法规，知识库+问答逻辑 |")
           total_days += 5
-      if "process" in req_select1:
+      if "process" in req_select1 and req_status == "qNa":
           print("流程类问答")
           days = business_count * 5
           table.append(f"| 流程类问答 | {days} | 一期 | {business_count}种业务×5人天 |")
           total_days += days
-      if "professional" in req_select1:
+      if "professional" in req_select1 and req_status == "qNa":
           print("专业性强或隐私的问答需求")
           print("专业性强或涉及隐私的问答需求暂不支持")
           # table = "专业性强或涉及隐私的问答需求暂不支持。"
-      if "template" in req_select2:
+      if "template" in req_select2 and req_status == "genText":
           print("模板生文")
           table.append("| 模板生文 | 5 | 一期 | 生成模板化材料，字数不多 |")
           total_days += 5
-      if "longText" in req_select2:
+      if "longText" in req_select2 and req_status == "genText":
           print("长文本生文")
           print("长文本生文需求暂不支持")
           # table = "长文本生文需求暂不支持。"
-      if "formatAdjust" in req_select2:
+      if "formatAdjust" in req_select2 and req_status == "genText":
           print("格式调整生文")
           table.append("| 格式调整 | 2 | 一期 | 数据处理，简单格式调整 |")
           total_days += 2
@@ -116,11 +117,6 @@
         template: |
           你是一个产品经理助手，请根据以下用户的需求描述，判断其开发复杂度。
           返回一个合理的整数，代表需要额外增加的人天数（仅用于复杂性调整）。
-          目前的估算规则如下：
-          - 是否需要新界面：{context#needNewPage}
-          - 需求类型：{context#requirementSelect}
-          - 具体描述：{context#requirementDesc}
-          - 流程类业务种类数量：{context#business_count}
           估算规则：
           - 新开发前后端：前端15人天，后端10人天。
           - 适配本地界面：前端3人天，后端2人天。
@@ -142,7 +138,7 @@
           {context#requirementDesc}
           目前已经根据需求类型和界面需求进行了初步估算，当前结果如下：
           {context#compute_result}
-          请判断该需求的复杂性，并返回一个合适的的整数，代表根据补充需要额外增加的人天数。
+          请根据用户补充的需求描述，判断该需求的复杂性，并返回一个合适的的整数，代表根据补充需要额外增加的人天数。
   sinks:
     context:
       - name: complexity_adjust
@@ -165,6 +161,7 @@
       not_need_new_page = "{context#noNeedNewPageDynamic}"
       need_new_page_status = "{context#needNewPageStatus}"
       # 解析需求类型
+      req_status = "{context#requirementTypeStatus}"  # 需求类型
       req_select1 = "{context#requirementSelect1}"  # 问答类
       req_select2 = "{context#requirementSelect2}"  # 生文类
 
@@ -174,17 +171,17 @@
       complexity_adjust = {context#complexity_adjust}
 
       # 界面需求
-      if need_new_page == "1":
+      if need_new_page == "1" and need_new_page_status == "needNewPage":
           print("--------------------------新开发前后端------------------------------")
           table.append("| 新开发前后端 | 25 | 一期 | 前端15人天+后端10人天，复杂UI/UX |")
           total_days += 25
-      if not_need_new_page == "1":
+      if not_need_new_page == "1" and need_new_page_status == "noNeedNewPage":
           table.append("| 适配需求方的本地界面 | 5 | 一期 | 前端3人天+后端2人天，样式调整 |")
           total_days += 5
-      elif not_need_new_page == "2":
+      elif not_need_new_page == "2" and need_new_page_status == "noNeedNewPage":
           table.append("| 使用jrrc数智平台 | 2 | 一期 | 前端1人天+后端1人天，简单适配 |")
           total_days += 2
-      elif not_need_new_page == "3":
+      elif not_need_new_page == "3" and need_new_page_status == "noNeedNewPage":
           table.append("| 联网方式 | 4 | 一期 | 前端2人天+后端2人天，API调用 |")
           total_days += 4
       elif need_new_page_status == "dontKnow":
@@ -192,28 +189,28 @@
           # table = "需进一步沟通，建议转人工。"
 
       # 需求类型
-      if "policy" in req_select1:
+      if "policy" in req_select1 and req_status == "qNa":
           print("政策类问答")
           table.append("| 政策类问答 | 5 | 一期 | 基于法律法规，知识库+问答逻辑 |")
           total_days += 5
-      if "process" in req_select1:
+      if "process" in req_select1 and req_status == "qNa":
           print("流程类问答")
           days = business_count * 5
           table.append(f"| 流程类问答 | {days} | 一期 | {business_count}种业务×5人天 |")
           total_days += days
-      if "professional" in req_select1:
+      if "professional" in req_select1 and req_status == "qNa":
           print("专业性强或隐私的问答需求")
           print("专业性强或涉及隐私的问答需求暂不支持")
           # table = "专业性强或涉及隐私的问答需求暂不支持。"
-      if "template" in req_select2:
+      if "template" in req_select2 and req_status == "genText":
           print("模板生文")
           table.append("| 模板生文 | 5 | 一期 | 生成模板化材料，字数不多 |")
           total_days += 5
-      if "longText" in req_select2:
+      if "longText" in req_select2 and req_status == "genText": 
           print("长文本生文")
           print("长文本生文需求暂不支持")
           # table = "长文本生文需求暂不支持。"
-      if "formatAdjust" in req_select2:
+      if "formatAdjust" in req_select2 and req_status == "genText":
           print("格式调整生文")
           table.append("| 格式调整 | 2 | 一期 | 数据处理，简单格式调整 |")
           total_days += 2

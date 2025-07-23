@@ -1,0 +1,158 @@
+- code: declared.operations
+  args:
+    payload:
+      llm:
+        name: qwen-plus
+        temperature: 0.3
+        slaves:
+          - name: jrrc_model
+- code: sources.execution
+  name: 生成中文日期
+  args:
+    source: |-
+      year, month, day = date.split('-')
+      month = str(int(month))
+      day = str(int(day))
+      output_date = year + '年' + month + '月' + day + '日'
+      return output_date
+  sinks:
+    logging: true
+    context: date_chinese
+- code: sources.execution
+  name: title1
+  args:
+    source: |-
+      result = gov
+      return result
+  sinks:
+    logging: true
+    context: title1
+- code: sources.execution
+  name: title2
+  args:
+    source: |-
+      result = '关于' + contnt + '的函'
+      return result
+  sinks:
+    logging: true
+    context: title2
+- code: refs.operations
+  name: 调用'公文写作流行用语' 输出：gov_lxyy
+  args:
+    flows: customize-gov-writing-style-study.yml
+- code: llmx.predict.chat
+  args:
+    messages:
+      - type: human
+        template: |-
+          - Role: 你是一位经验丰富的政府官员，具备法律知识和政策制定能力。
+          - Goals: 根据特定的文件/会议依据、具体事由，书写一份的政府函件，以交代或陈述某项工作。
+          - OutputFormat: 
+            1.只输出正文，不输出标题、署名、日期等其他信息。
+            2.不使用条目式，只使用纯文字。如果有必要用“1.2.3.”分点，则改用“一、二、三、”替代。
+            3.不使用任何markdown格式。
+            4.如果有附件，附件应写在最后面。
+            5.不使用类似“首先”、“其次”、“然后”这种分隔词，改为使用“一是”、”二是“、”三是“。
+            6.公文写作不使用主语。不要出现类似”我“、”我们“这类主语。
+            7.公文写作多使用流行用语，尽量少使用陈旧的2020年之前的公文用语。
+          - Workflow:
+            1. 确定函件的主题和目的。
+            2. 分析相关的文件和政策依据。
+            3. 明确函件的具体内容和执行细节。
+            4. 撰写函件草案。一般由四个部分组成：
+              开头：主要说明发函缘由、目的、根据等内容，然后可以用“现将有关问题说明如下。”或“现将有关事项函复如下。”等过渡语转入下文。复函的缘由部分，一般首先引叙来文的标题、发文字号，然后再交代根据，以说明发文的缘由。
+              主体：是函的核心内容部分，主要说明致函事项，应当用简洁得体的语言叙述内容。
+              结尾：一般用礼貌性语言向对方提出希望，或请对方协助解决某一问题，或请对方及时复函，或请对方提出意见，或请主管部门批准等。
+              结语：根据函的不同类型可以选择不同的结语，如“特此函询（商）。”“请即复函。”“特此函告。”“特此函复。”等。有的函也可以不用结束语，可以像普通信件一样，使用“此致。”“敬礼。”收尾。
+          - 文件/会议依据:
+            {context#support}
+          - 具体事由:
+            {context#contnt}
+          - 输出样例：
+            中秋、国庆佳节来临之际，为贯彻落实好中央八项规定精神及省市区有关作风建设规定要求，持续保持纠正“四风”高压态势。特在中秋、国庆两节前发送廉洁过节提醒函，要求党员干部要自觉做到“十个严禁”：
+            严禁违规用公款购买赠送月饼等节礼；严禁违规公款吃喝或违规接受下属、管理服务对象的宴请；严禁违规滥发津补贴或福利；严禁收送可能影响公正执行公务或明显超出正常礼尚往来的礼品、礼金、消费卡等；严禁公款旅游或变相公款旅游；严禁公车私用、“私车公养”或违规借用、占用管理服务对象车辆；严禁用公款为回乡探亲、参观旅游的党员干部安排旅游、餐饮住宿等活动；严禁出入私人会所以及带有私人会所性质的隐秘场所；严禁违规操办婚丧喜庆事宜；严禁组织参加“带彩”娱乐活动。
+            希望全党员干部树立道德高标准，严守纪律高压线，充分发挥表率作用，令行禁止，带头营造朴素节俭、风清气正的良好节日氛围，共同度过一个文明健康、团圆欢乐的节日!
+          - 公文写作流行用语：
+            --------
+            {context#gov_lxyy}
+            --------
+  sinks:
+    logging: true
+    context: text1
+- code: sources.execution
+  args: 
+    source: |-
+        lines = text1.split('\n')
+        indented_lines = ['\t' + line for line in lines if line.strip() != '']
+        indented_text = '\n'.join(indented_lines)
+        return indented_text
+  sinks:
+    logging: true
+    context: body
+- code: plans.structured
+  name: docx 模板替换输出
+  args:
+    - code: knowledge.docs.operations#bytes
+      args:
+        document: "{context#docx_tpl_id}"
+      sinks:
+        context: tpl_bytes
+    - code: midware.operations#docxtpl_render
+      args:
+        template: "{context#tpl_bytes}"
+        variables:
+          date: "{context#date_chinese}"
+          title1: "{context#title1}"
+          title2: "{context#title2}"
+          body: "{context#body}"
+          name: "{context#gov}"
+      sinks:
+        context: docx_bytes
+    # - code: sources.execution
+    #   args: 
+    #     source: |-
+    #       import hashlib
+
+    #       multiline_text = '''{context#body}'''
+    #       text_bytes = multiline_text.encode('utf-8')
+    #       hash_object = hashlib.sha256()
+    #       hash_object.update(text_bytes)
+    #       hash_hex = hash_object.hexdigest()
+    #       short_hash = hash_hex[:8]
+    #       return short_hash
+    #   sinks:
+    #     logging: true
+    #     context: short_hash
+    - code: sources.execution
+      args: 
+        source: |-
+            import time
+
+            current_time = time.localtime()
+            formatted_time = time.strftime('%Y-%m-%d %H:%M:%S', current_time)
+            timestamp = int(time.mktime(current_time))
+            return timestamp
+      sinks:
+        logging: true
+        context: time_stamp
+    - code: apis.operations
+      args:
+        - code: upload
+          args:
+            location: "{props#commons.vfs.defaults}:///$private/de/temps/{context#title2}{context#time_stamp}.docx"
+            bytes: "{context#docx_bytes}"
+            attachment: true
+          sinks:
+            context: docx_url
+    - code: formats.operations
+      args:
+        target:
+          - type: context-format
+            pattern: |-
+              点击下载：[{context#title2}]({context#docx_url})
+      sinks:
+        reply: pending
+- code: refs.operations
+  name: 保存历史记录
+  args:
+    flows: chat-memories-flush.yml

@@ -1,0 +1,51 @@
+type: object
+name: 公文写作-函
+required:
+  - date
+  - gov
+  - contnt
+  - support
+properties:
+  content:
+    type: string
+    ui:hidden: true
+    default: 公文写作-函
+  flows:
+    type: string
+    ui:hidden: true
+    default: customize-gov-letter.yml
+  docx_tpl_id:
+    type: string
+    ui:hidden: true
+    default: 402880ad8fcdd2f9018fcde7504f037a
+  date:
+    type: string
+    title: 日期
+    format: date
+    err:options:
+      required: '请输入日期'
+  gov:
+    type: string
+    title: 发文机关
+    default: XX市人民政府
+    err:options:
+      required: '请输入发文机关'
+  contnt:
+    type: string
+    title: 发文事由
+    default: 中秋、国庆廉洁过节
+    maxLength: 30
+    ui:options: 
+      type: textarea
+      rows: 2
+    err:options:
+      required: '请输入发文事由'
+  support:
+    type: string
+    title: 具体内容
+    default: 中秋、国庆佳节来临之际，为贯彻落实好中央八项规定精神及省市区有关作风建设规定要求，持续保持纠正“四风”高压态势。特在中秋、国庆两节前发送廉洁过节提醒函，要求全镇党员干部要自觉做到“十个严禁”
+    ui:options: 
+      type: textarea
+      rows: 10
+    err:options:
+      required: '请输入具体内容'

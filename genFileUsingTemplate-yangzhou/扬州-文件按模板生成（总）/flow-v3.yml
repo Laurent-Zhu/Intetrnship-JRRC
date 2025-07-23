@@ -1,0 +1,162 @@
+# 1. 声明 LLM 及从属模型
+- code: declared.operations
+  args:
+    payload:
+      llm:
+        name: gpt-4o
+        slaves:
+          - name: qwen-plus
+
+# 2. 初始化模板列表
+- code: sources.execution
+  name: 初始化模板
+  args:
+    source: |-
+      return [
+        {"name": "成员大会决议(注销)", "id": "c0a8002d97f38283019807c8d7e71ad8", "fields": ["market", "date", "members", "leader"]},
+        {"name": "成员代表大会决议(注销)", "id": "c0a8002d97f38283019807c8d7fd1ada", "fields": ["market", "date", "members", "leader"]},
+        {"name": "非公司法人企业清算报告", "id": "c0a8002d97f38283019807c8d8121adc", "fields": ["market", "date"]},
+        {"name": "个人独资企业清算报告", "id": "c0a8002d98091d6b01980c03abaf0390", "fields": ["market", "date"]},
+        {"name": "公司清算报告", "id": "c0a8002d98091d6b01980c03abcc0392", "fields": ["market", "date1", "date2"]},
+        {"name": "股东会会议记录(注销)", "id": "c0a8002d98091d6b01980c03abe50394", "fields": ["market", "date", "host", "director", "members", "leader"]},
+        {"name": "股东会决议(注销)", "id": "c0a8002d98091d6b01980c03abfe0396", "fields": ["market", "date", "members", "leader"]},
+        {"name": "股东决定(注销)", "id": "c0a8002d98091d6b01980c03ac170398", "fields": ["market", "date", "members", "leader"]},
+        {"name": "合伙企业清算报告", "id": "c0a8002d98091d6b01980c03ac32039a", "fields": ["market", "date"]},
+        {"name": "合伙企业注销决议", "id": "c0a8002d98091d6b01980c03ac4b039c", "fields": ["market", "date", "members"]},
+        {"name": "简易注销全体投资人承诺书", "id": "c0a8002d98091d6b01980c03ac64039e", "fields": ["market"]},
+        {"name": "农民专业合作社登记(备案)申请书(注销)", "id": "c0a8002d98091d6b01980c03ac7d03a0", "fields": ["market", "code"]},
+        {"name": "农民专业合作社清算报告", "id": "c0a8002d98091d6b01980c03ac9e03a2", "fields": ["market", "date1", "date2"]},
+        {"name": "企业注销登记申请书", "id: "c0a8002d98091d6b01980c03acb703a4", "fields": ["market", "code", "department"]},
+        {"name": "确认清算报告的成员大会决议", "id": "c0a8002d98091d6b01980c03acb903a6", "fields": ["market", "date1", "date2"]},
+        {"name": "确认清算报告的成员代表大会决议", "id": "c0a8002d98091d6b01980c03ace903a8", "fields": ["market", "date1", "date2"]},
+        {"name": "确认清算报告的股东会会议记录", "id": "c0a8002d98091d6b01980c03ad0303aa", "fields": ["market", "date1", "date2", "host", "director"]},
+        {"name": "确认清算报告的股东会决议", "id": "c0a8002d98091d6b01980c03ad1c03ac", "fields": ["market", "date1", "date2"]},
+        {"name": "主管部门(出资人)决定(注销)", "id": "c0a8002d98091d6b01980c03ad3503ae", "fields": ["market", "date"]}
+      ]
+  sinks:
+    context: templates
+
+# 3. 构造模板列表字符串用于展示
+- code: sources.execution
+  name: 构造模板展示文本
+  args:
+    locals:
+      templates: "{context#templates}"
+    source: |-
+      lines = [f"{i+1}. {tpl['name']}" for i, tpl in enumerate(templates)]
+      return "\n".join(lines)
+  sinks:
+    context: template_lines
+
+# 4. 询问用户要生成哪些模板
+- code: llmx.predict.chat
+  name: 用户选择模板
+  args:
+    messages:
+      - type: system
+        template: |
+          你是一个文档生成助手，请根据以下模板列表选择你要生成的文档：
+          {context#template_lines}
+          请输入对应编号或名称，多个用逗号分隔。
+    reply: pending
+  sinks:
+    context: user_input_raw
+
+# 5. 解析用户选择
+- code: sources.execution
+  name: 解析用户选择
+  args:
+    locals:
+      templates: "{context#templates}"
+      user_input: "{context#user_input_raw}"
+    source: |-
+      import re
+      selected = []
+      user_input = user_input or ''
+      for i, tpl in enumerate(templates):
+          if str(i+1) in user_input or tpl['name'] in user_input:
+              selected.append(tpl)
+      return selected
+  sinks:
+    context: selected_templates
+
+# 6. 遍历每个选择的模板
+- code: logics.loop
+  name: 遍历模板
+  args:
+    iterable: "{context#selected_templates}"
+    consumer:
+
+      # 6.1 用户填写字段
+      - code: logics.loop
+        name: 填写字段
+        args:
+          iterable: "{context#x.fields}"
+          consumer:
+            - code: llmx.predict.chat
+              args:
+                messages:
+                  - type: human
+                    template: 请输入字段 {context#x} 的值：
+                reply: pending
+              sinks:
+                context:
+                  type: map
+                  name: filled_fields
+                  key: "{context#x}"
+
+      # 6.2 加载模板文件
+      - code: knowledge.docs.operations#bytes
+        args:
+          document: "{context#x.id}"
+        sinks:
+          context: tpl_bytes
+
+      # 6.3 渲染模板
+      - code: midware.operations#docxtpl_render
+        args:
+          template: "{context#tpl_bytes}"
+          variables: "{context#filled_fields}"
+        sinks:
+          context: docx_bytes
+
+      # 6.4 上传文档
+      - code: sources.execution
+        name: 生成时间戳
+        args:
+          source: |
+            import time
+            return int(time.time())
+        sinks:
+          context: time_stamp
+
+      - code: apis.operations
+        name: 上传
+        args:
+          - code: upload
+            args:
+              location: "{props#commons.vfs.defaults}:///$private/de/docs/{context#filled_fields.market}_{context#x.name}_{context#time_stamp}.docx"
+              bytes: "{context#docx_bytes}"
+              attachment: true
+            sinks:
+              context: docx_url
+
+      # 6.5 构造返回信息
+      - code: formats.operations
+        name: 输出链接
+        args:
+          target:
+            - type: context-format
+              pattern: 【{context#x.name}】生成成功：[点击下载]({context#docx_url})
+        sinks:
+          context:
+            type: append
+            name: docx_links
+
+# 7. 返回所有文档链接
+- code: reply.operations
+  name: 返回结果
+  args:
+    pending: |
+      所有文档生成完成：
+      {context#docx_links}

@@ -1,0 +1,313 @@
+# This is summary-v2.yml
+# 版本说明:采用连续对话形式
+- code: plans.structured
+  args:
+    - code: declared.operations
+      props:
+        design: c3ca8e1eddd944d7b31f82b184420b73
+      args:
+        payload:
+          llm:
+            name: gpt-4o
+            temperature: 0.3
+
+    - code: sources.execution
+      function_desc: 计算每部分的内容字数
+      args:
+        source: |-
+          result = {context#length}
+          result = result*1000/2
+          return result
+      sinks:
+        context:
+          - scope: origin
+            type: set-props
+            name: length1
+        logging: false
+- code: reply.operations
+  args:
+    pending: "### <center> {context#title1}\n"
+- code: sources.execution
+  function_desc: 附加信息
+  args:
+    source: |-
+      # 获取三个参数的值，如果没有则会变成 'context#xxx'
+      work_experience = '''{context#work_experience}'''
+      learning_reflection = '''{context#learning_reflection}'''
+      improvement_plan = '''{context#improvement_plan}'''
+
+      # 初始化返回结果
+      final_result = ""
+
+      # 判断三个参数是否都为 'context#xxx'，如果是则设置模板字符串
+      if all(param.startswith('context#') for param in [work_experience, learning_reflection, improvement_plan]):
+          final_result = ""
+      else:
+          # 拼接非 'context#xxx' 的参数内容
+          if not work_experience.startswith('context#'):
+              final_result += f"工作心得:\n{work_experience}\n"
+          if not learning_reflection.startswith('context#'):
+              final_result += f"学习反思:\n{learning_reflection}\n"
+          if not improvement_plan.startswith('context#'):
+              final_result += f"改进计划:\n{improvement_plan}\n"
+
+      # 返回最终结果，去除末尾的多余换行符
+      return final_result.strip()
+
+  sinks:
+    context:
+      - scope: origin
+        type: set-props
+        name: info
+    logging: false
+# - code: reply.operations
+#   props:
+#     design: 309ff400b842419f8bcb89f7c1df75a6
+#   args:
+#     pending: 合并信息：{context#info}
+#   sinks: {}    
+
+- code: plans.structured
+  function_desc: 二、ＡＩ撰写
+  args:
+    - code: llmx.predict.chat
+      props:
+        design: d34131f8f51b45c2b35e6d60407d4c93
+      args:
+        messages:
+          - type: system
+            template: |-
+              - Role: 
+                公文大纲专家
+              - Goals: 
+                根据特定的信息，制定一项合理、合法、有效的公文安排大纲
+              - OutputFormat: 
+                只输出正文，不输出标题、署名、日期等其他信息。
+                不使用任何markdown格式。
+
+              - Workflow:
+                1. 思考分析用户输入信息
+                2. 根据用户输入信息撰写大纲
+
+              - Example：
+                  段落：引出主题，xxx如下：（xx字）
+
+                  一、总体目标与指导原则（xx字）
+
+                  二、主要任务与实施策略（xx字）
+                  （一）强化政府投资项目审计
+
+                  （二）深化领导干部经济责任审计
+
+                  三、工作要求与保障措施（xx字）
+                  （一）树立科学审计理念
+
+                  段落：总结性阐述（xx字）
+
+              - OutputFormat
+                总字数为{context#length}千字，注意为大纲每个部分合理分配字数
+          - type: human
+            template: |-
+              - 参考信息
+                  - keywords
+                  {context#keywords}
+
+                  - info
+                  {context#info}
+
+                  - type
+                  {context#type1}
+
+                  - scene
+                  {context#scene}
+
+                  - title1
+                  {context#title1}
+      sinks:
+        logging: false
+        context:
+          - scope: origin
+            type: set-props
+            name: outline
+        # reply:
+        #   - pending
+
+    - code: llmx.predict.chat
+      props:
+        design: d34131f8f51b45c2b35e6d60407d4c93
+      args:
+        messages:
+          - type: system
+            template: |-
+              - Role: 你是一位经验丰富的公文写作专家，具备法律知识和政策制定能力，擅长写各种公文。
+              - Goals: 根据特定的参考信息，制定一项合理、合法、有效的公文安排大纲，以交代和陈述某项工作。
+              - OutputFormat: 
+                1. 只输出正文，不输出标题、署名、日期等其他信息。
+                2. （一）、（二）、（三）、等二级小标题下，使用纯文本阐述内容
+                特殊情况需要分点阐述，则使用一是二是三是等采用总分结构（同一个段落）进行分点阐述
+                3. 不使用任何markdown格式。
+                4. 公文写作不使用主语。不要出现类似”我“、”我们“这类主语。
+              - Knowledge:
+                1. 确定总结的主题和目的。
+                2. 分析相关的法律文件和政策依据。
+                3. 明确总结的具体内容和执行细节。
+                4. 撰写总结草案。一般由以下部分组成：
+                  开头：总结的开头主要用来概述基本情况，有需要时可以列出前言部分。开头包括单位名称，工作性质、主要任务、时代背景、指导思想，以及总结目的、主要内容提示等。
+                  主体：主要内容包括成绩和做法、经验和教训、今后打算等。这部分篇幅长、内容多，要特别注意使层次分明、条理清楚。
+                  结尾：一般应在总结经验教训的基础上，提出今后的方向、任务和措施，表明决心、展望前景，
+                5. 审核和修改草案以确保准确性和合法性。
+
+              - Attention
+                二级小标题下尽量不分段！
+              - Skills
+                + 安排的正文首先用极其简要的语言介绍安排的目的和依据，常以“为了”、“根据”等介词起领，然后依次说明安排的事项和具体的要求措施。
+              - 大纲：
+                {context#outline}
+              - 参考信息
+                - keywords
+                {context#keywords}
+                - info
+                {context#info}
+                - type
+                {context#type1}
+                - scene
+                {context#scene}
+                - title1
+                {context#title1}
+          - type: human
+            template: |-
+              先根据大纲，撰写内容的上半部分，不要输出原始段落大纲！
+              全力以赴，这对我的未来非常重要！
+              大纲的段落内容也需要保留作为大纲
+              每个部分尽量达到目标字数
+              注意，只能涉及大纲的上半部分！！！
+      sinks:
+        logging: false
+        context:
+          - scope: origin
+            type: set-props
+            name: body1
+        reply:
+          - pending
+    - code: reply.operations
+      args:
+        pending: "\n"        
+    - code: llmx.predict.chat
+      props:
+        design: d34131f8f51b45c2b35e6d60407d4c93
+      args:
+        messages:
+          - type: system
+            template: |-
+              - Role: 你是一位经验丰富的公文写作专家，具备法律知识和政策制定能力，擅长写各种公文。
+              - Goals: 根据特定的参考信息，制定一项合理、合法、有效的公文安排大纲，以交代和陈述某项工作。
+              - OutputFormat: 
+                1. 只输出正文，不输出标题、署名、日期等其他信息。
+                2. （一）、（二）、（三）、等二级小标题下，使用纯文本阐述内容
+                特殊情况需要分点阐述，则使用一是二是三是等采用总分结构（同一个段落）进行分点阐述
+                3. 不使用任何markdown格式。
+                4. 公文写作不使用主语。不要出现类似”我“、”我们“这类主语。
+              - Knowledge:
+                1. 确定总结的主题和目的。
+                2. 分析相关的法律文件和政策依据。
+                3. 明确总结的具体内容和执行细节。
+                4. 撰写总结草案。一般由以下部分组成：
+                  开头：总结的开头主要用来概述基本情况，有需要时可以列出前言部分。开头包括单位名称，工作性质、主要任务、时代背景、指导思想，以及总结目的、主要内容提示等。
+                  主体：主要内容包括成绩和做法、经验和教训、今后打算等。这部分篇幅长、内容多，要特别注意使层次分明、条理清楚。
+                  结尾：一般应在总结经验教训的基础上，提出今后的方向、任务和措施，表明决心、展望前景，
+                5. 审核和修改草案以确保准确性和合法性。
+
+              - Attention
+                二级小标题下尽量不分段！
+              - Skills
+                + 安排的正文首先用极其简要的语言介绍安排的目的和依据，常以“为了”、“根据”等介词起领，然后依次说明安排的事项和具体的要求措施。
+              - 大纲：
+                {context#outline}
+              - 参考信息
+                - keywords
+                {context#keywords}
+                - info
+                {context#info}
+                - type
+                {context#type1}
+                - scene
+                {context#scene}
+                - title1
+                {context#title1}
+          - type: human
+            template: |-
+              先根据大纲，撰写内容的上半部分，不要输出原始段落大纲！
+              全力以赴，这对我的未来非常重要！
+              大纲的段落内容也需要改写或者扩写
+              每个部分尽量达到目标字数
+              注意，只能涉及大纲的上半部分！！！
+          - type: ai
+            template: '{context#body1}'
+          - type: human
+            template: |-
+              根据大纲续写剩余内容，不要输出原始段落大纲！
+              全力以赴，这对我的未来非常重要！
+              大纲的段落内容也需要改写或者扩写
+              每个部分尽量达到目标字数
+      sinks:              
+        logging: false
+        context:
+          - scope: origin
+            type: set-props
+            name: body2
+        reply:
+          - pending      
+    # - code: reply.operations
+    #   args:
+    #     pending: "<div style='text-align: right;'>\n{context#job}\n</div>"
+    # - code: reply.operations
+    #   args:
+    #     pending: "<div style='text-align: right;'>{context#date_chinese}\n</div>"
+
+    - code: sources.execution
+      props:
+        design: c476a20763b24260acb84dede0f528e2
+      args:
+        source: |-
+          title = '''{context#title1}'''
+          body1 = '''{context#body1}'''
+          body2 = '''{context#body2}'''
+          result = f'''{title}\n{body1}\n{body2}'''
+          result = result.replace('\n\n', '\n')
+          return result
+      sinks:
+        context:
+          - scope: origin
+            type: set-props
+            name: article
+        logging: false
+
+
+- code: reply.operations
+  args:
+    pending: "\n"
+- code: reply.operations
+  args:
+    pending: "\n点击链接下载word文件："
+- code: plans.structured
+  function_desc: 写入文件
+  props:
+    design: e0554c2bef174913841441b03b701d04
+  args:
+    - code: refs.operations
+      props:
+        design: af94ad82f8824294a14549da5331f1da
+      args:
+        flows: customize-gov-docs-reformat-subflow.yml
+        payload:
+          document_text: '{context#article}'
+          red_head: 0
+          delivering_department: 0
+          file_name: '{context#title1}'
+          name_time: 0
+          name_time_number: 1
+      sinks:
+        logging: false
+- code: refs.operations
+  args:
+    flows: chat-memories-flush.yml

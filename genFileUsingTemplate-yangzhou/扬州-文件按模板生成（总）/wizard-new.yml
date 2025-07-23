@@ -1,0 +1,503 @@
+type: object
+name: 扬州-文件按模板生成
+required:
+  - date
+  - market
+  - members
+  - leader
+properties:
+  content:
+    type: string
+    ui:hidden: true
+    default: 扬州-文件按模板生成
+
+  flows:
+    type: string
+    ui:hidden: true
+    default: yangzhou-file-generation-using-templates.yml
+
+  docx_tpl_id_select:
+    type: string
+    ui:customize: cascader
+    ui:options:
+      width: 100%
+      placeholder: 选择文档模板
+    enums:
+      type: static
+      config:
+        props:
+          label: label
+          value: value
+          children: children
+          multiple: true
+          emitPath: false
+        options:
+          - value: 1
+            label: 成员大会决议(注销)
+          - value: 2
+            label: 成员代表大会决议(注销)
+          - value: 3
+            label: 非公司法人企业清算报告
+          - value: 4
+            label: 个人独资企业清算报告
+          - value: 5
+            label: 公司清算报告
+          - value: 6
+            label: 股东会会议记录(注销)
+          - value: 7
+            label: 股东会决议(注销)
+          - value: 8
+            label: 股东决定(注销)
+          - value: 9
+            label: 合伙企业清算报告
+          - value: 10
+            label: 合伙企业注销决议
+          - value: 11
+            label: 简易注销全体投资人承诺书
+          - value: 12
+            label: 农民专业合作社登记(备案)申请书(注销)
+          - value: 13
+            label: 农民专业合作社清算报告
+          - value: 14
+            label: 企业注销登记申请书
+          - value: 15
+            label: 确认清算报告的成员大会决议
+          - value: 16
+            label: 确认清算报告的成员代表大会决议
+          - value: 17
+            label: 确认清算报告的股东会会议记录
+          - value: 18
+            label: 确认清算报告的股东会决议
+          - value: 19
+            label: 主管部门(出资人)决定(注销)
+
+  # date:
+  #   type: string
+  #   title: 日期
+  #   format: date
+  #   err:options:
+  #     required: '请输入日期'
+
+  # market:
+  #   type: string
+  #   title: 市场主体名称
+  #   default: 扬州某市场主体
+  #   err:options:
+  #     required: '请输入市场主体名称'
+
+  # members:
+  #   type: string
+  #   title: 清算组成员（清算人）姓名
+  #   default: 张三 李四
+  #   err:options:
+  #     required: '请输入清算组成员（清算人）姓名，多个成员用空格分隔'
+  #   ui:hidden: "{{!['1','2','6','7','8','10'].includes(rootFormData.docx_tpl_id_select)}}"
+
+  # leader:
+  #   type: string
+  #   title: 清算组负责人
+  #   default: 张三
+  #   err:options:
+  #     required: '请输入清算组负责人姓名'
+  #   ui:hidden: "{{!['1','2','6','7','8','10'].includes(rootFormData.docx_tpl_id_select)}}"
+
+  # code:
+  #   type: string
+  #   title: 统一社会信用代码或注册号
+  #   err:options:
+  #     required: '请输入统一社会信用代码或注册号'
+  #   ui:hidden: "{{!['12','14'].includes(rootFormData.docx_tpl_id_select)}}"
+
+  # date1:
+  #   type: string
+  #   title: 清算报告出具日期
+  #   format: date
+  #   ui:hidden: "{{!['5','13','15','16','17','18'].includes(rootFormData.docx_tpl_id_select)}}"
+
+  # date2:
+  #   type: string
+  #   title: 成立清算组时间或确认会议召开时间
+  #   format: date
+  #   ui:hidden: "{{!['5','13','15','16','17','18','19'].includes(rootFormData.docx_tpl_id_select)}}"
+
+  # host:
+  #   type: string
+  #   title: 会议主持人姓名
+  #   ui:hidden: "{{!['6','17'].includes(rootFormData.docx_tpl_id_select)}}"
+
+  # director:
+  #   type: string
+  #   title: 与会董事姓名
+  #   ui:hidden: "{{!['6','17'].includes(rootFormData.docx_tpl_id_select)}}"
+
+  # department:
+  #   type: string
+  #   title: 主管部门（出资人）
+  #   ui:hidden: "{{rootFormData.docx_tpl_id_select != '14'}}"
+  # 1. 成员大会决议(注销)
+  market_1:
+    type: string
+    title: 市场主体名称
+    ui:hidden: "{{!rootFormData.docx_tpl_id_select.includes(1)}}"
+  date_1:
+    type: string
+    title: 成立清算组或指派清算人的时间
+    format: date
+    ui:hidden: "{{!rootFormData.docx_tpl_id_select.includes(1)}}"
+  members_1:
+    type: string
+    title: 清算组成员（清算人）姓名
+    ui:hidden: "{{!rootFormData.docx_tpl_id_select.includes(1)}}"
+  leader_1:
+    type: string
+    title: 清算组负责人
+    ui:hidden: "{{!rootFormData.docx_tpl_id_select.includes(1)}}"
+  docx_tpl_id_1:
+    type: string
+    ui:hidden: true
+    default: c0a8002d97f38283019807c8d7e71ad8
+
+  # 2. 成员代表大会决议(注销)
+  market_2:
+    type: string
+    title: 市场主体名称
+    ui:hidden: "{{!rootFormData.docx_tpl_id_select.includes(2)}}"
+  date_2:
+    type: string
+    title: 成立清算组或指派清算人的时间
+    format: date
+    ui:hidden: "{{!rootFormData.docx_tpl_id_select.includes(2)}}"
+  members_2:
+    type: string
+    title: 清算组成员（清算人）姓名
+    ui:hidden: "{{!rootFormData.docx_tpl_id_select.includes(2)}}"
+  leader_2:
+    type: string
+    title: 清算组负责人
+    ui:hidden: "{{!rootFormData.docx_tpl_id_select.includes(2)}}"
+  docx_tpl_id_2:
+    type: string
+    ui:hidden: true
+    default: c0a8002d97f38283019807c8d7fd1ada
+
+  # 3. 非公司法人企业清算报告
+  market_3:
+    type: string
+    title: 市场主体名称
+    ui:hidden: "{{!rootFormData.docx_tpl_id_select.includes(3)}}"
+  date_3:
+    type: string
+    title: 清算报告出具日期
+    format: date
+    ui:hidden: "{{!rootFormData.docx_tpl_id_select.includes(3)}}"
+  docx_tpl_id_3:
+    type: string
+    ui:hidden: true
+    default: c0a8002d97f38283019807c8d8121adc
+
+  # 4. 个人独资企业清算报告
+  market_4:
+    type: string
+    title: 市场主体名称
+    ui:hidden: "{{!rootFormData.docx_tpl_id_select.includes(4)}}"
+  date_4:
+    type: string
+    title: 清算报告出具日期
+    format: date
+    ui:hidden: "{{!rootFormData.docx_tpl_id_select.includes(4)}}"
+  docx_tpl_id_4:
+    type: string
+    ui:hidden: true
+    default: c0a8002d98091d6b01980c03abaf0390
+
+  # 5. 公司清算报告
+  market_5:
+    type: string
+    title: 市场主体名称
+    ui:hidden: "{{!rootFormData.docx_tpl_id_select.includes(5)}}"
+  date1_5:
+    type: string
+    title: 清算报告出具日期
+    format: date
+    ui:hidden: "{{!rootFormData.docx_tpl_id_select.includes(5)}}"
+  date2_5:
+    type: string
+    title: 成立清算组或指派清算人的时间
+    format: date
+    ui:hidden: "{{!rootFormData.docx_tpl_id_select.includes(5)}}"
+  docx_tpl_id_5:
+    type: string
+    ui:hidden: true
+    default: c0a8002d98091d6b01980c03abcc0392
+
+  # 6. 股东会会议记录(注销)
+  market_6:
+    type: string
+    title: 市场主体名称
+    ui:hidden: "{{!rootFormData.docx_tpl_id_select.includes(6)}}"
+  date_6:
+    type: string
+    title: 成立清算组或指派清算人的时间
+    format: date
+    ui:hidden: "{{!rootFormData.docx_tpl_id_select.includes(6)}}"
+  host_6:
+    type: string
+    title: 会议主持人姓名
+    ui:hidden: "{{!rootFormData.docx_tpl_id_select.includes(6)}}"
+  director_6:
+    type: string
+    title: 与会董事姓名
+    ui:hidden: "{{!rootFormData.docx_tpl_id_select.includes(6)}}"
+  members_6:
+    type: string
+    title: 清算组成员（清算人）姓名
+    ui:hidden: "{{!rootFormData.docx_tpl_id_select.includes(6)}}"
+  leader_6:
+    type: string
+    title: 清算组负责人
+    ui:hidden: "{{!rootFormData.docx_tpl_id_select.includes(6)}}"
+  docx_tpl_id_6:
+    type: string
+    ui:hidden: true
+    default: c0a8002d98091d6b01980c03abe50394
+
+  # 7. 股东会决议(注销)
+  market_7:
+    type: string
+    title: 市场主体名称
+    ui:hidden: "{{!rootFormData.docx_tpl_id_select.includes(7)}}"
+  date_7:
+    type: string
+    title: 成立清算组或指派清算人的时间
+    format: date
+    ui:hidden: "{{!rootFormData.docx_tpl_id_select.includes(7)}}"
+  members_7:
+    type: string
+    title: 清算组成员
+    ui:hidden: "{{!rootFormData.docx_tpl_id_select.includes(7)}}"
+  leader_7:
+    type: string
+    title: 清算组负责人
+    ui:hidden: "{{!rootFormData.docx_tpl_id_select.includes(7)}}"
+  docx_tpl_id_7:
+    type: string
+    ui:hidden: true
+    default: c0a8002d98091d6b01980c03abfe0396
+
+  # 8. 股东决定(注销)
+  market_8:
+    type: string
+    title: 市场主体名称
+    ui:hidden: "{{!rootFormData.docx_tpl_id_select.includes(8)}}"
+  date_8:
+    type: string
+    title: 成立清算组时间
+    format: date
+    ui:hidden: "{{!rootFormData.docx_tpl_id_select.includes(8)}}"
+  members_8:
+    type: string
+    title: 清算组成员
+    ui:hidden: "{{!rootFormData.docx_tpl_id_select.includes(8)}}"
+  leader_8:
+    type: string
+    title: 清算组负责人
+    ui:hidden: "{{!rootFormData.docx_tpl_id_select.includes(8)}}"
+  docx_tpl_id_8:
+    type: string
+    ui:hidden: true
+    default: c0a8002d98091d6b01980c03ac170398
+
+  # 9. 合伙企业清算报告
+  market_9:
+    type: string
+    title: 市场主体名称
+    ui:hidden: "{{!rootFormData.docx_tpl_id_select.includes(9)}}"
+  date_9:
+    type: string
+    title: 清算报告出具日期
+    format: date
+    ui:hidden: "{{!rootFormData.docx_tpl_id_select.includes(9)}}"
+  docx_tpl_id_9:
+    type: string
+    ui:hidden: true
+    default: c0a8002d98091d6b01980c03ac32039a
+
+  # 10. 合伙企业注销决议
+  market_10:
+    type: string
+    title: 市场主体名称
+    ui:hidden: "{{!rootFormData.docx_tpl_id_select.includes(10)}}"
+  date_10:
+    type: string
+    title: 清算组成立时间
+    format: date
+    ui:hidden: "{{!rootFormData.docx_tpl_id_select.includes(10)}}"
+  members_10:
+    type: string
+    title: 清算组成员
+    ui:hidden: "{{!rootFormData.docx_tpl_id_select.includes(10)}}"
+  docx_tpl_id_10:
+    type: string
+    ui:hidden: true
+    default: c0a8002d98091d6b01980c03ac4f039c
+
+  # 11. 简易注销全体投资人承诺书
+  market_11:
+    type: string
+    title: 市场主体名称
+    ui:hidden: "{{!rootFormData.docx_tpl_id_select.includes(11)}}"
+  docx_tpl_id_11:
+    type: string
+    ui:hidden: true
+    default: c0a8002d98091d6b01980c03ac6f039e
+
+  # 12. 农民专业合作社登记(备案)申请书(注销)
+  market_12:
+    type: string
+    title: 市场主体名称
+    ui:hidden: "{{!rootFormData.docx_tpl_id_select.includes(12)}}"
+  code_12:
+    type: string
+    title: 统一社会信用代码或注册号
+    ui:hidden: "{{!rootFormData.docx_tpl_id_select.includes(12)}}"
+  docx_tpl_id_12:
+    type: string
+    ui:hidden: true
+    default: c0a8002d98091d6b01980c03ac8f03a0
+
+  # 13. 农民专业合作社清算报告
+  market_13:
+    type: string
+    title: 市场主体名称
+    ui:hidden: "{{!rootFormData.docx_tpl_id_select.includes(13)}}"
+  date1_13:
+    type: string
+    title: 清算报告出具日期
+    format: date
+    ui:hidden: "{{!rootFormData.docx_tpl_id_select.includes(13)}}"
+  date2_13:
+    type: string
+    title: 清算组成立时间
+    format: date
+    ui:hidden: "{{!rootFormData.docx_tpl_id_select.includes(13)}}"
+  docx_tpl_id_13:
+    type: string
+    ui:hidden: true
+    default: c0a8002d98091d6b01980c03acb203a2
+
+  # 14. 企业注销登记申请书
+  market_14:
+    type: string
+    title: 市场主体名称
+    ui:hidden: "{{!rootFormData.docx_tpl_id_select.includes(14)}}"
+  code_14:
+    type: string
+    title: 统一社会信用代码或注册号
+    ui:hidden: "{{!rootFormData.docx_tpl_id_select.includes(14)}}"
+  department_14:
+    type: string
+    title: 主管部门（出资人）
+    ui:hidden: "{{!rootFormData.docx_tpl_id_select.includes(14)}}"
+  docx_tpl_id_14:
+    type: string
+    ui:hidden: true
+    default: c0a8002d98091d6b01980c03acb103a4
+
+  # 15. 确认清算报告的成员大会决议
+  market_15:
+    type: string
+    title: 市场主体名称
+    ui:hidden: "{{!rootFormData.docx_tpl_id_select.includes(15)}}"
+  date1_15:
+    type: string
+    title: 会议召开日期
+    format: date
+    ui:hidden: "{{!rootFormData.docx_tpl_id_select.includes(15)}}"
+  date2_15:
+    type: string
+    title: 清算报告出具日期
+    format: date
+    ui:hidden: "{{!rootFormData.docx_tpl_id_select.includes(15)}}"
+  docx_tpl_id_15:
+    type: string
+    ui:hidden: true
+    default: c0a8002d98091d6b01980c03acd003a6
+
+  # 16. 确认清算报告的成员代表大会决议
+  market_16:
+    type: string
+    title: 市场主体名称
+    ui:hidden: "{{!rootFormData.docx_tpl_id_select.includes(16)}}"
+  date1_16:
+    type: string
+    title: 会议召开日期
+    format: date
+    ui:hidden: "{{!rootFormData.docx_tpl_id_select.includes(16)}}"
+  date2_16:
+    type: string
+    title: 清算报告出具日期
+    format: date
+    ui:hidden: "{{!rootFormData.docx_tpl_id_select.includes(16)}}"
+  docx_tpl_id_16:
+    type: string
+    ui:hidden: true
+    default: c0a8002d98091d6b01980c03ad0003a8
+
+  # 17. 确认清算报告的股东会会议记录
+  market_17:
+    type: string
+    title: 市场主体名称
+    ui:hidden: "{{!rootFormData.docx_tpl_id_select.includes(17)}}"
+  date1_17:
+    type: string
+    title: 会议召开日期
+    format: date
+    ui:hidden: "{{!rootFormData.docx_tpl_id_select.includes(17)}}"
+  date2_17:
+    type: string
+    title: 清算报告出具日期
+    format: date
+    ui:hidden: "{{!rootFormData.docx_tpl_id_select.includes(17)}}"
+  host_17:
+    type: string
+    title: 会议主持人姓名
+    ui:hidden: "{{!rootFormData.docx_tpl_id_select.includes(17)}}"
+  director_17:
+    type: string
+    title: 与会董事姓名
+    ui:hidden: "{{!rootFormData.docx_tpl_id_select.includes(17)}}"
+  docx_tpl_id_17:
+    type: string
+    ui:hidden: true
+    default: c0a8002d98091d6b01980c03ad0303aa
+
+  # 18. 确认清算报告的股东会决议
+  market_18:
+    type: string
+    title: 市场主体名称
+    ui:hidden: "{{!rootFormData.docx_tpl_id_select.includes(18)}}"
+  date1_18:
+    type: string
+    title: 会议召开日期
+    format: date
+    ui:hidden: "{{!rootFormData.docx_tpl_id_select.includes(18)}}"
+  date2_18:
+    type: string
+    title: 清算报告出具日期
+    format: date
+    ui:hidden: "{{!rootFormData.docx_tpl_id_select.includes(18)}}"
+  docx_tpl_id_18:
+    type: string
+    ui:hidden: true
+    default: c0a8002d98091d6b01980c03ad1c03ac
+
+  # 19. 主管部门(出资人)决定(注销)
+  date_19:
+    type: string
+    title: 成立清算组或指派清算人的时间
+    format: date
+    ui:hidden: "{{!rootFormData.docx_tpl_id_select.includes(19)}}"
+  docx_tpl_id_19:
+    type: string
+    ui:hidden: true
+    default: c0a8002d98091d6b01980c03ad3503ae

@@ -1,0 +1,48 @@
+# - 成立清算组或指派清算人的时间 date
+# - 市场主体名称 market
+# - 清算组成员（清算人）姓名 members
+# - 清算组负责人 leader
+type: object
+name: 成员代表大会决议-扬州
+required:
+  - date
+  - market
+  - members
+  - leader
+properties:
+  content:
+    type: string
+    ui:hidden: true
+    default: 成员代表大会决议-扬州
+  flows:
+    type: string
+    ui:hidden: true
+    default: yangzhou-member-representative-meeting-decision.yml
+  docx_tpl_id:
+    type: string
+    ui:hidden: true
+    default: c0a8002d97f38283019807c8d7fd1ada
+  date:
+    type: string
+    title: 日期
+    format: date
+    err:options:
+      required: '请输入日期'
+  market:
+    type: string
+    title: 市场主体名称
+    default: 扬州某市场主体
+    err:options:
+      required: '请输入市场主体名称'
+  members:
+    type: string
+    title: 清算组成员（清算人）姓名
+    default: 张三 李四
+    err:options:
+      required: '请输入清算组成员（清算人）姓名，多个成员用空格分隔'
+  leader:
+    type: string
+    title: 清算组负责人
+    default: 张三
+    err:options:
+      required: '请输入清算组负责人姓名'

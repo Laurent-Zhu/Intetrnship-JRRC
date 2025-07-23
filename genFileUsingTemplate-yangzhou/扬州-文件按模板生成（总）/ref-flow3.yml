@@ -1,0 +1,74 @@
+- code: declared.operations
+  args:
+    payload:
+      llm:
+        name: DeepSeek-R1
+- code: memories.storage#messages
+  sinks:
+    context: history
+- code: sources.execution
+  args: 
+    source: |-
+        res = '低空经济与空天'
+        return res
+  sinks:
+    logging: true
+    context: label
+- code: llmx.predict.chat
+  args:
+    llm:
+      name: coze-chat
+      coze_endpoint: https://api.coze.cn/open_api/v2/chat
+      coze_pat: pat_obBbbznSZjbZCDAT11J6wfgkSuPGURdUtm5uRaWZ5PtqA6IzaSM9tSaeGNbZVQ3Z
+      coze_bot: '7473102736918396978'
+      coze_accept: answer
+    messages:
+      - type: placeholder
+        variable: history
+      - type: human
+        template: |-
+          {content}
+  sinks:
+    logging: false
+    context: recall_text
+- code: sources.execution
+  args:
+    source: |-
+      import re
+      text = '''{context#recall_text}'''
+      cleaned_text = text.replace('{', '{{').replace('}', '}}')
+      return cleaned_text
+  sinks:
+    context: recall_text
+    logging: true
+- code: llmx.predict.chat
+  args:
+    messages:
+      - type: system
+        template: |-
+          - Role: 你是{label}政策问答机器人，专业回答相关政策问题。
+
+          - Goal: 现在时间是{now}。你专业解答{label}相关政策问题。
+
+          - Constrains:
+            1.仅回答相关问题或与用户闲聊。对于知识库中没有的问题，回复"很抱歉，暂时无法回答这个问题。"
+            2.语气温和、专业。
+            3.知识库中，可能存在与用户问题不相关的知识，请仔细甄别，不要答不对题。
+            4.禁止编造内容，回答尽量参考知识库。
+
+          - 知识库:
+            --------
+            {context#recall_text}
+            --------
+      - type: placeholder
+        variable: history
+      - type: human
+        template: |-
+          {content}
+    reply: pending
+  sinks:
+    logging: true
+- code: refs.operations
+  name: 保存历史记录
+  args:
+    flows: chat-memories-flush.yml

@@ -1,0 +1,82 @@
+- code: declared.operations
+  args:
+    payload:
+      llm:
+        name: gpt-4o-azure
+        slaves:
+          - name: qwen-plus
+
+- code: memories.storage0#messages
+  sinks:
+    context: history
+
+- code: mysql.operations#execute
+  args:
+    statement: |-
+      select knowledge_id from de_coze_kw_relation where id = '{context#id}';
+  sinks:
+    context: knowledge_id
+    logging: true
+
+- code: sources.execution
+  args:
+    source: |-
+        knowledge_id = {context#knowledge_id}
+        res = knowledge_id[0]['knowledge_id']
+        return res
+  sinks:
+    logging: true
+    context: knowledge_id
+
+- code: knowledge.vectors.operations#similar
+  args:
+    kwargs:
+      k: 10
+      query: "{context#content}"
+    knowledge: "{context#knowledge_id}"
+  sinks:
+    context: knowledge
+    logging: true
+
+- code: sources.execution
+  args:
+    source: |-
+        knowledge = '''{context#knowledge}'''.replace("{", '{{').replace("}", "}}")
+        return knowledge
+  sinks:
+    logging: true
+    context: knowledge
+
+- code: llmx.predict.chat
+  name: 大模型问答
+  args:
+    messages:
+      - type: system
+        template: |-
+          - Role: {context#role}
+
+          - Goal: 现在时间是{now}。{context#aim}
+
+          - Constrains:
+            1.不回答与Goal无关问题。
+            2.保持语气温和、专业，避免使用激烈或情绪化的表述。
+            3.回答尽量根据知识库内容。
+          
+          - 知识库：
+          --------
+          {context#knowledge}
+          --------
+
+      - type: placeholder
+        variable: history
+      - type: human
+        template: |-
+          {content}
+    reply: pending
+  sinks:
+    logging: true
+
+- code: refs.operations
+  name: 保存历史记录
+  args:
+    flows: chat-memories-flush.yml
